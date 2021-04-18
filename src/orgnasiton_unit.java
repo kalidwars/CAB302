@@ -32,4 +32,13 @@ public class orgnasiton_unit
             this.org_assets.addAll(Arrays.asList(initial_assets));
         }
     }
+
+    private boolean Complete_Sale(orgnasiton_unit SELLER, asset ASSET_Name)
+    {
+        boolean completed_sucessfully = true;
+
+
+
+        return completed_sucessfully;
+    }
 }

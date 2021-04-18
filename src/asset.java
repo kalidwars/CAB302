@@ -31,26 +31,38 @@ public class asset
      *
      * @param new_value (FLOAT) Enter new value for the assset
      *
-     * @return Returns True/False if the method has executed correctly
+     * @return Returns True/False if the method has executed correctly without errors
      */
     public boolean adjust_value(float new_value)
     {
-        if((this.ind_price - new_value) <= 0);
-        {
+        boolean did_it_work = false;
 
+        if(!((new_value) <= 0))
+        {
+            this.ind_price = new_value;
+            did_it_work = true;
         }
 
-        return true;
+        return did_it_work;
     }
 
     /**
      *This is for adjusting the number of buy or sell of the asset
      *
-     * @param adjustment
-     * @return
+     * @param adjustment (INT) the new number of assets avaliable
+     *
+     * @return boolean if the processs was excuted correctly
      */
     public boolean adjust_QTY(int adjustment)
     {
-        return true;
+        boolean check_if_worked = false;
+
+        if(!(adjustment <= 0))
+        {
+            this.num_avaliable = adjustment;
+            check_if_worked = true;
+        }
+
+        return check_if_worked;
     }
 }

@@ -3,7 +3,7 @@ public class asset
     //Variables to use throughout the class
     private String name_of_asset;
     private float ind_price;
-    private int num_avaliable;
+    private int num_available;
 
     /**
      *
@@ -23,7 +23,7 @@ public class asset
         //Assign values into class
         this.name_of_asset = asset_name;
         this.ind_price = value;
-        this.num_avaliable = QTY;
+        this.num_available = QTY;
     }
 
     /**
@@ -59,10 +59,38 @@ public class asset
 
         if(!(adjustment <= 0))
         {
-            this.num_avaliable = adjustment;
+            this.num_available = adjustment;
             check_if_worked = true;
         }
 
         return check_if_worked;
+    }
+
+    /**
+     *
+     * Simply returns the number of asset wanted to buy or sell
+     *
+     * @return (INT) the number of asset required for a buy
+     *      or sell
+     *
+     */
+    public int get_Num_available()
+    {
+        return this.num_available;
+    }
+
+    /**
+     *
+     * The value of which the final sale will cost
+     *
+     * @param num_required (INT) Pass through the number of assets to buy
+     *
+     * @return (FLOAT) Returns the simple multiplication of the number required
+     *              by the indvidual price
+     *
+     */
+    public float get_Value(int num_required)
+    {
+        return (this.ind_price * num_required);
     }
 }

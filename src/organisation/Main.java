@@ -1,4 +1,6 @@
-public class main
+package organisation;
+
+public class Main
 {
     public static void main()
     {

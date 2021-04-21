@@ -1,9 +1,11 @@
-public class asset
+package organisation;
+
+public class Asset
 {
     //Variables to use throughout the class
-    private String name_of_asset;
-    private float ind_price;
-    private int num_avaliable;
+    public String nameOfAsset;
+    public float indPrice;
+    public int numAvailable;
 
     /**
      *
@@ -18,12 +20,12 @@ public class asset
      * @param QTY (INT) The number wanted/up for sale
      *
      */
-    public asset(String asset_name, float value, int QTY)
+    public Asset(String asset_name, float value, int QTY)
     {
         //Assign values into class
-        this.name_of_asset = asset_name;
-        this.ind_price = value;
-        this.num_avaliable = QTY;
+        this.nameOfAsset = asset_name;
+        this.indPrice = value;
+        this.numAvailable = QTY;
     }
 
     /**
@@ -35,7 +37,7 @@ public class asset
      */
     public boolean adjust_value(float new_value)
     {
-        if((this.ind_price - new_value) <= 0);
+        if((this.indPrice - new_value) <= 0);
         {
 
         }

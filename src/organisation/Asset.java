@@ -35,7 +35,7 @@ public class Asset
      *
      * @return Returns True/False if the method has executed correctly
      */
-    public boolean adjust_value(float new_value)
+    public boolean adjustValue(float new_value)
     {
         if((this.indPrice - new_value) <= 0);
         {
@@ -51,7 +51,7 @@ public class Asset
      * @param adjustment
      * @return
      */
-    public boolean adjust_QTY(int adjustment)
+    public boolean adjustQTY(int adjustment)
     {
         return true;
     }

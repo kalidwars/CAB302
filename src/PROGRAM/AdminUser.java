@@ -1,6 +1,8 @@
-public class admin_user extends user
+package PROGRAM;
+
+public class AdminUser extends User
 {
-    public admin_user(String id, String passWord)
+    public AdminUser(String id, String passWord)
     {
         super(id, passWord);
     }

@@ -1,4 +1,6 @@
-public class asset
+package PROGRAM;
+
+public class Asset
 {
     //Variables to use throughout the class
     private String name_of_asset;
@@ -17,8 +19,12 @@ public class asset
      *
      * @param QTY (INT) The number wanted/up for sale
      *
+     * @author Hugh Glas
+     *
+     * @version 1.0
+     *
      */
-    public asset(String asset_name, float value, int QTY)
+    public Asset(String asset_name, float value, int QTY)
     {
         //Assign values into class
         this.name_of_asset = asset_name;
@@ -32,6 +38,9 @@ public class asset
      * @param new_value (FLOAT) Enter new value for the assset
      *
      * @return Returns True/False if the method has executed correctly without errors
+     * @author Hugh Glas
+     *
+     * @version 1.0
      */
     public boolean adjust_value(float new_value)
     {
@@ -52,6 +61,11 @@ public class asset
      * @param adjustment (INT) the new number of assets avaliable
      *
      * @return boolean if the processs was excuted correctly
+     *
+     *@author Hugh Glas
+     *
+     *@version 1.0
+     *
      */
     public boolean adjust_QTY(int adjustment)
     {
@@ -68,10 +82,30 @@ public class asset
 
     /**
      *
+     * Simply returns the indvidual price of the asset
+     *
+     * @return (FLOAT) reutnrs the indvidual price of the asset
+     *
+     * @author Hugh Glas
+     *
+     * @version 1.0
+     *
+     */
+    public float getInd_price()
+    {
+        return ind_price;
+    }
+
+    /**
+     *
      * Simply returns the number of asset wanted to buy or sell
      *
      * @return (INT) the number of asset required for a buy
      *      or sell
+     *
+     * @author Hugh Glas
+     *
+     * @version 1.0
      *
      */
     public int get_Num_available()
@@ -88,9 +122,29 @@ public class asset
      * @return (FLOAT) Returns the simple multiplication of the number required
      *              by the indvidual price
      *
+     * @author Hugh Glas
+     *
+     * @version 1.0
+     *
      */
-    public float get_Value(int num_required)
+    public float GetValue(int num_required)
     {
         return (this.ind_price * num_required);
+    }
+
+    /**
+     *
+     * Simple method that returns the name
+     *
+     * @return (STRING) returns the name of the asset
+     *
+     * @author Hugh Glas
+     *
+     * @version 1.0
+     *
+     */
+    public String GetName()
+    {
+        return name_of_asset;
     }
 }

@@ -1,13 +1,15 @@
+package PROGRAM;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class orgnasiton_unit
+public class OrganisationUnit
 {
     //Variables that are to be used throughout class
     private String org_name;
     private float current_credits;
-    private ArrayList<asset> org_assets;
-    private ArrayList<trade> trade_buys = new ArrayList<trade>();
+    private ArrayList<Asset> org_assets;
+    private ArrayList<Trade> trade_buys = new ArrayList<Trade>();
 
     /**
      * Constructs the orgnaisation unit to keep track on current
@@ -21,12 +23,16 @@ public class orgnasiton_unit
      * @param initial_assets (asset[]) an array is to be feed in (it is fine
      *                       if null) and these are to be added to the organisation.
      *
+     * @author Hugh Glas
+     *
+     * @version 1.0
+     *
      */
-    public orgnasiton_unit(String name, float credits, asset[] initial_assets)
+    public OrganisationUnit(String name, float credits, Asset[] initial_assets)
     {
         this.org_name = name;
         this.current_credits = credits;
-        this.org_assets = new ArrayList<asset>();
+        this.org_assets = new ArrayList<Asset>();
 
         if(initial_assets != null)
         {
@@ -34,6 +40,37 @@ public class orgnasiton_unit
         }
     }
 
+    /**
+     *
+     * Simply Returns the amount of credits within the organisation as a float
+     *
+     * @return (FLOAT) The number of credits said organisation has
+     *
+     * @author Hugh Glas
+     *
+     * @version 1.0
+     *
+     */
+    public float currentCredits()
+    {
+        return this.current_credits;
+    }
+
+    /**
+     *
+     * Returns the name of the organisation unit
+     *
+     * @return (STRING) returns the name of the organisation
+     *
+     * @author Hugh Glas
+     *
+     * @version 1.0
+     *
+     */
+    public String orgName()
+    {
+        return this.org_name;
+    }
 
     /**
      *
@@ -43,27 +80,32 @@ public class orgnasiton_unit
      * @param SELLER (orgnasition_unit) the unit in which the asset
      *               was sold from
      *
-     * @param order_fulfilled (asset - buy_order) The order in which is being
+     * @param order_fulfilled (asset - PROGRAM.buy_order) The order in which is being
      *                       fufilled
      *
-     * @param sale_taken (asset - sell_order) The order in which is being used
-     *                   to complete the trade
+     * @param sale_taken (asset - PROGRAM.sell_order) The order in which is being used
+     *                   to complete the PROGRAM.trade
      *
      * @return (boolean) To return if the process was completed
      *                  fully
+     *
+     *  @author Hugh Glas
+     *
+     *  @version 1.0
+     *
      */
-    private boolean Complete_Sale(orgnasiton_unit SELLER, buy_order order_fulfilled, sell_order sale_taken)
+    private boolean Complete_Sale(OrganisationUnit SELLER, BuyOrder order_fulfilled, SellOrder sale_taken)
     {
         boolean completed_sucessfully;
 
         int num_brought = order_fulfilled.get_Num_available();
-        int current_avaliable = sale_taken.get_Num_available();
+        int current_available = sale_taken.get_Num_available();
 
-        completed_sucessfully = sale_taken.adjust_QTY(current_avaliable - num_brought);
+        completed_sucessfully = sale_taken.adjust_QTY(current_available - num_brought);
 
         if(completed_sucessfully)
         {
-            trade_buys.add((new trade(SELLER,order_fulfilled)));
+            trade_buys.add((new Trade(SELLER,order_fulfilled)));
         }
 
         return completed_sucessfully;
@@ -76,20 +118,25 @@ public class orgnasiton_unit
      * i.e. if the sale will cause the company to go into the negatives
      * or if it results in 0 credits
      *
-     * @param order_to_be_checked (buy_order - asset) The buy request attempted
+     *
+     * @param order_to_be_checked (PROGRAM.buy_order - asset) The buy request attempted
      *                            to be fuilled
      *
-     * @param to_be_satisfied (sell_order - asset) The sell that is being checked
+     * @param to_be_satisfied (PROGRAM.sell_order - asset) The sell that is being checked
      *                        to be completed
      *
      * @return (boolean) Returns false if the sale will cause the company to bust
      *                   Returns true if the sale will not cause the company to bust
      *
+     * @author Hugh Glas
+     *
+     * @version 1.0
+     *
      */
-    public boolean Check_Balance(buy_order order_to_be_checked, sell_order to_be_satisfied)
+    public boolean Check_Sale_Process(BuyOrder order_to_be_checked, SellOrder to_be_satisfied)
     {
         int buy_qty = order_to_be_checked.get_Num_available();
-        float sell_price = to_be_satisfied.get_Value(buy_qty);
+        float sell_price = to_be_satisfied.GetValue(buy_qty);
 
         if((this.current_credits -  sell_price) <= 0)
         {

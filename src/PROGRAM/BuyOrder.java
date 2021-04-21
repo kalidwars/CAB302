@@ -1,4 +1,6 @@
-public class buy_order extends asset
+package PROGRAM;
+
+public class BuyOrder extends Asset
 {
 
     /**
@@ -9,8 +11,13 @@ public class buy_order extends asset
      *                   for sale/requests
      * @param value      (FLOAT) The price of which people are willing to buy or sell
      * @param QTY        (INT) The number wanted/up for sale
+     *
+     * @author Hugh Glas
+     *
+     * @version 1.0
+     *
      */
-    public buy_order(String asset_name, float value, int QTY)
+    public BuyOrder(String asset_name, float value, int QTY)
     {
         super(asset_name, value, QTY);
     }

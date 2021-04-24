@@ -1,10 +1,12 @@
 package PROGRAM;
 
+import CustomExceptions.StockExceptions;
+
 public class Asset
 {
     //Variables to use throughout the class
     private String name_of_asset;
-    private float ind_price;
+    private double ind_price;
     private int num_available;
 
     /**
@@ -15,21 +17,39 @@ public class Asset
      * @param asset_name (STRING) The name/description of the asset avaliable
      *                   for sale/requests
      *
-     * @param value  (FLOAT) The price of which people are willing to buy or sell
+     * @param value  (DOUBLE) The price of which people are willing to buy or sell
      *
      * @param QTY (INT) The number wanted/up for sale
      *
+     * @exception StockExceptions Thrown in 2 casses:
+     *                      a) When the Value is negative
+     *                      b) When QTY is negative or zeros
+     *
      * @author Hugh Glas
      *
-     * @version 1.0
+     * @version 1.1
      *
      */
-    public Asset(String asset_name, float value, int QTY)
+    public Asset(String asset_name, Double value, int QTY) throws StockExceptions
     {
         //Assign values into class
         this.name_of_asset = asset_name;
-        this.ind_price = value;
-        this.num_available = QTY;
+
+        if(value < 0)
+        {
+            throw new StockExceptions("Expected a Positive Value or 0 value for credits");
+        }
+        else {
+            this.ind_price = value;
+        }
+
+        if(QTY <= 0)
+        {
+            throw new StockExceptions("Expected a Positive value for Quantity");
+        }
+        else {
+            this.num_available = QTY;
+        }
     }
 
     /**
@@ -42,7 +62,7 @@ public class Asset
      *
      * @version 1.0
      */
-    public boolean adjust_value(float new_value)
+    public boolean adjustValue(float new_value)
     {
         boolean did_it_work = false;
 
@@ -62,12 +82,12 @@ public class Asset
      *
      * @return boolean if the processs was excuted correctly
      *
-     *@author Hugh Glas
+     * @author Hugh Glas
      *
-     *@version 1.0
+     * @version 1.0
      *
      */
-    public boolean adjust_QTY(int adjustment)
+    public boolean adjustQTY(int adjustment)
     {
         boolean check_if_worked = false;
 
@@ -91,7 +111,7 @@ public class Asset
      * @version 1.0
      *
      */
-    public float getInd_price()
+    public double getIndPrice()
     {
         return ind_price;
     }
@@ -108,7 +128,7 @@ public class Asset
      * @version 1.0
      *
      */
-    public int get_Num_available()
+    public int getNumAvailable()
     {
         return this.num_available;
     }
@@ -126,8 +146,11 @@ public class Asset
      *
      * @version 1.0
      *
+     * TO DO
+     * - Throw exception when given a num required that is greater then current value
+     *
      */
-    public float GetValue(int num_required)
+    public double GetValue(int num_required)
     {
         return (this.ind_price * num_required);
     }

@@ -1,5 +1,7 @@
 package PROGRAM;
 
+import CustomExceptions.StockExceptions;
+
 public class BuyOrder extends Asset
 {
 
@@ -9,7 +11,7 @@ public class BuyOrder extends Asset
      *
      * @param asset_name (STRING) The name/description of the asset avaliable
      *                   for sale/requests
-     * @param value      (FLOAT) The price of which people are willing to buy or sell
+     * @param value      (DOUBLE) The price of which people are willing to buy or sell
      * @param QTY        (INT) The number wanted/up for sale
      *
      * @author Hugh Glas
@@ -17,7 +19,7 @@ public class BuyOrder extends Asset
      * @version 1.0
      *
      */
-    public BuyOrder(String asset_name, float value, int QTY)
+    public BuyOrder(String asset_name, double value, int QTY) throws StockExceptions
     {
         super(asset_name, value, QTY);
     }

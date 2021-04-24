@@ -1,5 +1,7 @@
 package PROGRAM;
 
+import CustomExceptions.StockExceptions;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -7,7 +9,7 @@ public class OrganisationUnit
 {
     //Variables that are to be used throughout class
     private String org_name;
-    private float current_credits;
+    private double current_credits;
     private ArrayList<Asset> org_assets;
     private ArrayList<Trade> trade_buys = new ArrayList<Trade>();
 
@@ -18,20 +20,35 @@ public class OrganisationUnit
      * @param name (STRING) the name of which the orgnaisiton unit is to be
      *              referred to
      *
-     * @param credits (FLOATS) the current value of the company
+     * @param credits (DOUBLE) the current value of the company
+     *
+     * @exception StockExceptions an exception will be thrown when a negative value
+     *                  is entered for initial credits
      *
      * @param initial_assets (asset[]) an array is to be feed in (it is fine
      *                       if null) and these are to be added to the organisation.
      *
      * @author Hugh Glas
      *
-     * @version 1.0
+     * @version 1.1
+     *
+     * To Do
+     *
+     * - Throw an exception when a not list is passed through
      *
      */
-    public OrganisationUnit(String name, float credits, Asset[] initial_assets)
+    public OrganisationUnit(String name, double credits, Asset[] initial_assets) throws StockExceptions
     {
         this.org_name = name;
-        this.current_credits = credits;
+
+        if(credits < 0)
+        {
+            throw new StockExceptions("Expected a Positive Value or 0 value for credits");
+        }
+        else {
+            this.current_credits = credits;
+        }
+
         this.org_assets = new ArrayList<Asset>();
 
         if(initial_assets != null)
@@ -51,7 +68,7 @@ public class OrganisationUnit
      * @version 1.0
      *
      */
-    public float currentCredits()
+    public double currentCredits()
     {
         return this.current_credits;
     }
@@ -98,10 +115,10 @@ public class OrganisationUnit
     {
         boolean completed_sucessfully;
 
-        int num_brought = order_fulfilled.get_Num_available();
-        int current_available = sale_taken.get_Num_available();
+        int num_brought = order_fulfilled.getNumAvailable();
+        int current_available = sale_taken.getNumAvailable();
 
-        completed_sucessfully = sale_taken.adjust_QTY(current_available - num_brought);
+        completed_sucessfully = sale_taken.adjustQTY(current_available - num_brought);
 
         if(completed_sucessfully)
         {
@@ -135,8 +152,8 @@ public class OrganisationUnit
      */
     public boolean Check_Sale_Process(BuyOrder order_to_be_checked, SellOrder to_be_satisfied)
     {
-        int buy_qty = order_to_be_checked.get_Num_available();
-        float sell_price = to_be_satisfied.GetValue(buy_qty);
+        int buy_qty = order_to_be_checked.getNumAvailable();
+        double sell_price = to_be_satisfied.GetValue(buy_qty);
 
         if((this.current_credits -  sell_price) <= 0)
         {
@@ -146,5 +163,21 @@ public class OrganisationUnit
         {
             return true;
         }
+    }
+
+    /**
+     *
+     * Returns the current list of assets attached to the business
+     *
+     * @return (ArrayList<Assets>) Returns all of the attached assets
+     *
+     * @version 1.0
+     *
+     * @author Hugh Glas
+     *
+     */
+    public ArrayList<Asset> getAllAssets()
+    {
+        return this.org_assets;
     }
 }

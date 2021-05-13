@@ -16,5 +16,4 @@ public class StockExceptions extends Exception
     {
         super(message);
     }
-
 }

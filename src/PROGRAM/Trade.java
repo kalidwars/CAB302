@@ -1,5 +1,8 @@
 package PROGRAM;
 
+import java.util.Collection;
+import java.util.ArrayList;
+
 public class Trade
 {
     private OrganisationUnit seller_org;

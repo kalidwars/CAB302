@@ -1,5 +1,7 @@
 package PROGRAM;
 
+import PROGRAM.*;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import java.nio.charset.StandardCharsets;

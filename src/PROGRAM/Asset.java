@@ -1,6 +1,6 @@
 package PROGRAM;
 
-import CustomExceptions.StockExceptions;
+import CustomExceptions.*;
 
 public class Asset
 {
@@ -21,7 +21,7 @@ public class Asset
      *
      * @param QTY (INT) The number wanted/up for sale
      *
-     * @exception StockExceptions Thrown in 2 casses:
+     * @exception Exception Thrown in 2 casses:
      *                      a) When the Value is negative
      *                      b) When QTY is negative or zeros
      *

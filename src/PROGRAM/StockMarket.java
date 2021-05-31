@@ -6,6 +6,7 @@ public class StockMarket
 {
     private ArrayList<OrganisationUnit> StockMarketLive = new ArrayList<OrganisationUnit>();
 
+    public ArrayList<Trade> activeTrades;
     /**
      *
      * This is a class to act like a stock market and to keep

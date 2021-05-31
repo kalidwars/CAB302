@@ -1,6 +1,6 @@
 package PROGRAM;
 
-import CustomExceptions.StockExceptions;
+import CustomExceptions.*;
 
 public class BuyOrder extends Asset
 {

@@ -1,6 +1,6 @@
 package PROGRAM;
 
-import CustomExceptions.StockExceptions;
+import CustomExceptions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +11,7 @@ public class OrganisationUnit
     private String org_name;
     private double current_credits;
     private ArrayList<Asset> org_assets;
-    private ArrayList<Trade> trade_buys = new ArrayList<Trade>();
+    private ArrayList<Trade> trade_history = new ArrayList<Trade>();
 
     /**
      * Constructs the orgnaisation unit to keep track on current
@@ -22,7 +22,7 @@ public class OrganisationUnit
      *
      * @param credits (DOUBLE) the current value of the company
      *
-     * @exception StockExceptions an exception will be thrown when a negative value
+     * @exception Exception an exception will be thrown when a negative value
      *                  is entered for initial credits
      *
      * @param initial_assets (asset[]) an array is to be feed in (it is fine
@@ -55,6 +55,7 @@ public class OrganisationUnit
         {
             this.org_assets.addAll(Arrays.asList(initial_assets));
         }
+
     }
 
     /**
@@ -111,9 +112,11 @@ public class OrganisationUnit
      *  @version 1.0
      *
      */
+    
     private boolean Complete_Sale(OrganisationUnit SELLER, BuyOrder order_fulfilled, SellOrder sale_taken)
     {
         boolean completed_sucessfully;
+        Trade to_be_added = new Trade(SELLER,order_fulfilled);
 
         int num_brought = order_fulfilled.getNumAvailable();
         int current_available = sale_taken.getNumAvailable();
@@ -122,7 +125,7 @@ public class OrganisationUnit
 
         if(completed_sucessfully)
         {
-            trade_buys.add((new Trade(SELLER,order_fulfilled)));
+            this.trade_history.add(to_be_added);
         }
 
         return completed_sucessfully;
@@ -155,14 +158,7 @@ public class OrganisationUnit
         int buy_qty = order_to_be_checked.getNumAvailable();
         double sell_price = to_be_satisfied.GetValue(buy_qty);
 
-        if((this.current_credits -  sell_price) <= 0)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return !((this.current_credits - sell_price) <= 0);
     }
 
     /**

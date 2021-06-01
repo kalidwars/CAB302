@@ -25,7 +25,7 @@ import java.util.ArrayList;
  */
 public class DataSource
 {
-
+    private static final String TESTING  = "DROP TABLE IF EXISTS users;";
     private static final String GET_ASSETS = "SELECT * FROM assets WHERE OrgUnit=?";
     private static final String GET_ALL_USER = "SELECT * FROM users";
     private Connection connection;
@@ -56,14 +56,7 @@ public class DataSource
                     "  KEY fk_orgunit (orgunit)," +
                     "  CONSTRAINT fk_orgunit FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit));";
     private static final String CREATE_TABLE_USERS =
-            "CREATE TABLE IF NOT EXITS users (" +
-                    "  username varchar(45) NOT NULL," +
-                    "  password varchar(45) NOT NULL," +
-                    "  privilege varchar(45) NOT NULL," +
-                    "  orgunit varchar(45)," +
-                    "  PRIMARY KEY (username)," +
-                    "  KEY orgunit (orgunit)," +
-                    "  CONSTRAINT users_ibfk_1 FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit);";
+            "CREATE TABLE IF NOT EXISTS users (username varchar(45) NOT NULL,password varchar(45) NOT NULL,privilege varchar(45) NOT NULL,orgunit varchar(45),PRIMARY KEY (username),KEY orgunit (orgunit));";
     private static final String CREATE_TABLE_HISTORY =
             "CREATE TABLE ‘TRADE_HISTORY’ (" +
                     "TradeID int(11) NOT NULL AUTO_INCREMENT," +
@@ -91,16 +84,29 @@ public class DataSource
     {
         connection = DBConnection.getInstance();
         try {
+            this.PrepareTesting();
             Statement st = connection.createStatement();
-            st.execute(CREATE_TABLE_SELL_ASSETS);
-            st.execute(CREATE_TABLE_BUY_ORDERS);
+            //st.execute(CREATE_TABLE_SELL_ASSETS);
+            //st.execute(CREATE_TABLE_BUY_ORDERS);
             st.execute(CREATE_TABLE_USERS);
-            st.execute(CREATE_TABLE_OU);
-            st.execute(CREATE_TABLE_HISTORY);
+            //st.execute(CREATE_TABLE_OU);
+            //st.execute(CREATE_TABLE_HISTORY);
             getAssets = connection.prepareStatement(GET_ASSETS);
             getAllUsers = connection.prepareStatement(GET_ALL_USER);
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void PrepareTesting()
+    {
+        try {
+            Statement st = connection.createStatement();
+            st.execute(TESTING);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -156,9 +162,9 @@ public class DataSource
      *
      * @author Hugh
      */
-    public ArrayList<User> getUser() throws SQLException, NoSuchPaddingException, NoSuchAlgorithmException
+    public ArrayList<User> convertToUsers(StockMarket QuestionStockMarket) throws SQLException, NoSuchPaddingException, NoSuchAlgorithmException
     {
-        //Setup vairables for setting up users
+        //Setup variables for setting up users
         String USER;
         String PW;
         boolean PRI;
@@ -200,7 +206,7 @@ public class DataSource
                 else
                 {
                     //Grab OU information
-                    OU_Info = StartServer.CurrentStockMarket.DBfindOU(OU_name);
+                    OU_Info = QuestionStockMarket.DBfindOU(OU_name);
                     toReturn.add(new User(USER,PW,OU_Info));
                 }
 

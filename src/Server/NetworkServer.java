@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class NetworkServer {
     @Serial
     private static final long serialVersionUID = -2393708718755176852L;
-    private static final int PORT = 10000;
+    private static final int PORT = 3306;
     private static final int SOCKET_TIMEOUT = 100;
     private AtomicBoolean running = new AtomicBoolean(true);
     private DataSource DataSource = new DataSource();
@@ -42,8 +42,9 @@ public class NetworkServer {
                             oos.flush();
                         }
                     case "GET_ALL_USER":
+                        String QStock = ois.readUTF();
                         ArrayList<User> tempUser = new ArrayList<User>();
-                        tempUser = DataSource.getUser();
+                        //tempUser = DataSource.convertToUsers();
                         oos.writeInt(tempUser.size());
                         for(User user : tempUser)
                         {

@@ -2,31 +2,35 @@ package Client;
 
 import COMMON.*;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.io.Serial;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.channels.Pipe;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class ServerConnection {
-    private static final long serialVersionUID = -7092701502990374424L;
+public class ServerConnection
+{
+    @Serial
+    private static final long serialVersionUID = -2393708718755176852L;
     private static final String HostIP = "127.0.0.1";
-    private static final int PORT = 10000;
-    private Socket socket = null;
-    private ObjectOutputStream objectOutputStream = null;
-    private ObjectInputStream objectInputStream = null;
+    private static final int PORT = 3306;
+    private Socket socket;
+    private ObjectOutputStream objectOutputStream;
+    private ObjectInputStream objectInputStream;
 
-    public ServerConnection() {
-        try {
+    public ServerConnection()
+    {
+        try
+        {
             this.socket = new Socket(HostIP,PORT);
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectOutputStream.flush();
-            objectInputStream = new ObjectInputStream(socket.getInputStream());
-        } catch (IOException e) {
+            //objectInputStream = new ObjectInputStream(socket.getInputStream());
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
             System.exit(1);
         }
@@ -41,13 +45,20 @@ public class ServerConnection {
      * @author Hugh (based on Adam's)
      *
      * @version 1.0
+     *
+     * This may need to be deleted later but keep just in case
+     *
      */
+    /**
     public ArrayList<User> getUser()
     {
         ArrayList<User> toReturn = new ArrayList<User>();
         try
         {
             objectOutputStream.writeUTF("GET_ALL_USER");
+            objectOutputStream.flush();
+            objectOutputStream.writeUTF("");
+            objectOutputStream.flush();
             int numUsers = objectInputStream.readInt();
             for (int i = 0; i < numUsers; i++)
             {
@@ -63,6 +74,7 @@ public class ServerConnection {
         return toReturn;
 
     }
+     */
 
     public ArrayList<Asset> GetAssets(String OUName) {
         ArrayList<Asset> assets = new ArrayList<>();

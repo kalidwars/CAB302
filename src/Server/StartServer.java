@@ -1,6 +1,7 @@
 package Server;
 
 import COMMON.StockMarket;
+import CustomExceptions.StockExceptions;
 
 import javax.print.DocFlavor;
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class StartServer {
      * @author Adam, Hugh
      *
      */
-    public static void main(String[] args)
+    public static void main(String[] args) throws StockExceptions
     {
         CurrentStockMarket = new StockMarket();
         //Initialise Server

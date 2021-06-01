@@ -1,5 +1,7 @@
 package COMMON;
 
+import CustomExceptions.StockExceptions;
+
 import java.util.ArrayList;
 
 public class StockMarket
@@ -21,12 +23,13 @@ public class StockMarket
      * @author Hugh Glas
      *
      */
-    public StockMarket()
+    public StockMarket() throws StockExceptions
     {
         StockMarketLive = new ArrayList<OrganisationUnit>();
         activeTrades = new ArrayList<Asset>();
         ListOfUsers = new ArrayList<User>();
         pastTrades = new ArrayList<Trade>();
+        StockMarketLive.add(new OrganisationUnit("ADMINS",0,null));
     }
 
     /**

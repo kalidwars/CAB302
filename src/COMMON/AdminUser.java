@@ -13,7 +13,7 @@ public class AdminUser extends COMMON.User
     //SQL Variables
     private Connection connection;
     private static final String upload_statement =
-            "INSERT INTO user (username, password, privilege, orgunit) VALUES (?, ?, ?, ?)";
+            "INSERT INTO users (username, password, privilege, orgunit) VALUES (?, ?, ?, ?)";
     private PreparedStatement UPLOADING;
 
     public AdminUser(String id, String passWord) throws NoSuchAlgorithmException, NoSuchPaddingException
@@ -43,10 +43,10 @@ public class AdminUser extends COMMON.User
         {
             UPLOADING = connection.prepareStatement(upload_statement);
             UPLOADING.setString(1, this.GetUserID());
-            //UPLOADING.setString(2,)
+            UPLOADING.setString(2,this.RawPassword());
             UPLOADING.setString(3,String.valueOf(true));
-            UPLOADING.setString(4,null);
-
+            UPLOADING.setString(4,"ADMINS");
+            UPLOADING.executeQuery();
         }
         catch (SQLException ex)
         {

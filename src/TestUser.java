@@ -4,6 +4,7 @@ import CustomExceptions.*;
 
 //Import SQL API
 import Server.DataSource;
+
 import java.sql.SQLException;
 import Client.ServerConnection;
 
@@ -23,6 +24,7 @@ public class TestUser
     private User test_Case_1;
     private AdminUser test_Case_2;
     private DataSource test;
+    private StockMarket testStock;
 
     @BeforeEach
     void SetUp() throws NoSuchAlgorithmException, NoSuchPaddingException, StockExceptions
@@ -31,6 +33,10 @@ public class TestUser
         test_Case_1 = new User("NormalUser","PW",OU_test);
         test_Case_2 = new AdminUser("root","root");
         test = new DataSource();
+        testStock = new StockMarket();
+        testStock.addOrgnsiationUnit(OU_test);
+        testStock.UpdateUsers(test_Case_1);
+        testStock.UpdateUsers(test_Case_2);
     }
 
     @Test
@@ -41,7 +47,7 @@ public class TestUser
         //Test Case 2
         assertEquals("root",test_Case_2.GetUserID());
     }
-    /**
+
     @Test
     public void TestEncryption()
     {
@@ -53,7 +59,7 @@ public class TestUser
     {
 
     }
-    */
+
     @Test
     void Uploading_DownLoading_Users() throws SQLException, NoSuchPaddingException,NoSuchAlgorithmException
     {
@@ -63,6 +69,7 @@ public class TestUser
         try
         {
             test_Case_1.Upload();
+            test_Case_2.Upload();
         }
         catch (SQLException e)
         {
@@ -70,14 +77,21 @@ public class TestUser
         }
         try
         {
-            check1 = test.getUser();
+            check1 = test.convertToUsers(testStock);
         }
         catch (SQLException e2)
         {
             e2.printStackTrace();
         }
 
-        assertTrue(check1.contains(test_Case_1));
+        //Check Values are correct
+        assertEquals("NormalUser",check1.get(0).GetUserID());
+        assertEquals("root",check1.get(1).GetUserID());
+
+        //Check Typing is correct
+        assertTrue(check1.get(0) instanceof User);
+        assertTrue(check1.get(1) instanceof AdminUser);
+
 
     }
 }

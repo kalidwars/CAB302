@@ -41,7 +41,7 @@ public class User implements Serializable
     //SQL Variables
     private Connection connection;
     private static final String upload_statement =
-            "INSERT INTO user (username, password, privilege, orgunit) VALUES (?, ?, ?, ?)";
+            "INSERT INTO users (username, password, privilege, orgunit) VALUES (?,?,?,?);";
     private PreparedStatement UPLOADING;
 
 
@@ -120,6 +120,11 @@ public class User implements Serializable
         return null;
     }
 
+    public String RawPassword()
+    {
+        return this.PassWord;
+    }
+
     /**
      *
      * Uploading method for User (this will be overwritten in Admin User
@@ -144,7 +149,7 @@ public class User implements Serializable
         try
         {
             UPLOADING = connection.prepareStatement(upload_statement);
-            UPLOADING.setString(1, this.ID);
+            UPLOADING.setString(1,this.ID);
             UPLOADING.setString(2,this.PassWord);
             UPLOADING.setString(3,String.valueOf(false));
             UPLOADING.setString(4,this.OU_OWNER.orgName());

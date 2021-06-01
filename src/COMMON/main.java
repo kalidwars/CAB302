@@ -1,4 +1,4 @@
-package PROGRAM;
+package COMMON;
 
 public class main
 {

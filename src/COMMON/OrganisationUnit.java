@@ -1,4 +1,5 @@
-package PROGRAM;
+package COMMON;
+import COMMON.*;
 
 import CustomExceptions.*;
 

@@ -1,9 +1,9 @@
-package PROGRAM;
+package COMMON;
 
 import javax.crypto.NoSuchPaddingException;
 import java.security.NoSuchAlgorithmException;
 
-public class AdminUser extends User
+public class AdminUser extends COMMON.User
 {
     public AdminUser(String id, String passWord) throws NoSuchAlgorithmException, NoSuchPaddingException
     {

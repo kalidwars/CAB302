@@ -1,9 +1,8 @@
-package PROGRAM;
-
-import PROGRAM.*;
+package COMMON;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import java.io.Serial;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.Security;
@@ -11,9 +10,12 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
+import java.io.Serializable;
 
-public class User
+public class User implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = -2393708718755176852L;
     private String ID;
     //Private Variables used for encryption and decryption
     private Cipher internallCipher;
@@ -21,13 +23,14 @@ public class User
     private byte[] keyBytes = new byte[]{11,0,5,50,100,60,78,55};
     private String SecretAlgorithm = "EnCrYpTeD";
     private SecretKeySpec GeneratedKey = new SecretKeySpec(keyBytes, SecretAlgorithm);
+    private OrganisationUnit OU_OWNER;
     /**
      *
      * User class for log in and
      *
      * @param id - Raw String id (Initial.Lastname (i.e. Hugh Glas => H.Glas)
      * @param passWord - Encrypted Password String
-     * @param ParentUnit - The Unit the user can be
+     * @param ParentUnit - The Unit the user can be selling stuff in
      *
      * @author Hugh Glas
      *
@@ -36,6 +39,8 @@ public class User
      */
     public User(String id, String passWord, OrganisationUnit ParentUnit) throws NoSuchPaddingException, NoSuchAlgorithmException
     {
+        this.ID = id;
+        this.OU_OWNER = ParentUnit;
         internallCipher = Cipher.getInstance("DES/CBC/NoPadding");
     }
 

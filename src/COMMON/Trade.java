@@ -11,8 +11,9 @@ public class Trade
 
     /**
      *
-     * This is a class that keeps track of the SeLLER and the asset
+     * This is a class that keeps track of the SELLER and the asset
      * The full history will be stored in the orgnasitional unit class
+     * (THIS IS COMPLETED TRADES)
      *
      * @param seller (orgnaistion_unit) The unit in which the asset was
      *               brought from

@@ -23,13 +23,15 @@ public class NetworkServer {
      * Handles the connection received from ServerSocket
      * @param socket The socket used to communicate with the currently connected client
      */
-    private void handleConnection(Socket socket) throws Exception {
+    private void handleConnection(Socket socket) throws Exception
+    {
         try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
              ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
             for(;;) {
                 oos.flush();
                 String command = ois.readUTF();
-                switch (command) {
+                switch (command)
+                {
                     case "GET_ASSETS":
                         String OUName = ois.readUTF();
                         ArrayList<Asset> temp = new ArrayList<>();
@@ -37,6 +39,15 @@ public class NetworkServer {
                         oos.writeInt(temp.size());
                         for(Asset asset : temp) {
                             oos.writeObject(asset);
+                            oos.flush();
+                        }
+                    case "GET_ALL_USER":
+                        ArrayList<User> tempUser = new ArrayList<User>();
+                        tempUser = DataSource.getUser();
+                        oos.writeInt(tempUser.size());
+                        for(User user : tempUser)
+                        {
+                            oos.writeObject(user);
                             oos.flush();
                         }
                 }

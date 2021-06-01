@@ -4,9 +4,13 @@ import java.util.ArrayList;
 
 public class StockMarket
 {
-    private ArrayList<OrganisationUnit> StockMarketLive = new ArrayList<OrganisationUnit>();
+    public ArrayList<OrganisationUnit> StockMarketLive;
 
-    public ArrayList<Trade> activeTrades;
+    public ArrayList<Asset> activeTrades;
+
+    public ArrayList<Trade> pastTrades;
+
+    public ArrayList<User> ListOfUsers;
     /**
      *
      * This is a class to act like a stock market and to keep
@@ -19,7 +23,10 @@ public class StockMarket
      */
     public StockMarket()
     {
-
+        StockMarketLive = new ArrayList<OrganisationUnit>();
+        activeTrades = new ArrayList<Asset>();
+        ListOfUsers = new ArrayList<User>();
+        pastTrades = new ArrayList<Trade>();
     }
 
     /**
@@ -46,5 +53,53 @@ public class StockMarket
         }
 
         return !canBeAdded;
+    }
+
+    /**
+     * Database information
+     * Method to return Orgnisation Unit from OU_name
+     *
+     * @param OU_Name (STRING) Ou name within database
+     *
+     * @return (OrganisationUnit) Return the unit in its entirety
+     *
+     */
+    public OrganisationUnit DBfindOU(String OU_Name)
+    {
+        //Variables to use to assit in finding
+        OrganisationUnit toReturn = null;
+        String nameOU;
+
+        //Set up variables for 'for' loop
+        int length = StockMarketLive.size();
+
+        //Iterate through Stockmarket
+        for(int i = 0; i < length; i++)
+        {
+            toReturn = StockMarketLive.get(i);
+            nameOU = toReturn.orgName();
+            if(nameOU == OU_Name)
+            {
+                i = length;
+            }
+        }
+
+        return toReturn;
+    }
+
+    /**
+     *
+     * Updates the currently working users
+     *
+     * @param toBeAdded - User to be added to the StockMarket
+     *
+     * @version 1.0
+     *
+     * @author Hugh
+     *
+     */
+    public void UpdateUsers(User toBeAdded)
+    {
+        this.ListOfUsers.add(toBeAdded);
     }
 }

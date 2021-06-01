@@ -1,8 +1,16 @@
 package COMMON;
+import Server.*;
 
+//Needed Library
+import java.io.Serial;
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+
+//May be Deleted later
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import java.io.Serial;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.Security;
@@ -10,20 +18,34 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
-import java.io.Serializable;
+import java.sql.Statement;
+
 
 public class User implements Serializable
 {
     @Serial
     private static final long serialVersionUID = -2393708718755176852L;
+
+    //User Variables
     private String ID;
+    private String PassWord;
+    private OrganisationUnit OU_OWNER;
+
     //Private Variables used for encryption and decryption
     private Cipher internallCipher;
     //Setup Key
     private byte[] keyBytes = new byte[]{11,0,5,50,100,60,78,55};
     private String SecretAlgorithm = "EnCrYpTeD";
     private SecretKeySpec GeneratedKey = new SecretKeySpec(keyBytes, SecretAlgorithm);
-    private OrganisationUnit OU_OWNER;
+
+    //SQL Variables
+    private Connection connection;
+    private static final String upload_statement =
+            "INSERT INTO user (username, password, privilege, orgunit) VALUES (?, ?, ?, ?)";
+    private PreparedStatement UPLOADING;
+
+
+
     /**
      *
      * User class for log in and
@@ -41,6 +63,7 @@ public class User implements Serializable
     {
         this.ID = id;
         this.OU_OWNER = ParentUnit;
+        this.PassWord = passWord;
         internallCipher = Cipher.getInstance("DES/CBC/NoPadding");
     }
 
@@ -95,5 +118,44 @@ public class User implements Serializable
     public Boolean PassWordCorrect(String PasswordAttempt)
     {
         return null;
+    }
+
+    /**
+     *
+     * Uploading method for User (this will be overwritten in Admin User
+     *
+     * @return (BOOLEAN)    True - if upload occurred correctly
+     *                      False - if upload occurred incorrectly
+     *
+     * @version 1.0
+     *
+     * @author Hugh
+     *
+     */
+    public boolean Upload() throws SQLException
+    {
+        //Create Pass Fail varaible boolean
+        boolean toReturn = true;
+
+        //Set UP Connection Information to server
+        connection = DBConnection.getInstance();
+        Statement st = connection.createStatement();
+
+        try
+        {
+            UPLOADING = connection.prepareStatement(upload_statement);
+            UPLOADING.setString(1, this.ID);
+            UPLOADING.setString(2,this.PassWord);
+            UPLOADING.setString(3,String.valueOf(false));
+            UPLOADING.setString(4,this.OU_OWNER.orgName());
+            UPLOADING.executeQuery();
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            toReturn = false;
+        }
+
+        return toReturn;
     }
 }

@@ -1,9 +1,11 @@
 package Server;
 
-import COMMON.Asset;
-import COMMON.SellOrder;
+import COMMON.*;
 import CustomExceptions.*;
+import Server.*;
 
+import javax.crypto.NoSuchPaddingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,71 +22,73 @@ import java.util.ArrayList;
  *
  * @version 1.2
  *
- *
  */
 public class DataSource
 {
 
     private static final String GET_ASSETS = "SELECT * FROM assets WHERE OrgUnit=?";
+    private static final String GET_ALL_USER = "SELECT * FROM users";
     private Connection connection;
 
     //Create String For Creating tables in Server
     //Each variable name is what the table is designed for
     //Designed by Hugh and Adam
     private static final String CREATE_TABLE_SELL_ASSETS =
-            "CREATE TABLE IF NOT EXITS `assets` (" +
-                    "  `AssetID int(50) NOT NULL AUTO_INCREMENT`" +
-                    "  `Name` varchar(45) NOT NULL," +
-                    "  `OrgUnit` varchar(45) NOT NULL," +
-                    "  `Price` double (11) NOT NULL," +
-                    "  `Amount` int(11) NOT NULL," +
-                    "  `UserName` varchar(45) NOT NULL," +
-                    "  PRIMARY KEY (`AssetID`)," +
-                    "  KEY `fk_orgunit` (`orgunit`)," +
-                    "  CONSTRAINT `fk_orgunit` FOREIGN KEY (`orgunit`) REFERENCES `organisationunits` (`Orgunit`);";
+            "CREATE TABLE IF NOT EXITS assets (" +
+                    "  AssetID int(50) NOT NULL AUTO_INCREMENT" +
+                    "  Name varchar(45) NOT NULL," +
+                    "  OrgUnit varchar(45) NOT NULL," +
+                    "  Price double (11) NOT NULL," +
+                    "  Amount int(11) NOT NULL," +
+                    "  UserName varchar(45) NOT NULL," +
+                    "  PRIMARY KEY (AssetID)," +
+                    "  KEY fk_orgunit (orgunit`," +
+                    "  CONSTRAINT fk_orgunit FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit);";
     private static final String CREATE_TABLE_BUY_ORDERS =
-            "CREATE TABLE `orders` (" +
-                    "`OrderID` int(50) NOT NULL AUTO_INCREMENT," +
-                    "‘Name’ varchar(45) NOT NULL," +
-                    "‘OrgUnit” varchar(45) NOT NULL," +
-                    "‘Price’ double(11) NOT NULL" +
-                    "‘Amount’ int(11) NOT NULL," +
-                    " `UserName` varchar(45) NOT NULL," +
-                    " PRIMARY KEY (`AssetId`)," +
-                    "  KEY `fk_orgunit` (`orgunit`)," +
-                    "  CONSTRAINT `fk_orgunit` FOREIGN KEY (`orgunit`) REFERENCES `organisationunits` (`Orgunit`));";
+            "CREATE TABLE orders (" +
+                    "OrderID int(50) NOT NULL AUTO_INCREMENT," +
+                    "Name varchar(45) NOT NULL," +
+                    "OrgUnit varchar(45) NOT NULL," +
+                    "Price double(11) NOT NULL" +
+                    "Amount int(11) NOT NULL," +
+                    "UserName varchar(45) NOT NULL," +
+                    "PRIMARY KEY (AssetId)," +
+                    "  KEY fk_orgunit (orgunit)," +
+                    "  CONSTRAINT fk_orgunit FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit));";
     private static final String CREATE_TABLE_USERS =
-            "CREATE TABLE IF NOT EXITS `users` (" +
-                    "  `username` varchar(45) NOT NULL," +
-                    "  `password` varchar(45) NOT NULL," +
-                    "  `privilege` varchar(45) NOT NULL," +
-                    "  `orgunit` varchar(45) NOT NULL," +
-                    "  PRIMARY KEY (`username`)," +
-                    "  KEY `orgunit` (`orgunit`)," +
-                    "  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`orgunit`) REFERENCES `organisationunits` (`Orgunit`);";
+            "CREATE TABLE IF NOT EXITS users (" +
+                    "  username varchar(45) NOT NULL," +
+                    "  password varchar(45) NOT NULL," +
+                    "  privilege varchar(45) NOT NULL," +
+                    "  orgunit varchar(45)," +
+                    "  PRIMARY KEY (username)," +
+                    "  KEY orgunit (orgunit)," +
+                    "  CONSTRAINT users_ibfk_1 FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit);";
     private static final String CREATE_TABLE_HISTORY =
             "CREATE TABLE ‘TRADE_HISTORY’ (" +
-                    "`TradeID` int(11) NOT NULL AUTO_INCREMENT," +
-                    "`OrgUnitBuy’ varchar(45) NOT NULL," +
-                    "`OrgUnitSell` varchar(45) NOT NULL," +
-                    "‘UserSeller` varchar(45) NOT NULL," +
-                    "`UserBuyer` varchar(45) NOT NULL," +
-                    "`QTY` int(11) NOT NULL," +
-                    "`PRICE` double(11) NOT NULL," +
-                    "PRIMARY KEY(`TradeID`)" +
-                    "FOREIGN KEY (`OrgUnitBuy’`) REFERENCES `organisationunits` (`Orgunit`)" +
-                    "FOREIGN KEY (`OrgUnitSell`) REFERENCES `organisationunits` (`Orgunit`)" +
-                    "FOREIGN KEY (`‘UserSeller`) REFERENCES `‘user’ ` (`‘username’`)" +
-                    "FOREIGN KEY (`UserBuyer`) REFERENCES `‘user’ ` (`‘username’`));";
+                    "TradeID int(11) NOT NULL AUTO_INCREMENT," +
+                    "OrgUnitBuy varchar(45) NOT NULL," +
+                    "OrgUnitSell varchar(45) NOT NULL," +
+                    "UserSeller varchar(45) NOT NULL," +
+                    "UserBuyer varchar(45) NOT NULL," +
+                    "QTY int(11) NOT NULL," +
+                    "PRICE double(11) NOT NULL," +
+                    "PRIMARY KEY(TradeID)" +
+                    "FOREIGN KEY (OrgUnitBuy) REFERENCES organisationunits (Orgunit)" +
+                    "FOREIGN KEY (OrgUnitSell) REFERENCES organisationunits (Orgunit)" +
+                    "FOREIGN KEY (UserSeller) REFERENCES user  (username)" +
+                    "FOREIGN KEY (UserBuyer) REFERENCES ‘user’  (username));";
     private static final String CREATE_TABLE_OU =
-            "CREATE TABLE IF NOT EXITS `organisationunits` (" +
-                    "  `Orgunit` varchar(45) NOT NULL," +
-                    "  `credits` int(11) NOT NULL," +
-                    "  PRIMARY KEY (`Orgunit`);";
+            "CREATE TABLE IF NOT EXITS organisationunits (" +
+                    "  Orgunit varchar(45) NOT NULL," +
+                    "  credits int(11) NOT NULL," +
+                    "  PRIMARY KEY (Orgunit);";
     private PreparedStatement getAssets;
+    private PreparedStatement getAllUsers;
 
 
-    public DataSource() {
+    public DataSource()
+    {
         connection = DBConnection.getInstance();
         try {
             Statement st = connection.createStatement();
@@ -94,6 +98,7 @@ public class DataSource
             st.execute(CREATE_TABLE_OU);
             st.execute(CREATE_TABLE_HISTORY);
             getAssets = connection.prepareStatement(GET_ASSETS);
+            getAllUsers = connection.prepareStatement(GET_ALL_USER);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -132,6 +137,82 @@ public class DataSource
             //Do Nothing as this error doesn't occur here
         }
         return temp;
+    }
+
+    /**
+     *
+     * This function is to return ALL users in the DB and convert them
+     * to the user class
+     *
+     * @return (ARRAYLIST<User>) Array list of all users currently in DB
+     *                          (NOTE RETURNS NULL IF THERE ARE NO USERS)
+     *
+     * @throws SQLException - is presented if the SQL commmand causes error
+     *
+     * @throws NoSuchPaddingException - Throws if there is a memory overflow
+     * @throws NoSuchAlgorithmException - Throws if algoritihm is incorrect
+     *
+     * @version 1.0
+     *
+     * @author Hugh
+     */
+    public ArrayList<User> getUser() throws SQLException, NoSuchPaddingException, NoSuchAlgorithmException
+    {
+        //Setup vairables for setting up users
+        String USER;
+        String PW;
+        boolean PRI;
+        String OU_name;
+        OrganisationUnit OU_Info;
+
+        //Setup variables to be used in connection
+        ArrayList<User> toReturn = new ArrayList<User>();
+        ResultSet raw = null;
+
+        //Attempt grab of information
+        try
+        {
+            //Query DB with
+            raw = getAllUsers.executeQuery();
+        }
+        catch (SQLException error)
+        {
+            error.printStackTrace();
+        }
+
+        //If the query returns something set up and return user
+        if(raw != null)
+        {
+            //Iterate through list of results
+            while(raw.next())
+            {
+                //Store Variables
+                USER = raw.getString("username");
+                PW = raw.getString("password");
+                PRI = raw.getBoolean("privilege");
+                OU_name = raw.getString("orgunit");
+
+                //If the user is Admin user (i.e. privilege = true)
+                if(PRI)
+                {
+                    toReturn.add(new AdminUser(USER,PW));
+                }
+                else
+                {
+                    //Grab OU information
+                    OU_Info = StartServer.CurrentStockMarket.DBfindOU(OU_name);
+                    toReturn.add(new User(USER,PW,OU_Info));
+                }
+
+            }
+        }
+        else
+        {
+            //Return empty variable
+            toReturn = null;
+        }
+
+        return toReturn;
     }
 
 }

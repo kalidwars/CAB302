@@ -1,5 +1,7 @@
 package Server;
 
+import COMMON.StockMarket;
+
 import javax.print.DocFlavor;
 import java.io.IOException;
 import java.sql.Connection;
@@ -11,6 +13,7 @@ public class StartServer {
     //Create SQL connectivity stuff
     private static Connection connection;
     public static DataSource SERVER;
+    public static StockMarket CurrentStockMarket;
 
     /**
      *
@@ -25,6 +28,7 @@ public class StartServer {
      */
     public static void main(String[] args)
     {
+        CurrentStockMarket = new StockMarket();
         //Initialise Server
         NetworkServer test = new NetworkServer();
         try {

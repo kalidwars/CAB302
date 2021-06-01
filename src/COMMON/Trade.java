@@ -7,6 +7,7 @@ public class Trade
 {
     private OrganisationUnit seller_org;
     private Asset asset_brought;
+    private String userSeller;
 
     /**
      *
@@ -23,9 +24,10 @@ public class Trade
      * @version 1.0
      *
      */
-    public Trade(OrganisationUnit seller, BuyOrder fulfilled)
+    public Trade(OrganisationUnit seller, String sellerUser, BuyOrder fulfilled)
     {
         this.seller_org = seller;
         this.asset_brought = fulfilled;
+        this.userSeller = sellerUser;
     }
 }

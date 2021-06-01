@@ -12,8 +12,8 @@ public class TestAsset {
     @BeforeEach
     void setup() throws StockExceptions
     {
-        Test1 = new BuyOrder("asset name", 300, 5);
-        Test2 = new SellOrder("asset name 2",550,6);
+        Test1 = new BuyOrder("asset name", 300, 5,"BuyTest");
+        Test2 = new SellOrder("asset name 2",550,6,"SellTest");
     }
 
     // Test if asset name is correct
@@ -84,13 +84,13 @@ public class TestAsset {
     public void ExceptionThrowing() throws StockExceptions
     {
         assertThrows(StockExceptions.class, () -> {
-            BuyOrder Test1 = new BuyOrder("Test1", -2,50);
+            BuyOrder Test1 = new BuyOrder("Test1", -2,50,"test");
         });
         assertThrows(StockExceptions.class, () -> {
-            SellOrder Test2 = new SellOrder("Test2",0,-10);
+            SellOrder Test2 = new SellOrder("Test2",0,-10,"test");
         });
         assertThrows(StockExceptions.class, () -> {
-            BuyOrder Test3 = new BuyOrder("Test3",6,0);
+            BuyOrder Test3 = new BuyOrder("Test3",6,0,"test");
         });
     }
 

@@ -13,15 +13,16 @@ public class BuyOrder extends Asset
      *                   for sale/requests
      * @param value      (DOUBLE) The price of which people are willing to buy or sell
      * @param QTY        (INT) The number wanted/up for sale
+     * @param USER (STRING) Enter the user responsible for putting up the Asset
      *
      * @author Hugh Glas
      *
      * @version 1.0
      *
      */
-    public BuyOrder(String asset_name, double value, int QTY) throws StockExceptions
+    public BuyOrder(String asset_name, double value, int QTY, String USER) throws StockExceptions
     {
-        super(asset_name, value, QTY);
+        super(asset_name, value, QTY, USER);
     }
 
 }

@@ -8,6 +8,7 @@ public class Asset
     private String name_of_asset;
     private double ind_price;
     private int num_available;
+    private String USERResponsible;
 
     /**
      *
@@ -21,19 +22,22 @@ public class Asset
      *
      * @param QTY (INT) The number wanted/up for sale
      *
+     * @param USER (STRING) Enter the user responsible for putting up the Asset
+     *
      * @exception Exception Thrown in 2 casses:
      *                      a) When the Value is negative
      *                      b) When QTY is negative or zeros
      *
      * @author Hugh Glas
      *
-     * @version 1.1
+     * @version 1.2
      *
      */
-    public Asset(String asset_name, Double value, int QTY) throws StockExceptions
+    public Asset(String asset_name, Double value, int QTY, String USER) throws StockExceptions
     {
         //Assign values into class
         this.name_of_asset = asset_name;
+        this.USERResponsible = USER;
 
         if(value < 0)
         {
@@ -168,6 +172,22 @@ public class Asset
      */
     public String GetName()
     {
-        return name_of_asset;
+        return this.name_of_asset;
+    }
+
+    /**
+     *
+     * Method to return the user responsible for putting up the Asset
+     *
+     * @return  (STRING) returns the user responsible for putting up the Asset
+     *
+     * @author Hugh
+     *
+     * @version 1.0
+     *
+     */
+    public String GetUser()
+    {
+        return this.USERResponsible;
     }
 }

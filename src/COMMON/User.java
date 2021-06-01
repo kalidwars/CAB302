@@ -71,6 +71,21 @@ public class User implements Serializable
 
     /**
      *
+     * Simple Method to return the ID string
+     *
+     * @return (STRING) Raw string of the ID
+     *
+     * @version 1.0
+     *
+     * @Author Hugh
+     */
+    public String GetUserID()
+    {
+        return this.ID;
+    }
+
+    /**
+     *
      * Method In Which Proves the password is correct
      *
      * @param PasswordAttempt - RawString Password to check against the actual password

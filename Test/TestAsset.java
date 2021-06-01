@@ -2,18 +2,28 @@ import COMMON.*;
 import CustomExceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import javax.crypto.NoSuchPaddingException;
+import java.security.NoSuchAlgorithmException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
 public class TestAsset {
     BuyOrder Test1;
     SellOrder Test2;
+    User BuyUser;
+    User SellUser;
+    OrganisationUnit TestUnit;
 
     @BeforeEach
-    void setup() throws StockExceptions
+    void setup() throws StockExceptions, NoSuchAlgorithmException, NoSuchPaddingException
     {
-        Test1 = new BuyOrder("asset name", 300, 5,"BuyTest");
-        Test2 = new SellOrder("asset name 2",550,6,"SellTest");
+        TestUnit = new OrganisationUnit("Buys",0,null);
+        BuyUser = new User("BuyTest","PW", TestUnit);
+        SellUser = new User("SellTest","PW",TestUnit);
+        Test1 = new BuyOrder("asset name", 300, 5,BuyUser);
+        Test2 = new SellOrder("asset name 2",550,6,SellUser);
     }
 
     // Test if asset name is correct
@@ -88,16 +98,17 @@ public class TestAsset {
     }
 
     @Test
-    public void ExceptionThrowing() throws StockExceptions
+    public void ExceptionThrowing() throws StockExceptions, NoSuchAlgorithmException, NoSuchPaddingException
     {
+        User UserExcep = new User("Exception","asdf",TestUnit);
         assertThrows(StockExceptions.class, () -> {
-            BuyOrder Test1 = new BuyOrder("Test1", -2,50,"test");
+            BuyOrder Test1 = new BuyOrder("Test1", -2,50,UserExcep);
         });
         assertThrows(StockExceptions.class, () -> {
-            SellOrder Test2 = new SellOrder("Test2",0,-10,"test");
+            SellOrder Test2 = new SellOrder("Test2",0,-10,UserExcep);
         });
         assertThrows(StockExceptions.class, () -> {
-            BuyOrder Test3 = new BuyOrder("Test3",6,0,"test");
+            BuyOrder Test3 = new BuyOrder("Test3",6,0,UserExcep);
         });
     }
 

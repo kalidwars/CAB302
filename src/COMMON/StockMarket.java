@@ -46,6 +46,27 @@ public class StockMarket {
         return !canBeAdded;
     }
 
+    public User getUserFromID(String ID)
+    {
+        int iterator = 0;
+        User PlaceHolder;
+        User toReturn = null;
+        while(iterator < ListOfUsers.size())
+        {
+            PlaceHolder = ListOfUsers.get(iterator);
+
+            if(PlaceHolder.GetUserID() == ID)
+            {
+                toReturn = PlaceHolder;
+                iterator = ListOfUsers.size();
+            }
+
+            iterator++;
+        }
+
+        return toReturn;
+    }
+
     /**
      * Database information
      * Method to return Orgnisation Unit from OU_name

@@ -20,7 +20,7 @@ public class BuyOrder extends Asset
      * @version 1.0
      *
      */
-    public BuyOrder(String asset_name, double value, int QTY, String USER) throws StockExceptions
+    public BuyOrder(String asset_name, double value, int QTY, User USER) throws StockExceptions
     {
         super(asset_name, value, QTY, USER);
     }

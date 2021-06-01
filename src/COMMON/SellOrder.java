@@ -20,7 +20,7 @@ public class SellOrder extends Asset
      * @version 1.0
      *
      */
-    public SellOrder(String asset_name, double value, int QTY, String USER) throws StockExceptions
+    public SellOrder(String asset_name, double value, int QTY, User USER) throws StockExceptions
     {
         super(asset_name, value, QTY, USER);
     }

@@ -123,13 +123,15 @@ public class DataSource
     public ArrayList<Asset> getAssets(String OUName) throws SQLException, StockExceptions
     {
         ArrayList<Asset> temp = new ArrayList<>();
+        User TOPass;
         ResultSet rs = null;
         try {
             getAssets.setString(1,OUName);
             rs = getAssets.executeQuery();
             while(rs.next())
             {
-                temp.add(new SellOrder(rs.getString("Name"),rs.getDouble("Amount"),rs.getInt("Price"),rs.getString("UserName")));
+                TOPass = StartServer.CurrentStockMarket.getUserFromID(rs.getString("UserName"));
+                temp.add(new SellOrder(rs.getString("Name"),rs.getDouble("Amount"),rs.getInt("Price"),TOPass));
             }
         }
         catch (SQLException throwable)

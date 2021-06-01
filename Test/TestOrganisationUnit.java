@@ -3,6 +3,8 @@ import COMMON.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.crypto.NoSuchPaddingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -10,11 +12,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestOrganisationUnit
 {
+    OrganisationUnit TestUnit = new OrganisationUnit("Test",0,null);
     OrganisationUnit organisationUnit;
     OrganisationUnit organisationUnit_withAssets;
-    BuyOrder SubTest1 =  new BuyOrder("Chip", 5, 8, "Test1");
-    SellOrder SubTest2 = new SellOrder("GPU", 8.8, 420, "Test2");;
     Asset[] AssetTest = new Asset[2];
+    User Test;
+    BuyOrder SubTest1;
+    SellOrder SubTest2;
 
     public TestOrganisationUnit() throws StockExceptions
     {
@@ -23,8 +27,11 @@ public class TestOrganisationUnit
 
 
     @BeforeEach
-    void setup() throws StockExceptions
+    void setup() throws StockExceptions, NoSuchAlgorithmException, NoSuchPaddingException
     {
+            Test = new User("Test", "PW", TestUnit);
+            SubTest1 =  new BuyOrder("Chip", 5, 8, Test);
+            SubTest2 = new SellOrder("GPU", 8.8, 420, Test);
             organisationUnit = new OrganisationUnit("organisation name", 10000, null);
             AssetTest[0] = (SubTest1);
             AssetTest[1] = (SubTest2);

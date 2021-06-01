@@ -25,7 +25,7 @@ import java.util.ArrayList;
  */
 public class DataSource
 {
-    private static final String TESTING  = "DROP TABLE IF EXISTS users;";
+    private static final String TESTING  = "DROP TABLE IF EXISTS users; DROP TABLE IF EXISTS organisationunits;";
     private static final String GET_ASSETS = "SELECT * FROM assets WHERE OrgUnit=?";
     private static final String GET_ALL_USER = "SELECT * FROM users";
     private Connection connection;
@@ -56,7 +56,7 @@ public class DataSource
                     "  KEY fk_orgunit (orgunit)," +
                     "  CONSTRAINT fk_orgunit FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit));";
     private static final String CREATE_TABLE_USERS =
-            "CREATE TABLE IF NOT EXISTS users (username varchar(45) NOT NULL,password varchar(45) NOT NULL,privilege varchar(45) NOT NULL,orgunit varchar(45),PRIMARY KEY (username),KEY orgunit (orgunit));";
+            "CREATE TABLE IF NOT EXISTS users (username varchar(45) NOT NULL,password varchar(45) NOT NULL,privilege varchar(45) NOT NULL,orgunit varchar(45),PRIMARY KEY (username),FOREIGN KEY (orgunit) REFERENCES organisationunits(orgunit));";
     private static final String CREATE_TABLE_HISTORY =
             "CREATE TABLE ‘TRADE_HISTORY’ (" +
                     "TradeID int(11) NOT NULL AUTO_INCREMENT," +
@@ -72,10 +72,7 @@ public class DataSource
                     "FOREIGN KEY (UserSeller) REFERENCES user  (username)" +
                     "FOREIGN KEY (UserBuyer) REFERENCES ‘user’  (username));";
     private static final String CREATE_TABLE_OU =
-            "CREATE TABLE IF NOT EXITS organisationunits (" +
-                    "  Orgunit varchar(45) NOT NULL," +
-                    "  credits int(11) NOT NULL," +
-                    "  PRIMARY KEY (Orgunit);";
+            "CREATE TABLE IF NOT EXISTS organisationunits (Orgunit varchar(45) NOT NULL, credits double(11) NOT NULL, PRIMARY KEY (Orgunit));";
     private PreparedStatement getAssets;
     private PreparedStatement getAllUsers;
 
@@ -86,10 +83,11 @@ public class DataSource
         try {
             this.PrepareTesting();
             Statement st = connection.createStatement();
+            st.execute(CREATE_TABLE_OU);
             //st.execute(CREATE_TABLE_SELL_ASSETS);
             //st.execute(CREATE_TABLE_BUY_ORDERS);
             st.execute(CREATE_TABLE_USERS);
-            //st.execute(CREATE_TABLE_OU);
+
             //st.execute(CREATE_TABLE_HISTORY);
             getAssets = connection.prepareStatement(GET_ASSETS);
             getAllUsers = connection.prepareStatement(GET_ALL_USER);

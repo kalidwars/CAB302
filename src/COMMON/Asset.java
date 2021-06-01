@@ -8,7 +8,7 @@ public class Asset
     private String name_of_asset;
     private double ind_price;
     private int num_available;
-    private String USERResponsible;
+    private User USERResponsible;
 
     /**
      *
@@ -22,7 +22,7 @@ public class Asset
      *
      * @param QTY (INT) The number wanted/up for sale
      *
-     * @param USER (STRING) Enter the user responsible for putting up the Asset
+     * @param USER (USER) Enter the user responsible for putting up the Asset
      *
      * @exception Exception Thrown in 2 casses:
      *                      a) When the Value is negative
@@ -33,7 +33,7 @@ public class Asset
      * @version 1.2
      *
      */
-    public Asset(String asset_name, Double value, int QTY, String USER) throws StockExceptions
+    public Asset(String asset_name, Double value, int QTY, User USER) throws StockExceptions
     {
         //Assign values into class
         this.name_of_asset = asset_name;
@@ -188,6 +188,17 @@ public class Asset
      */
     public String GetUser()
     {
-        return this.USERResponsible;
+        return this.USERResponsible.GetUserID();
+    }
+
+    /**
+     *
+     * Method mainly for the use of finding the asset belongs too
+     *
+     * @return (STRING) returns the OU name that the user belongs too
+     */
+    public String GetOUID()
+    {
+        return this.USERResponsible.OUID_Owner();
     }
 }

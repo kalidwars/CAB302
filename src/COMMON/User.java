@@ -125,6 +125,11 @@ public class User implements Serializable
         return this.PassWord;
     }
 
+    public String OUID_Owner()
+    {
+        return this.OU_OWNER.orgName();
+    }
+
     /**
      *
      * Uploading method for User (this will be overwritten in Admin User

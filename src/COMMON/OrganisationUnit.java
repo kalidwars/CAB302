@@ -1,5 +1,8 @@
 package COMMON;
 import COMMON.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
 
 import CustomExceptions.*;
 
@@ -13,6 +16,12 @@ public class OrganisationUnit
     private double current_credits;
     private ArrayList<Asset> org_assets;
     private ArrayList<Trade> trade_history = new ArrayList<Trade>();
+
+    //SQL VARIABLES
+    private Connection connection;
+    private static final String uploadStatement =
+            "INSERT INTO organisationunits (Orgunit NOT NULL, credits double(11)) VALUES (? ?)";
+    private PreparedStatement UPLOADING;
 
     /**
      * Constructs the orgnaisation unit to keep track on current
@@ -176,5 +185,10 @@ public class OrganisationUnit
     public ArrayList<Asset> getAllAssets()
     {
         return this.org_assets;
+    }
+
+    public boolean Upload()
+    {
+        return false;
     }
 }

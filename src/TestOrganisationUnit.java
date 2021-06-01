@@ -12,8 +12,8 @@ public class TestOrganisationUnit
 {
     OrganisationUnit organisationUnit;
     OrganisationUnit organisationUnit_withAssets;
-    BuyOrder SubTest1 =  new BuyOrder("Chip", 5, 8);
-    SellOrder SubTest2 = new SellOrder("GPU", 8.8, 420);;
+    BuyOrder SubTest1 =  new BuyOrder("Chip", 5, 8, "Test1");
+    SellOrder SubTest2 = new SellOrder("GPU", 8.8, 420, "Test2");;
     Asset[] AssetTest = new Asset[2];
 
     public TestOrganisationUnit() throws StockExceptions

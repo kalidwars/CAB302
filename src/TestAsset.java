@@ -19,6 +19,13 @@ public class TestAsset {
     // Test if asset name is correct
 
     @Test
+    public void testUserName()
+    {
+        assertEquals("BuyTest",Test1.GetUser());
+        assertEquals("SellTest",Test2.GetUser());
+    }
+
+    @Test
     public void testAssetName()
     {
         assertEquals("asset name", Test1.GetName());

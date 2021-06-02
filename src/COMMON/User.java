@@ -64,7 +64,6 @@ public class User implements Serializable
         this.ID = id;
         this.OU_OWNER = ParentUnit;
         this.PassWord = passWord;
-        //internallCipher = Cipher.getInstance("DES/CBC/NoPadding");
     }
 
     /**
@@ -127,7 +126,10 @@ public class User implements Serializable
 
     public String OUID_Owner()
     {
-        return this.OU_OWNER.orgName();
+        if(this.OU_OWNER == null)
+            return "ADMINS";
+        else
+            return this.OU_OWNER.orgName();
     }
 
     /**

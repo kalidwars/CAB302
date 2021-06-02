@@ -101,6 +101,13 @@ public class TestAsset {
     }
 
     @Test
+    public void testOUID()
+    {
+        assertEquals("Buys",Test1.GetOUID());
+        assertEquals("Buys",Test2.GetOUID());
+    }
+
+    @Test
     public void ExceptionThrowing() throws StockExceptions, NoSuchAlgorithmException, NoSuchPaddingException
     {
         User UserExcep = new User("Exception","asdf",TestUnit);

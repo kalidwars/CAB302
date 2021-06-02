@@ -25,16 +25,20 @@ public class TestUser
     private AdminUser test_Case_2;
     private StockMarket testStock;
 
+    /**
+     * SETUPS MARKET TEST CA
+     *
+     * @throws NoSuchAlgorithmException
+     * @throws NoSuchPaddingException
+     * @throws StockExceptions
+     * @throws SQLException
+     */
     @BeforeEach
-    void SetUp() throws NoSuchAlgorithmException, NoSuchPaddingException, StockExceptions
+    void SetUp() throws NoSuchAlgorithmException, NoSuchPaddingException, StockExceptions, SQLException
     {
-        testStock = new StockMarket();
         OU_test = new OrganisationUnit("Basecase",100,null);
         test_Case_1 = new User("NormalUser","PW",OU_test);
         test_Case_2 = new AdminUser("root","root");
-        testStock.addOrgnsiationUnit(OU_test);
-        testStock.UpdateUsers(test_Case_1);
-        testStock.UpdateUsers(test_Case_2);
     }
 
     @Test
@@ -47,15 +51,12 @@ public class TestUser
     }
 
     @Test
-    public void TestEncryption()
+    void TestOUID()
     {
-
-    }
-
-    @Test
-    public void TestDecryption()
-    {
-
+        //Test Case 1
+        assertEquals("Basecase",test_Case_1.OUID_Owner());
+        //Test Case 2
+        assertEquals("ADMINS",test_Case_2.OUID_Owner());
     }
 
 

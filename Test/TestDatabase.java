@@ -6,6 +6,7 @@ import Client.*;
 
 //Import Testing API's and Exceptions
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.function.Executable;
 
 import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class TestDatabase
     private StockMarket testStock;
 
     @BeforeEach
-    public void SetUp() throws StockExceptions, NoSuchPaddingException, NoSuchAlgorithmException
+    public void SetUp() throws StockExceptions, NoSuchPaddingException, NoSuchAlgorithmException, SQLException
     {
         test = new DataSource();
         OU_test = new OrganisationUnit("Basecase",100,null);
@@ -38,20 +39,35 @@ public class TestDatabase
     }
 
     @Test
-    public void DatabaseConnection()
+    public void DatabaseConnection() throws SQLException
     {
-        DataSource dataSource = new DataSource();
+        test.UNITTESTING();
+        assertDoesNotThrow(() -> new DataSource());
     }
 
+    /**
     @Test
-    public void SendingAssets()
-    {
-        ServerConnection serverConnection = new ServerConnection();
-        ArrayList<Asset> test = serverConnection.GetAssets(OU_test.orgName());
-        for (Asset asset : test) {
-            System.out.println(asset.GetName());
-        }
+    @DisplayName("Add asset to database/Server")
+    public void AddAssetToDB() throws StockExceptions {
+        Asset Asset1 = new Asset("Test Asset 1",100.0,30,SellUser);
+        ServerConnection test = new ServerConnection();
+        test.AddAsset(Asset1);
     }
+    @Test
+    @DisplayName("Remove asset from database/Server")
+    public void RemoveAssetFromDB() throws StockExceptions {
+        Asset Asset1 = new Asset("Test Asset 1",100.0,30,BuyUser);
+        ServerConnection test = new ServerConnection();
+        test.RemoveAsset(Asset1);
+    }
+    @Test
+    @DisplayName("Get Asset from database/Server")
+    public void GetAssetFromServer()
+    {
+        ServerConnection test = new ServerConnection();
+        ArrayList<Asset> testassets = test.GetAssets("Buys");
+    }
+     */
 
     @Test
     public void Uploading_DownLoading_OU() throws StockExceptions, SQLException
@@ -72,8 +88,13 @@ public class TestDatabase
 
     }
     @Test
-    void Uploading_DownLoading_Users() throws SQLException, NoSuchPaddingException,NoSuchAlgorithmException
+    void Uploading_DownLoading_Users() throws SQLException, NoSuchPaddingException,NoSuchAlgorithmException, StockExceptions
     {
+        //This needs to be done to clear table and to allow for primary keys
+        test.UNITTESTING();
+        OU_test.Upload();
+        OrganisationUnit ADMIN = new OrganisationUnit("ADMINS", 0, null);
+        ADMIN.Upload();
 
         //Test Case 1
         ArrayList<User> check1 = new ArrayList<User>();

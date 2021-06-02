@@ -27,7 +27,7 @@ public class StartServer {
      * @author Adam, Hugh
      *
      */
-    public static void main(String[] args) throws StockExceptions
+    public static void main(String[] args) throws StockExceptions, SQLException
     {
         CurrentStockMarket = new StockMarket();
         //Initialise Server

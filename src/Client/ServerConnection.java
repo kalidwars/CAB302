@@ -36,46 +36,6 @@ public class ServerConnection implements Serializable
         }
     }
 
-    /**
-     *
-     * Function to Retrieve Users
-     *
-     * @return List of Users in db
-     *
-     * @author Hugh (based on Adam's)
-     *
-     * @version 1.0
-     *
-     * This may need to be deleted later but keep just in case
-     *
-     */
-    /**
-    public ArrayList<User> getUser()
-    {
-        ArrayList<User> toReturn = new ArrayList<User>();
-        try
-        {
-            objectOutputStream.writeUTF("GET_ALL_USER");
-            objectOutputStream.flush();
-            objectOutputStream.writeUTF("");
-            objectOutputStream.flush();
-            int numUsers = objectInputStream.readInt();
-            for (int i = 0; i < numUsers; i++)
-            {
-                User user = (User) objectInputStream.readObject();
-                toReturn.add(user);
-            }
-        }
-        catch (IOException | ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-
-        return toReturn;
-
-    }
-     */
-
     public ArrayList<Asset> GetAssets(String OUName) {
         ArrayList<Asset> assets = new ArrayList<>();
         try {

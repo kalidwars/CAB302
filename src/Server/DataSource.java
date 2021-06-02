@@ -25,58 +25,40 @@ import java.util.ArrayList;
  */
 public class DataSource
 {
+
+    //Useful methods
     private static final String GET_ASSETS = "SELECT * FROM assets WHERE OrgUnit=?";
     private static final String ADD_ASSET = "INSERT INTO assets (name, username, amount,value) VALUES (?, ?, ?, ?);";
     private static final String REMOVE_ASSET = "DELETE FROM assets WHERE name=? AND username=? AND amount=? AND value=?";
     private static final String GET_ALL_USER = "SELECT * FROM users";
+    private static final String GET_ALL_OU = "SELECT * FROM organisationunits;";
+
+    //Testing SQL Methods
     private static final String TESTING  = "DELETE FROM users WHERE true;";
     private static final String TESTING2 = "DELETE FROM organisationunits WHERE true;";
-    private static final String GET_ALL_OU = "SELECT * FROM organisationunits;";
+    private static final String TESTING3 = "DELETE FROM sells WHERE true;";
+    private static final String TESTING4 = "DELETE FROM buys WHERE true";
+    private static final String TESTING5 = "DELETE FROM trade_history WHERE true;";
+
     private Connection connection;
 
     //Create String For Creating tables in Server
     //Each variable name is what the table is designed for
     //Designed by Hugh and Adam
     private static final String CREATE_TABLE_SELL_ASSETS =
-            "CREATE TABLE IF NOT EXITS assets (" +
-                    "  AssetID int(50) NOT NULL AUTO_INCREMENT" +
-                    "  Name varchar(45) NOT NULL," +
-                    "  OrgUnit varchar(45) NOT NULL," +
-                    "  Price double (11) NOT NULL," +
-                    "  Amount int(11) NOT NULL," +
-                    "  UserName varchar(45) NOT NULL," +
-                    "  PRIMARY KEY (AssetID)," +
-                    "  KEY fk_orgunit (orgunit`," +
-                    "  CONSTRAINT fk_orgunit FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit);";
+            "CREATE TABLE IF NOT EXISTS sells (SaleID int(50) NOT NULL AUTO_INCREMENT, Name varchar(45) NOT NULL, username VARCHAR(45) NOT NULL,OrgUnit varchar(45) NOT NULL, Price double(11,2) NOT NULL, Amount int(11) NOT NULL, PRIMARY KEY (SaleId), KEY fk_orgunit (orgunit),  CONSTRAINT sale_orgunit FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit), FOREIGN KEY (username) REFERENCES users(username));";
     private static final String CREATE_TABLE_BUY_ORDERS =
-            "CREATE TABLE orders (" +
-                    "OrderID int(50) NOT NULL AUTO_INCREMENT," +
-                    "Name varchar(45) NOT NULL," +
-                    "OrgUnit varchar(45) NOT NULL," +
-                    "Price double(11) NOT NULL" +
-                    "Amount int(11) NOT NULL," +
-                    "UserName varchar(45) NOT NULL," +
-                    "PRIMARY KEY (AssetId)," +
-                    "  KEY fk_orgunit (orgunit)," +
-                    "  CONSTRAINT fk_orgunit FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit));";
+            "CREATE TABLE IF NOT EXISTS buys (AssetID int(50) NOT NULL AUTO_INCREMENT, Name varchar(45) NOT NULL, username VARCHAR(45) NOT NULL,OrgUnit varchar(45) NOT NULL, Price double(11,2) NOT NULL, Amount int(11) NOT NULL, PRIMARY KEY (AssetID), KEY fk_orgunit (orgunit),  CONSTRAINT fk_orgunit FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit), FOREIGN KEY (username) REFERENCES users(username));";
     private static final String CREATE_TABLE_USERS =
             "CREATE TABLE IF NOT EXISTS users (username varchar(45) NOT NULL,password varchar(45) NOT NULL,privilege varchar(45) NOT NULL,orgunit varchar(45),PRIMARY KEY (username),FOREIGN KEY (orgunit) REFERENCES organisationunits(orgunit));";
     private static final String CREATE_TABLE_HISTORY =
-            "CREATE TABLE ‘TRADE_HISTORY’ (" +
-                    "TradeID int(11) NOT NULL AUTO_INCREMENT," +
-                    "OrgUnitBuy varchar(45) NOT NULL," +
-                    "OrgUnitSell varchar(45) NOT NULL," +
-                    "UserSeller varchar(45) NOT NULL," +
-                    "UserBuyer varchar(45) NOT NULL," +
-                    "QTY int(11) NOT NULL," +
-                    "PRICE double(11) NOT NULL," +
-                    "PRIMARY KEY(TradeID)" +
-                    "FOREIGN KEY (OrgUnitBuy) REFERENCES organisationunits (Orgunit)" +
-                    "FOREIGN KEY (OrgUnitSell) REFERENCES organisationunits (Orgunit)" +
-                    "FOREIGN KEY (UserSeller) REFERENCES user  (username)" +
-                    "FOREIGN KEY (UserBuyer) REFERENCES ‘user’  (username));";
+            "CREATE TABLE IF NOT EXISTS trade_history (TradeID int(11) NOT NULL AUTO_INCREMENT, OrgUnitBuy varchar(45) NOT NULL,OrgUnitSell varchar(45) NOT NULL,UserSeller varchar(45) NOT NULL,UserBuyer varchar(45) NOT NULL,QTY int(11) NOT NULL,PRICE double(11,2) NOT NULL, PRIMARY KEY(TradeID),\n" +
+                    "FOREIGN KEY (OrgUnitBuy) REFERENCES organisationunits (Orgunit)," +
+                    "FOREIGN KEY (OrgUnitSell) REFERENCES organisationunits (Orgunit)," +
+                    "FOREIGN KEY (UserSeller) REFERENCES users (username)," +
+                    "FOREIGN KEY (UserBuyer) REFERENCES users (username));";
     private static final String CREATE_TABLE_OU =
-            "CREATE TABLE IF NOT EXISTS organisationunits (Orgunit varchar(45) NOT NULL, credits double(11,2) NOT NULL, PRIMARY KEY (Orgunit));";
+            "CREATE TABLE IF NOT EXISTS organisationunits (Orgunit varchar(45) NOT NULL, credits double(11,2), PRIMARY KEY (Orgunit));";
     private PreparedStatement getAssets;
     private PreparedStatement getAllUsers;
     private PreparedStatement addAsset;
@@ -89,13 +71,14 @@ public class DataSource
         connection = DBConnection.getInstance();
         try {
             Statement st = connection.createStatement();
+            //Create Tables from above statementes
             st.execute(CREATE_TABLE_OU);
-            //st.execute(CREATE_TABLE_SELL_ASSETS);
-            //st.execute(CREATE_TABLE_BUY_ORDERS);
             st.execute(CREATE_TABLE_USERS);
-            //st.execute(CREATE_TABLE_USERS);
+            st.execute(CREATE_TABLE_BUY_ORDERS);
+            st.execute(CREATE_TABLE_SELL_ASSETS);
+            st.execute(CREATE_TABLE_HISTORY);
 
-            //st.execute(CREATE_TABLE_HISTORY);
+            //Prepare 'concrete' statements
             getAssets = connection.prepareStatement(GET_ASSETS);
             getAllUsers = connection.prepareStatement(GET_ALL_USER);
             getAllOU = connection.prepareStatement(GET_ALL_OU);
@@ -118,6 +101,9 @@ public class DataSource
         Statement st = connection.createStatement();
         st.execute(TESTING);
         st.execute(TESTING2);
+        st.execute(TESTING3);
+        st.execute(TESTING4);
+        st.execute(TESTING5);
     }
 
     /**

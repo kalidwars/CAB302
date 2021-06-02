@@ -32,6 +32,8 @@ public class DataSource
     private static final String REMOVE_ASSET = "DELETE FROM assets WHERE name=? AND username=? AND amount=? AND value=?";
     private static final String GET_ALL_USER = "SELECT * FROM users";
     private static final String GET_ALL_OU = "SELECT * FROM organisationunits;";
+    private static final String GET_BUY_ORDER = "SELECT * FROM orders where offertype = buy AND complete = 0";
+    private static final String GET_SELL_ORDER = "SELECT * FROM orders where offertype = sell AND complete = 0";
 
     //Testing SQL Methods
     private static final String TESTING  = "DELETE FROM users WHERE true;";
@@ -64,7 +66,8 @@ public class DataSource
     private PreparedStatement addAsset;
     private PreparedStatement removeAsset;
     private PreparedStatement getAllOU;
-
+    private PreparedStatement getbuyorders;
+    private PreparedStatement getsellorders;
 
     public DataSource()
     {
@@ -84,6 +87,8 @@ public class DataSource
             getAllOU = connection.prepareStatement(GET_ALL_OU);
             addAsset = connection.prepareStatement(ADD_ASSET);
             removeAsset = connection.prepareStatement(REMOVE_ASSET);
+            getbuyorders = connection.prepareStatement(GET_BUY_ORDER);
+            getsellorders = connection.prepareStatement(GET_SELL_ORDER);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -233,6 +238,36 @@ public class DataSource
         }
 
         return toReturn;
+    }
+
+    public ArrayList<BuyOrder> GetBuyOrders() {
+        ArrayList<BuyOrder> buyOrders = new ArrayList<>();
+        ResultSet rs = null;
+        try {
+            rs = getbuyorders.executeQuery();
+            while(rs.next())
+            {
+                /// Just need to add what columns we are going to use buyOrders.add(BuyOrder();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return buyOrders;
+    }
+
+    public ArrayList<BuyOrder> GetSellOrders() {
+        ArrayList<BuyOrder> sellOrders = new ArrayList<>();
+        ResultSet rs = null;
+        try {
+            rs = getsellorders.executeQuery();
+            while(rs.next())
+            {
+                /// Just need to add what columns we are going to use buyOrders.add(BuyOrder();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return sellOrders;
     }
 
     public ArrayList<OrganisationUnit> convertToOU() throws StockExceptions

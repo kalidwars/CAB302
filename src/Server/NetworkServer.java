@@ -68,6 +68,18 @@ public class NetworkServer implements Serializable {
                             oos.flush();
                         }
                 }
+                ArrayList<BuyOrder> BuyOrders = DataSource.GetBuyOrders();
+                ArrayList<BuyOrder> SellOrders = DataSource.GetSellOrders();
+                for(int i = 0; i < BuyOrders.size(); i++) {
+                    for(int j = 0; j < SellOrders.size(); j++) {
+                        if(BuyOrders.get(i).GetName() == SellOrders.get(j).GetName()
+                        && BuyOrders.get(i).getIndPrice() == SellOrders.get(j).getIndPrice()
+                        ) {
+                            //NEED TO ADD IN WHATS GONNA HAPPEN HERE
+                        }
+                    }
+                }
+
             }
         }
     }

@@ -144,12 +144,11 @@ public class User implements Serializable
      */
     public boolean Upload() throws SQLException
     {
-        //Create Pass Fail varaible boolean
+        //Create Pass Fail variable boolean
         boolean toReturn = true;
 
         //Set UP Connection Information to server
         connection = DBConnection.getInstance();
-        Statement st = connection.createStatement();
 
         try
         {

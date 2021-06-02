@@ -12,13 +12,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestOrganisationUnit
 {
-    OrganisationUnit TestUnit = new OrganisationUnit("Test",0,null);
-    OrganisationUnit organisationUnit;
-    OrganisationUnit organisationUnit_withAssets;
-    Asset[] AssetTest = new Asset[2];
-    User Test;
-    BuyOrder SubTest1;
-    SellOrder SubTest2;
+    private OrganisationUnit TestUnit = new OrganisationUnit("Test",0,null);
+    private OrganisationUnit organisationUnit;
+    private OrganisationUnit organisationUnit_withAssets;
+    private OrganisationUnit Uploading;
+    private Asset[] AssetTest = new Asset[2];
+    private User Test;
+    private BuyOrder SubTest1;
+    private SellOrder SubTest2;
 
     public TestOrganisationUnit() throws StockExceptions
     {
@@ -79,4 +80,5 @@ public class TestOrganisationUnit
             OrganisationUnit ExceptionTest = new OrganisationUnit("Exception",-20,AssetTest);
         });
     }
+
 }

@@ -18,18 +18,20 @@ import java.util.ArrayList;
  *
  * Class for retrieving data from the XML file holding the address list.
  *
- * @author Adam
+ * @author Adam, Hugh
  *
  * @version 1.2
  *
  */
 public class DataSource
 {
-    private static final String TESTING  = "DROP TABLE IF EXISTS users; DROP TABLE IF EXISTS organisationunits;";
     private static final String GET_ASSETS = "SELECT * FROM assets WHERE OrgUnit=?";
     private static final String ADD_ASSET = "INSERT INTO assets (name, username, amount,value) VALUES (?, ?, ?, ?);";
     private static final String REMOVE_ASSET = "DELETE FROM assets WHERE name=? AND username=? AND amount=? AND value=?";
     private static final String GET_ALL_USER = "SELECT * FROM users";
+    private static final String TESTING  = "DELETE FROM users WHERE true;";
+    private static final String TESTING2 = "DELETE FROM organisationunits WHERE true;";
+    private static final String GET_ALL_OU = "SELECT * FROM organisationunits;";
     private static final String GET_BUY_ORDER = "SELECT * FROM orders where offertype = buy AND complete = 0";
     private static final String GET_SELL_ORDER = "SELECT * FROM orders where offertype = sell AND complete = 0";
     private Connection connection;
@@ -76,13 +78,15 @@ public class DataSource
                     "FOREIGN KEY (UserSeller) REFERENCES user  (username)" +
                     "FOREIGN KEY (UserBuyer) REFERENCES ‘user’  (username));";
     private static final String CREATE_TABLE_OU =
-            "CREATE TABLE IF NOT EXISTS organisationunits (Orgunit varchar(45) NOT NULL, credits double(11) NOT NULL, PRIMARY KEY (Orgunit));";
+            "CREATE TABLE IF NOT EXISTS organisationunits (Orgunit varchar(45) NOT NULL, credits double(11,2) NOT NULL, PRIMARY KEY (Orgunit));";
     private PreparedStatement getAssets;
     private PreparedStatement getAllUsers;
     private PreparedStatement addAsset;
     private PreparedStatement removeAsset;
     private PreparedStatement getbuyorders;
     private PreparedStatement getsellorders;
+    private PreparedStatement getAllOU;
+
 
     public DataSource()
     {
@@ -90,14 +94,16 @@ public class DataSource
         try {
             //this.PrepareTesting();
             Statement st = connection.createStatement();
-            //st.execute(CREATE_TABLE_OU);
+            st.execute(CREATE_TABLE_OU);
             //st.execute(CREATE_TABLE_SELL_ASSETS);
             //st.execute(CREATE_TABLE_BUY_ORDERS);
+            st.execute(CREATE_TABLE_USERS);
             //st.execute(CREATE_TABLE_USERS);
 
             //st.execute(CREATE_TABLE_HISTORY);
             getAssets = connection.prepareStatement(GET_ASSETS);
             getAllUsers = connection.prepareStatement(GET_ALL_USER);
+            getAllOU = connection.prepareStatement(GET_ALL_OU);
             addAsset = connection.prepareStatement(ADD_ASSET);
             removeAsset = connection.prepareStatement(REMOVE_ASSET);
             getbuyorders = connection.prepareStatement(GET_BUY_ORDER);
@@ -107,16 +113,18 @@ public class DataSource
         }
     }
 
-    public void PrepareTesting()
+    /**
+     * <b>DO NOT USE FOR FINAL PRODUCT ONLY FOR TESTING</b>
+     *
+     * This is for clearing all the tables of the data
+     *
+     * @throws SQLException When an error occurs while executing
+     */
+    public void UNITTESTING() throws SQLException
     {
-        try {
-            Statement st = connection.createStatement();
-            st.execute(TESTING);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+        Statement st = connection.createStatement();
+        st.execute(TESTING);
+        st.execute(TESTING2);
     }
 
     /**
@@ -244,6 +252,46 @@ public class DataSource
             //Return empty variable
             toReturn = null;
         }
+
+        return toReturn;
+    }
+
+    public ArrayList<OrganisationUnit> convertToOU() throws StockExceptions
+    {
+        // Variable to return to the OU
+        ArrayList<OrganisationUnit> toReturn = new ArrayList<OrganisationUnit>();
+        Double retrievedCredits;
+        String nameOU;
+
+        //SQL Variable
+        ResultSet raw = null;
+
+        try
+        {
+            raw = getAllOU.executeQuery();
+
+            //If the query returns something run through results
+            if(raw != null)
+            {
+                while(raw.next())
+                {
+                    //Store Variables
+                    retrievedCredits = raw.getDouble("credits");
+                    nameOU = raw.getString("Orgunit");
+
+                    toReturn.add(new OrganisationUnit(nameOU,retrievedCredits,null));
+                }
+            }
+            else
+            {
+                toReturn = null;
+            }
+        }
+        catch (SQLException SQL)
+        {
+            SQL.printStackTrace();
+        }
+
 
         return toReturn;
     }

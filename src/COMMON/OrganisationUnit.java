@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
 import CustomExceptions.*;
+import Server.DBConnection;
 
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.Serializable;
@@ -24,7 +26,7 @@ public class OrganisationUnit implements Serializable
     //SQL VARIABLES
     private Connection connection;
     private static final String uploadStatement =
-            "INSERT INTO organisationunits (Orgunit NOT NULL, credits double(11)) VALUES (? ?)";
+            "INSERT INTO organisationunits (Orgunit, credits) VALUES (?,?);";
     private PreparedStatement UPLOADING;
 
     /**
@@ -191,8 +193,38 @@ public class OrganisationUnit implements Serializable
         return this.org_assets;
     }
 
-    public boolean Upload()
+
+    /**
+     *
+     * This uploads the current Organisation Unit ot the Local Database
+     *
+     * @return (BOOLEAN) Return True if there isn't an issue
+     *                          False if there is an issue
+     *
+     * @throws SQLException Occurs if the Database ecounters a problem
+     */
+    public boolean Upload() throws SQLException
     {
-        return false;
+        //Variable to return True or false if the operation has been succesful
+        boolean toReturn = true;
+
+        //Start Connection to server
+        connection = DBConnection.getInstance();
+
+        try
+        {
+            //Take OrgUnit information and Upload it
+            UPLOADING = connection.prepareStatement(uploadStatement);
+            UPLOADING.setString(1,this.org_name);
+            UPLOADING.setDouble(2,this.current_credits);
+            UPLOADING.executeQuery();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            toReturn = false;
+        }
+
+        return toReturn;
     }
 }

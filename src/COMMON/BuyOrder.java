@@ -2,9 +2,13 @@ package COMMON;
 
 import CustomExceptions.*;
 
-public class BuyOrder extends Asset
-{
+import java.io.Serial;
+import java.io.Serializable;
 
+public class BuyOrder extends Asset implements Serializable
+{
+    @Serial
+    private static final long serialVersionUID = -2393708718755176852L;
     /**
      * This class is to describe the asset and the value of the asset
      * additionally it keeps tracks of the QTY

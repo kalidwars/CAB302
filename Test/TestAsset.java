@@ -1,10 +1,13 @@
 import COMMON.*;
+import Client.ServerConnection;
 import CustomExceptions.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.crypto.NoSuchPaddingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -110,6 +113,27 @@ public class TestAsset {
         assertThrows(StockExceptions.class, () -> {
             BuyOrder Test3 = new BuyOrder("Test3",6,0,UserExcep);
         });
+    }
+    @Test
+    @DisplayName("Add asset to database/Server")
+    public void AddAssetToDB() throws StockExceptions {
+        Asset Asset1 = new Asset("Test Asset 1",100.0,30,SellUser);
+        ServerConnection test = new ServerConnection();
+        test.AddAsset(Asset1);
+    }
+    @Test
+    @DisplayName("Remove asset from database/Server")
+    public void RemoveAssetFromDB() throws StockExceptions {
+        Asset Asset1 = new Asset("Test Asset 1",100.0,30,BuyUser);
+        ServerConnection test = new ServerConnection();
+        test.RemoveAsset(Asset1);
+    }
+    @Test
+    @DisplayName("Get Asset from database/Server")
+    public void GetAssetFromServer()
+    {
+        ServerConnection test = new ServerConnection();
+        ArrayList<Asset> testassets = test.GetAssets("Buys");
     }
 
 }

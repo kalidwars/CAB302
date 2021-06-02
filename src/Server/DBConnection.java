@@ -10,6 +10,15 @@ import java.util.Properties;
 
 public class DBConnection
 {
+    /**
+     *
+     * Class for connecting to the database
+     *
+     * @author Adam
+     *
+     * @version 1.2
+     *
+     */
 
     /**
      * The singleton instance of the database connection.

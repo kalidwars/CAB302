@@ -10,12 +10,12 @@ import java.nio.channels.Pipe;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class ServerConnection
+public class ServerConnection implements Serializable
 {
     @Serial
     private static final long serialVersionUID = -2393708718755176852L;
     private static final String HostIP = "127.0.0.1";
-    private static final int PORT = 3306;
+    private static final int PORT = 5000;
     private Socket socket;
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
@@ -27,7 +27,7 @@ public class ServerConnection
             this.socket = new Socket(HostIP,PORT);
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectOutputStream.flush();
-            //objectInputStream = new ObjectInputStream(socket.getInputStream());
+            objectInputStream = new ObjectInputStream(socket.getInputStream());
         }
         catch (IOException e)
         {
@@ -105,4 +105,27 @@ public class ServerConnection
         }
     }
 
+    public void AddAsset(Asset asset) {
+        try {
+            objectOutputStream.writeUTF("ADD_ASSET");
+            objectOutputStream.flush();
+            objectOutputStream.writeObject(asset);
+            objectOutputStream.flush();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void RemoveAsset(Asset asset1) {
+        try {
+        objectOutputStream.writeUTF("REMOVE_ASSET");
+        objectOutputStream.flush();
+        objectOutputStream.writeObject(asset1);
+        objectOutputStream.flush();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

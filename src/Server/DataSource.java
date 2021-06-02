@@ -27,6 +27,8 @@ public class DataSource
 {
     private static final String TESTING  = "DROP TABLE IF EXISTS users; DROP TABLE IF EXISTS organisationunits;";
     private static final String GET_ASSETS = "SELECT * FROM assets WHERE OrgUnit=?";
+    private static final String ADD_ASSET = "INSERT INTO assets (name, username, amount,value) VALUES (?, ?, ?, ?);";
+    private static final String REMOVE_ASSET = "DELETE FROM assets WHERE name=? AND username=? AND amount=? AND value=?";
     private static final String GET_ALL_USER = "SELECT * FROM users";
     private Connection connection;
 
@@ -75,22 +77,25 @@ public class DataSource
             "CREATE TABLE IF NOT EXISTS organisationunits (Orgunit varchar(45) NOT NULL, credits double(11) NOT NULL, PRIMARY KEY (Orgunit));";
     private PreparedStatement getAssets;
     private PreparedStatement getAllUsers;
-
+    private PreparedStatement addAsset;
+    private PreparedStatement removeAsset;
 
     public DataSource()
     {
         connection = DBConnection.getInstance();
         try {
-            this.PrepareTesting();
+            //this.PrepareTesting();
             Statement st = connection.createStatement();
-            st.execute(CREATE_TABLE_OU);
+            //st.execute(CREATE_TABLE_OU);
             //st.execute(CREATE_TABLE_SELL_ASSETS);
             //st.execute(CREATE_TABLE_BUY_ORDERS);
-            st.execute(CREATE_TABLE_USERS);
+            //st.execute(CREATE_TABLE_USERS);
 
             //st.execute(CREATE_TABLE_HISTORY);
             getAssets = connection.prepareStatement(GET_ASSETS);
             getAllUsers = connection.prepareStatement(GET_ALL_USER);
+            addAsset = connection.prepareStatement(ADD_ASSET);
+            removeAsset = connection.prepareStatement(REMOVE_ASSET);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -119,6 +124,8 @@ public class DataSource
      * @throws SQLException OCCURS when an Sql error occurs
      *
      * @throws StockExceptions This should not be thrown here
+     *
+     * @author Adam
      */
     public ArrayList<Asset> getAssets(String OUName) throws SQLException, StockExceptions
     {
@@ -143,6 +150,20 @@ public class DataSource
             //Do Nothing as this error doesn't occur here
         }
         return temp;
+    }
+    public void AddAsset(Asset asset) throws SQLException {
+        addAsset.setString(1, asset.GetName());
+        addAsset.setString(2, asset.GetOUID());
+        addAsset.setInt(3, asset.getNumAvailable());
+        addAsset.setDouble(4,asset.getIndPrice());
+        addAsset.execute();
+    }
+    public void RemoveAsset(Asset asset) throws SQLException {
+        removeAsset.setString(1, asset.GetName());
+        removeAsset.setString(2, asset.GetUser());
+        removeAsset.setInt(3, asset.getNumAvailable());
+        removeAsset.setDouble(4,asset.getIndPrice());
+        removeAsset.execute();
     }
 
     /**
@@ -220,5 +241,4 @@ public class DataSource
 
         return toReturn;
     }
-
 }

@@ -1,7 +1,12 @@
 package CustomExceptions;
 
-public class StockExceptions extends Exception
+import java.io.Serial;
+import java.io.Serializable;
+
+public class StockExceptions extends Exception implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = -2393708718755176852L;
     /**
      *
      * Excpetion Related to Trade and other stock things

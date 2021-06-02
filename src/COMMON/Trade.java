@@ -1,10 +1,14 @@
 package COMMON;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.ArrayList;
 
-public class Trade
+public class Trade implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = -2393708718755176852L;
     private OrganisationUnit seller_org;
     private Asset asset_brought;
     private String userSeller;

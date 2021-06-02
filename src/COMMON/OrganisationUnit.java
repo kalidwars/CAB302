@@ -1,5 +1,7 @@
 package COMMON;
 import COMMON.*;
+
+import java.io.Serial;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -8,9 +10,11 @@ import CustomExceptions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-public class OrganisationUnit
+import java.io.Serializable;
+public class OrganisationUnit implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = -2393708718755176852L;
     //Variables that are to be used throughout class
     private String org_name;
     private double current_credits;

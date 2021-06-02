@@ -32,7 +32,7 @@ public class User implements Serializable
     private OrganisationUnit OU_OWNER;
 
     //Private Variables used for encryption and decryption
-    private Cipher internallCipher;
+    //private Cipher internallCipher;
     //Setup Key
     private byte[] keyBytes = new byte[]{11,0,5,50,100,60,78,55};
     private String SecretAlgorithm = "EnCrYpTeD";
@@ -64,7 +64,7 @@ public class User implements Serializable
         this.ID = id;
         this.OU_OWNER = ParentUnit;
         this.PassWord = passWord;
-        internallCipher = Cipher.getInstance("DES/CBC/NoPadding");
+        //internallCipher = Cipher.getInstance("DES/CBC/NoPadding");
     }
 
     /**
@@ -82,15 +82,15 @@ public class User implements Serializable
      *
      * @author Hugh Glas
      */
-    public byte[] PassWordEncryption(String RawPassword) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException
-    {
+    //public byte[] PassWordEncryption(String RawPassword) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException
+    //{
         //Initialise Encryption Mode of cipher
-        internallCipher.init(Cipher.ENCRYPT_MODE,GeneratedKey);
+        //internallCipher.init(Cipher.ENCRYPT_MODE,GeneratedKey);
         //Get into acceptable passable variables
-        byte[] plainText = RawPassword.getBytes(StandardCharsets.UTF_8);
-        byte[] CipherText = internallCipher.doFinal(plainText);
-        return CipherText;
-    }
+        //byte[] plainText = RawPassword.getBytes(StandardCharsets.UTF_8);
+        //byte[] CipherText = internallCipher.doFinal(plainText);
+        //return CipherText;
+    //}
 
     /**
      *

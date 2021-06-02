@@ -2,9 +2,13 @@ package COMMON;
 
 import CustomExceptions.StockExceptions;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class StockMarket {
+public class StockMarket implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -2393708718755176852L;
     public ArrayList<OrganisationUnit> StockMarketLive;
 
     public ArrayList<Asset> activeTrades;

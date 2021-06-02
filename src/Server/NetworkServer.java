@@ -2,9 +2,7 @@ package Server;
 
 import COMMON.*;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.io.Serial;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,10 +10,22 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class NetworkServer {
+/**
+ *
+ * Class for running the server/Accepting commands from clients
+ *
+ * @author Adam
+ *
+ * @version 1.2
+ *
+ */
+
+
+
+public class NetworkServer implements Serializable {
     @Serial
     private static final long serialVersionUID = -2393708718755176852L;
-    private static final int PORT = 3306;
+    private static final int PORT = 5000;
     private static final int SOCKET_TIMEOUT = 100;
     private AtomicBoolean running = new AtomicBoolean(true);
     private DataSource DataSource = new DataSource();
@@ -41,6 +51,12 @@ public class NetworkServer {
                             oos.writeObject(asset);
                             oos.flush();
                         }
+                    case "ADD_ASSET":
+                        Asset asset = (Asset) ois.readObject();
+                        DataSource.AddAsset(asset);
+                    case "REMOVE_ASSET":
+                        Asset assettoremove = (Asset) ois.readObject();
+                        DataSource.RemoveAsset(assettoremove);
                     case "GET_ALL_USER":
                         String QStock = ois.readUTF();
                         ArrayList<User> tempUser = new ArrayList<User>();

@@ -2,13 +2,17 @@ package COMMON;
 
 import Server.DBConnection;
 import javax.crypto.NoSuchPaddingException;
+import java.io.Serial;
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class AdminUser extends COMMON.User
+public class AdminUser extends COMMON.User implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = -2393708718755176852L;
 
     //SQL Variables
     private Connection connection;

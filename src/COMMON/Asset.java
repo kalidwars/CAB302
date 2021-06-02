@@ -2,8 +2,13 @@ package COMMON;
 
 import CustomExceptions.*;
 
-public class Asset
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Asset implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = -2393708718755176852L;
     //Variables to use throughout the class
     private String name_of_asset;
     private double ind_price;
@@ -24,7 +29,7 @@ public class Asset
      *
      * @param USER (USER) Enter the user responsible for putting up the Asset
      *
-     * @exception Exception Thrown in 2 casses:
+     * @exception Exception Thrown in 2 cases:
      *                      a) When the Value is negative
      *                      b) When QTY is negative or zeros
      *

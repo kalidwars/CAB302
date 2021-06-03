@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,7 +29,7 @@ public class TestOrganisationUnit
 
 
     @BeforeEach
-    void setup() throws StockExceptions, NoSuchAlgorithmException, NoSuchPaddingException
+    void setup() throws StockExceptions, IOException
     {
             Test = new User("Test", "PW", TestUnit);
             SubTest1 =  new BuyOrder("Chip", 5, 8, Test);

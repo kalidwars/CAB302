@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ public class TestAsset {
     OrganisationUnit TestUnit;
 
     @BeforeEach
-    void setup() throws StockExceptions, NoSuchAlgorithmException, NoSuchPaddingException
+    void setup() throws StockExceptions, IOException
     {
         TestUnit = new OrganisationUnit("Buys",0,null);
         BuyUser = new User("BuyTest","PW", TestUnit);
@@ -108,7 +109,7 @@ public class TestAsset {
     }
 
     @Test
-    public void ExceptionThrowing() throws StockExceptions, NoSuchAlgorithmException, NoSuchPaddingException
+    public void ExceptionThrowing() throws IOException
     {
         User UserExcep = new User("Exception","asdf",TestUnit);
         assertThrows(StockExceptions.class, () -> {

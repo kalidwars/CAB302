@@ -5,6 +5,7 @@ import CustomExceptions.*;
 //Import SQL API
 import Server.DataSource;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import Client.ServerConnection;
 
@@ -34,7 +35,7 @@ public class TestUser
      * @throws SQLException
      */
     @BeforeEach
-    void SetUp() throws NoSuchAlgorithmException, NoSuchPaddingException, StockExceptions, SQLException
+    void SetUp() throws IOException, StockExceptions, SQLException
     {
         OU_test = new OrganisationUnit("Basecase",100,null);
         test_Case_1 = new User("NormalUser","PW",OU_test);
@@ -59,5 +60,10 @@ public class TestUser
         assertEquals("ADMINS",test_Case_2.OUID_Owner());
     }
 
+    @Test
+    void TestEncryption()
+    {
+        assertNotEquals("root",test_Case_2.RetrivePassword());
+    }
 
 }

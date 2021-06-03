@@ -9,6 +9,7 @@ import jdk.jfr.Name;
 import org.junit.jupiter.api.*;
 
 import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class TestDatabase
     private SellOrder Test2;
 
     @BeforeEach
-    public void SetUp() throws StockExceptions, NoSuchPaddingException, NoSuchAlgorithmException, SQLException
+    public void SetUp() throws StockExceptions, IOException, SQLException
     {
         test = new DataSource();
         OU_test = new OrganisationUnit("Basecase",100,null);
@@ -76,7 +77,7 @@ public class TestDatabase
 
     @Test
     @DisplayName("Uploading_DownLoading_Users")
-    void test_3() throws SQLException, NoSuchPaddingException,NoSuchAlgorithmException, StockExceptions
+    void test_3() throws SQLException, IOException, StockExceptions
     {
         //This needs to be done to clear table and to allow for primary keys
         test.UNITTESTING();

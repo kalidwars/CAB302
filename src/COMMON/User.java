@@ -2,11 +2,8 @@ package COMMON;
 import Server.*;
 
 //Needed Library
-import java.io.Serial;
-import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
+import java.sql.*;
+import java.io.*;
 
 //May be Deleted later
 import javax.crypto.BadPaddingException;
@@ -18,17 +15,14 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Statement;
 
 
-public class User implements Serializable
+public class User
 {
-    @Serial
-    private static final long serialVersionUID = -2393708718755176852L;
-
     //User Variables
     private String ID;
     private String PassWord;
+    private Serial privatePassWord;
     private OrganisationUnit OU_OWNER;
 
     //Private Variables used for encryption and decryption
@@ -59,11 +53,11 @@ public class User implements Serializable
      * @version 1.1
      *
      */
-    public User(String id, String passWord, OrganisationUnit ParentUnit) throws NoSuchPaddingException, NoSuchAlgorithmException
-    {
+    public User(String id, String passWord, OrganisationUnit ParentUnit) throws IOException {
         this.ID = id;
         this.OU_OWNER = ParentUnit;
-        this.PassWord = passWord;
+        this.privatePassWord = new Serial(passWord);
+        privatePassWord.EncryptPassword();
     }
 
     /**
@@ -119,9 +113,9 @@ public class User implements Serializable
         return null;
     }
 
-    public String RawPassword()
+    public String RetrivePassword()
     {
-        return this.PassWord;
+        return this.privatePassWord.getHiddenData();
     }
 
     public String OUID_Owner()

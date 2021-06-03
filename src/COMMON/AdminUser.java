@@ -2,6 +2,7 @@ package COMMON;
 
 import Server.DBConnection;
 import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
@@ -20,7 +21,7 @@ public class AdminUser extends COMMON.User implements Serializable
             "INSERT INTO users (username, password, privilege, orgunit) VALUES (?, ?, ?, ?)";
     private PreparedStatement UPLOADING;
 
-    public AdminUser(String id, String passWord) throws NoSuchAlgorithmException, NoSuchPaddingException
+    public AdminUser(String id, String passWord) throws IOException
     {
         super(id, passWord, null);
     }
@@ -47,7 +48,7 @@ public class AdminUser extends COMMON.User implements Serializable
         {
             UPLOADING = connection.prepareStatement(upload_statement);
             UPLOADING.setString(1, this.GetUserID());
-            UPLOADING.setString(2,this.RawPassword());
+            UPLOADING.setString(2,this.RetrivePassword());
             UPLOADING.setString(3,String.valueOf(true));
             UPLOADING.setString(4,"ADMINS");
             UPLOADING.executeQuery();

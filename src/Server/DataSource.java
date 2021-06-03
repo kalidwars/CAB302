@@ -5,6 +5,7 @@ import CustomExceptions.*;
 import Server.*;
 
 import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -181,7 +182,7 @@ public class DataSource
      *
      * @author Hugh
      */
-    public ArrayList<User> convertToUsers(StockMarket QuestionStockMarket) throws SQLException, NoSuchPaddingException, NoSuchAlgorithmException
+    public ArrayList<User> convertToUsers(StockMarket QuestionStockMarket) throws SQLException, IOException
     {
         //Setup variables for setting up users
         String USER;

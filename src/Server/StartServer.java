@@ -38,6 +38,7 @@ public class StartServer {
             e.printStackTrace();
         }
         SERVER = new DataSource();
+        SERVER.UNITTESTING();
 
     }
 }

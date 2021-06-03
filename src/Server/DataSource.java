@@ -270,7 +270,7 @@ public class DataSource
         return sellOrders;
     }
 
-    public ArrayList<OrganisationUnit> convertToOU() throws StockExceptions
+    public ArrayList<OrganisationUnit> GetAllOU() throws StockExceptions
     {
         // Variable to return to the OU
         ArrayList<OrganisationUnit> toReturn = new ArrayList<OrganisationUnit>();

@@ -26,7 +26,7 @@ public class OrganisationUnit implements Serializable
     //SQL VARIABLES
     private Connection connection;
     private static final String uploadStatement =
-            "INSERT INTO organisationunits (Orgunit, credits) VALUES (?,?);";
+            "INSERT INTO organisationunits (Orgunit,credits) VALUES (?,?) ON DUPLICATE KEY UPDATE Orgunit = Orgunit;";
     private PreparedStatement UPLOADING;
 
     /**

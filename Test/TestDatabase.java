@@ -5,11 +5,10 @@ import CustomExceptions.*;
 import Client.*;
 
 //Import Testing API's and Exceptions
+import jdk.jfr.Name;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.function.Executable;
 
 import javax.crypto.NoSuchPaddingException;
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,6 +24,10 @@ public class TestDatabase
     private AdminUser test_Case_2;
     private DataSource test;
     private StockMarket testStock;
+    private User BuyUser;
+    private User SellUser;
+    private OrganisationUnit TestUnit;
+    private SellOrder Test2;
 
     @BeforeEach
     public void SetUp() throws StockExceptions, NoSuchPaddingException, NoSuchAlgorithmException, SQLException
@@ -32,45 +35,28 @@ public class TestDatabase
         test = new DataSource();
         OU_test = new OrganisationUnit("Basecase",100,null);
         testStock = new StockMarket();
+        TestUnit = new OrganisationUnit("Buys",0,null);
         test_Case_1 = new User("NormalUser","PW",OU_test);
         test_Case_2 = new AdminUser("root","root");
+        BuyUser = new User("BuyTest","PW", TestUnit);
+        SellUser = new User("SellTest","PW",TestUnit);
         test_case_1_B = new BuyOrder("Test",0.69,6,test_Case_1);
         test_case_2_S = new SellOrder("test2", 55,78,test_Case_2);
+        Test2 = new SellOrder("asset name 2",550,6,SellUser);
     }
 
     @Test
-    public void DatabaseConnection() throws SQLException
+    @DisplayName("Database Connection")
+    public void test_1 () throws SQLException
     {
         test.UNITTESTING();
         assertDoesNotThrow(() -> new DataSource());
+
     }
 
-    /**
     @Test
-    @DisplayName("Add asset to database/Server")
-    public void AddAssetToDB() throws StockExceptions {
-        Asset Asset1 = new Asset("Test Asset 1",100.0,30,SellUser);
-        ServerConnection test = new ServerConnection();
-        test.AddAsset(Asset1);
-    }
-    @Test
-    @DisplayName("Remove asset from database/Server")
-    public void RemoveAssetFromDB() throws StockExceptions {
-        Asset Asset1 = new Asset("Test Asset 1",100.0,30,BuyUser);
-        ServerConnection test = new ServerConnection();
-        test.RemoveAsset(Asset1);
-    }
-    @Test
-    @DisplayName("Get Asset from database/Server")
-    public void GetAssetFromServer()
-    {
-        ServerConnection test = new ServerConnection();
-        ArrayList<Asset> testassets = test.GetAssets("Buys");
-    }
-     */
-
-    @Test
-    public void Uploading_DownLoading_OU() throws StockExceptions, SQLException
+    @DisplayName("Uploading_DownLoading_OU")
+    public void test_2() throws StockExceptions, SQLException
     {
         test.UNITTESTING();
 
@@ -78,7 +64,7 @@ public class TestDatabase
 
         OU_test.Upload();
 
-        checkOU = test.convertToOU();
+        checkOU = test.GetAllOU();
 
         OrganisationUnit critera = checkOU.get(0);
 
@@ -87,8 +73,10 @@ public class TestDatabase
         assertEquals(100.0,critera.currentCredits());
 
     }
+
     @Test
-    void Uploading_DownLoading_Users() throws SQLException, NoSuchPaddingException,NoSuchAlgorithmException, StockExceptions
+    @DisplayName("Uploading_DownLoading_Users")
+    void test_3() throws SQLException, NoSuchPaddingException,NoSuchAlgorithmException, StockExceptions
     {
         //This needs to be done to clear table and to allow for primary keys
         test.UNITTESTING();
@@ -126,5 +114,32 @@ public class TestDatabase
 
 
     }
+
+    @Test
+    @DisplayName("AddAssetToDB")
+    public void test_4() throws StockExceptions {
+        Asset Asset1 = new Asset("Test Asset 1",100.0,30,SellUser);
+        ServerConnection test = new ServerConnection();
+        test.AddAsset(Asset1);
+    }
+
+
+    @Test
+    @DisplayName("RemoveAssetFromDB")
+    public void test_5() throws StockExceptions {
+        Asset Asset1 = new Asset("Test Asset 1",100.0,30,BuyUser);
+        ServerConnection test = new ServerConnection();
+        test.RemoveAsset(Asset1);
+    }
+
+    @Test
+    @DisplayName("GetAssetFromServer")
+    public void test_6() throws SQLException
+    {
+        ServerConnection test = new ServerConnection();
+        test.AddAsset(Test2);
+        ArrayList<Asset> testassets = test.GetAssets("Buys");
+    }
+
 
 }

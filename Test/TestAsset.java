@@ -121,26 +121,5 @@ public class TestAsset {
             BuyOrder Test3 = new BuyOrder("Test3",6,0,UserExcep);
         });
     }
-    @Test
-    @DisplayName("Add asset to database/Server")
-    public void AddAssetToDB() throws StockExceptions {
-        Asset Asset1 = new Asset("Test Asset 1",100.0,30,SellUser);
-        ServerConnection test = new ServerConnection();
-        test.AddAsset(Asset1);
-    }
-    @Test
-    @DisplayName("Remove asset from database/Server")
-    public void RemoveAssetFromDB() throws StockExceptions {
-        Asset Asset1 = new Asset("Test Asset 1",100.0,30,BuyUser);
-        ServerConnection test = new ServerConnection();
-        test.RemoveAsset(Asset1);
-    }
-    @Test
-    @DisplayName("Get Asset from database/Server")
-    public void GetAssetFromServer()
-    {
-        ServerConnection test = new ServerConnection();
-        ArrayList<Asset> testassets = test.GetAssets("Buys");
-    }
 
 }

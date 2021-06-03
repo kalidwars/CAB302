@@ -25,16 +25,17 @@ public class StockMarket implements Serializable {
      * @version 1.0
      * @author Hugh Glas
      */
-    public StockMarket() throws StockExceptions, SQLException {
+    public StockMarket() throws StockExceptions, SQLException
+    {
         StockMarketLive = new ArrayList<OrganisationUnit>();
         activeTrades = new ArrayList<Asset>();
         ListOfUsers = new ArrayList<User>();
         pastTrades = new ArrayList<Trade>();
+
         //This Is to prevent any SQL Error throws
         OrganisationUnit ADMIN = new OrganisationUnit("ADMINS", 0, null);
         ADMIN.Upload();
         StockMarketLive.add(ADMIN);
-
     }
 
     /**

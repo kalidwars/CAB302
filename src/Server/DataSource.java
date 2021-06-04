@@ -53,7 +53,7 @@ public class DataSource
     private static final String CREATE_TABLE_BUY_ORDERS =
             "CREATE TABLE IF NOT EXISTS buys (AssetID int(50) NOT NULL AUTO_INCREMENT, Name varchar(45) NOT NULL, username VARCHAR(45) NOT NULL,OrgUnit varchar(45) NOT NULL, Price double(11,2) NOT NULL, Amount int(11) NOT NULL, PRIMARY KEY (AssetID), KEY fk_orgunit (orgunit),  CONSTRAINT fk_orgunit FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit), FOREIGN KEY (username) REFERENCES users(username));";
     private static final String CREATE_TABLE_USERS =
-            "CREATE TABLE IF NOT EXISTS users (username varchar(45) NOT NULL,password varchar(45) NOT NULL,privilege varchar(45) NOT NULL,orgunit varchar(45),PRIMARY KEY (username),FOREIGN KEY (orgunit) REFERENCES organisationunits(orgunit));";
+            "CREATE TABLE IF NOT EXISTS users (username varchar(45) NOT NULL,password blob NOT NULL,privilege varchar(45) NOT NULL,orgunit varchar(45),PRIMARY KEY (username),FOREIGN KEY (orgunit) REFERENCES organisationunits(orgunit));";
     private static final String CREATE_TABLE_HISTORY =
             "CREATE TABLE IF NOT EXISTS trade_history (TradeID int(11) NOT NULL AUTO_INCREMENT, OrgUnitBuy varchar(45) NOT NULL,OrgUnitSell varchar(45) NOT NULL,UserSeller varchar(45) NOT NULL,UserBuyer varchar(45) NOT NULL,QTY int(11) NOT NULL,PRICE double(11,2) NOT NULL, PRIMARY KEY(TradeID),\n" +
                     "FOREIGN KEY (OrgUnitBuy) REFERENCES organisationunits (Orgunit)," +

@@ -1,47 +1,33 @@
 package COMMON;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
-public class Serial implements Serializable
-{
-
+public class Serial implements Serializable {
     private static final long serialVersionUID = 6412491339292614630L;
 
+
     private String data;
-    private ArrayList<String> hiddenlist;
+    private ArrayList<String> hiddenList;
 
     /**
-     *
      * Setups Class for Serilsation
-     * This will protect critical information
+     * This will protect critical information such as password
+     * <b>NOTE: This will only work on Strings</b>
      *
      * @param HiddenData (STRING) this is the string that needs encryption
-     *
-     *
      */
-    public Serial(String HiddenData)
-    {
-        data =  HiddenData;
+    public Serial(String HiddenData) {
+        //Translate into bytes to upload for later usage
+        this.data = HiddenData;
     }
 
-    public String getHiddenData()
+    public byte[] GetBinaryOutput()
     {
-        return this.data;
+        return this.data.getBytes();
     }
-
-    public void EncryptPassword() throws IOException
-    {
-        FileOutputStream tempPlaceHolder = new FileOutputStream("tmp/information.txt");
-
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(tempPlaceHolder);
-        objectOutputStream.writeObject(data);
-        objectOutputStream.close();
-        tempPlaceHolder.close();
-    }
-
-    public void UpLoadPassword()
-    {}
-
-
 }
+

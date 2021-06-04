@@ -3,11 +3,9 @@ import COMMON.*;
 import CustomExceptions.*;
 
 //Import SQL API
-import Server.DataSource;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import Client.ServerConnection;
 
 //IMPORT JUIN API
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 //IMPORT java
 import javax.crypto.NoSuchPaddingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 
 public class TestUser
 {
@@ -60,10 +57,6 @@ public class TestUser
         assertEquals("ADMINS",test_Case_2.OUID_Owner());
     }
 
-    @Test
-    void TestEncryption()
-    {
-        assertNotEquals("root",test_Case_2.RetrivePassword());
-    }
+
 
 }

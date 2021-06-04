@@ -1,11 +1,11 @@
 package COMMON;
 
 import Server.DBConnection;
-import javax.crypto.NoSuchPaddingException;
+
 import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
-import java.security.NoSuchAlgorithmException;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -39,16 +39,17 @@ public class AdminUser extends COMMON.User implements Serializable
      *
      */
     @Override
-    public boolean Upload()
+    public boolean Upload() throws SQLException
     {
         boolean toReturn = true;
         connection = DBConnection.getInstance();
-
+        byte[] placeHolder = this.ReturnRawPassword().GetBinaryOutput();
+        Blob DATA = new javax.sql.rowset.serial.SerialBlob(placeHolder);
         try
         {
             UPLOADING = connection.prepareStatement(upload_statement);
             UPLOADING.setString(1, this.GetUserID());
-            UPLOADING.setString(2,this.RetrivePassword());
+            UPLOADING.setBlob(2,DATA);
             UPLOADING.setString(3,String.valueOf(true));
             UPLOADING.setString(4,"ADMINS");
             UPLOADING.executeQuery();

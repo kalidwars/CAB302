@@ -142,5 +142,11 @@ public class TestDatabase
         ArrayList<Asset> testassets = test.GetAssets("Buys");
     }
 
+    @Test
+    @DisplayName("TestEncryption")
+    void test_7() throws IOException, SQLException {
+        test_Case_2.Upload();
+    }
+
 
 }

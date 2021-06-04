@@ -5,6 +5,12 @@ package userInterface;
  *
  * @author n10245090
  */
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author n10245090
+ */
 public class addUser extends javax.swing.JFrame {
 
     /**
@@ -30,7 +36,7 @@ public class addUser extends javax.swing.JFrame {
         newUserTextField = new javax.swing.JTextField();
         newPassTextField = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Create New User");
 
         addUserLabel.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -38,6 +44,11 @@ public class addUser extends javax.swing.JFrame {
 
         createBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         createBtn.setText("CREATE");
+        createBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createBtnActionPerformed(evt);
+            }
+        });
 
         newUserLabel.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         newUserLabel.setText("Enter the username:");
@@ -102,6 +113,11 @@ public class addUser extends javax.swing.JFrame {
     private void newUserTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newUserTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_newUserTextFieldActionPerformed
+
+    private void createBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "User Added");
+    }//GEN-LAST:event_createBtnActionPerformed
 
     /**
      * @param args the command line arguments

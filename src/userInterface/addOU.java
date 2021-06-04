@@ -1,5 +1,6 @@
 package userInterface;
 
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,38 +24,43 @@ public class addOU extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        createOULabel = new javax.swing.JLabel();
+        OUNameLabel = new javax.swing.JLabel();
+        OUCreditsLabel = new javax.swing.JLabel();
+        OUAssetsLabel = new javax.swing.JLabel();
+        createOUBtn = new javax.swing.JButton();
+        OUNameTextField = new javax.swing.JTextField();
+        OUCreditsTextField = new javax.swing.JTextField();
+        OUAssetsTextField = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Create New OU");
 
-        jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
-        jLabel1.setText("CREATE NEW OU");
+        createOULabel.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        createOULabel.setText("CREATE NEW OU");
 
-        jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jLabel2.setText("Enter name of OU:");
+        OUNameLabel.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        OUNameLabel.setText("Enter name of OU:");
 
-        jLabel3.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jLabel3.setText("Enter number of OU credits:");
+        OUCreditsLabel.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        OUCreditsLabel.setText("Enter number of OU credits:");
 
-        jLabel4.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jLabel4.setText("Enter number of OU assets:");
+        OUAssetsLabel.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        OUAssetsLabel.setText("Enter number of OU assets:");
 
-        jButton1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jButton1.setText("CREATE");
+        createOUBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        createOUBtn.setText("CREATE");
+        createOUBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createOUBtnActionPerformed(evt);
+            }
+        });
 
-        jTextField1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        OUNameTextField.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
 
-        jTextField2.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        OUCreditsTextField.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
 
-        jTextField3.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        OUAssetsTextField.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -64,47 +70,52 @@ public class addOU extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(128, 128, 128)
-                                                .addComponent(jLabel1))
+                                                .addComponent(createOULabel))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(54, 54, 54)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(jLabel3)
-                                                        .addComponent(jLabel2)
-                                                        .addComponent(jLabel4))
+                                                        .addComponent(OUCreditsLabel)
+                                                        .addComponent(OUNameLabel)
+                                                        .addComponent(OUAssetsLabel))
                                                 .addGap(18, 18, 18)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(jTextField1)
-                                                        .addComponent(jTextField2)
-                                                        .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
+                                                        .addComponent(OUNameTextField)
+                                                        .addComponent(OUCreditsTextField)
+                                                        .addComponent(OUAssetsTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(162, 162, 162)
-                                                .addComponent(jButton1)))
+                                                .addComponent(createOUBtn)))
                                 .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jLabel1)
+                                .addComponent(createOULabel)
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel2)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(OUNameLabel)
+                                        .addComponent(OUNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel3)
-                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(OUCreditsLabel)
+                                        .addComponent(OUCreditsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel4)
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(OUAssetsLabel)
+                                        .addComponent(OUAssetsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton1)
+                                .addComponent(createOUBtn)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void createOUBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createOUBtnActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "OU Added");
+    }//GEN-LAST:event_createOUBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -142,13 +153,13 @@ public class addOU extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JLabel OUAssetsLabel;
+    private javax.swing.JTextField OUAssetsTextField;
+    private javax.swing.JLabel OUCreditsLabel;
+    private javax.swing.JTextField OUCreditsTextField;
+    private javax.swing.JLabel OUNameLabel;
+    private javax.swing.JTextField OUNameTextField;
+    private javax.swing.JButton createOUBtn;
+    private javax.swing.JLabel createOULabel;
     // End of variables declaration//GEN-END:variables
 }

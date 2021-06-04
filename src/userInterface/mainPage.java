@@ -1,5 +1,12 @@
 package userInterface;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author n10245090
+ */
 public class mainPage extends javax.swing.JFrame {
 
     /**
@@ -8,6 +15,7 @@ public class mainPage extends javax.swing.JFrame {
     public mainPage() {
         initComponents();
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -60,7 +68,7 @@ public class mainPage extends javax.swing.JFrame {
         deleteUserMenuItem = new javax.swing.JMenuItem();
         deleteOUMenuItem = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Trading System");
         setPreferredSize(new java.awt.Dimension(1000, 800));
 
@@ -122,6 +130,11 @@ public class mainPage extends javax.swing.JFrame {
 
         buyBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         buyBtn.setText("BUY");
+        buyBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout avBuyPanelLayout = new javax.swing.GroupLayout(avBuyPanel);
         avBuyPanel.setLayout(avBuyPanelLayout);
@@ -173,6 +186,11 @@ public class mainPage extends javax.swing.JFrame {
 
         sellBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         sellBtn.setText("SELL");
+        sellBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sellBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout avSellPanelLayout = new javax.swing.GroupLayout(avSellPanel);
         avSellPanel.setLayout(avSellPanelLayout);
@@ -245,6 +263,11 @@ public class mainPage extends javax.swing.JFrame {
 
         buyRemoveBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         buyRemoveBtn.setText("REMOVE");
+        buyRemoveBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyRemoveBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout currBuyPanelLayout = new javax.swing.GroupLayout(currBuyPanel);
         currBuyPanel.setLayout(currBuyPanelLayout);
@@ -296,6 +319,11 @@ public class mainPage extends javax.swing.JFrame {
 
         sellRemoveBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         sellRemoveBtn.setText("REMOVE");
+        sellRemoveBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sellRemoveBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout currSellPanelLayout = new javax.swing.GroupLayout(currSellPanel);
         currSellPanel.setLayout(currSellPanelLayout);
@@ -355,6 +383,11 @@ public class mainPage extends javax.swing.JFrame {
 
         createBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         createBtn.setText("CREATE ORDER");
+        createBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout createOrdersPanelLayout = new javax.swing.GroupLayout(createOrdersPanel);
         createOrdersPanel.setLayout(createOrdersPanelLayout);
@@ -430,6 +463,11 @@ public class mainPage extends javax.swing.JFrame {
         settingsMenu.setText("Settings");
 
         logoutMenuItem.setText("logout");
+        logoutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutMenuItemActionPerformed(evt);
+            }
+        });
         settingsMenu.add(logoutMenuItem);
 
         mainMenuBar.add(settingsMenu);
@@ -437,15 +475,35 @@ public class mainPage extends javax.swing.JFrame {
         staffMenu.setText("Staff");
 
         addUserMenuItem.setText("Add User");
+        addUserMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addUserMenuItemActionPerformed(evt);
+            }
+        });
         staffMenu.add(addUserMenuItem);
 
         addOUMenuItem.setText("Add OU");
+        addOUMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addOUMenuItemActionPerformed(evt);
+            }
+        });
         staffMenu.add(addOUMenuItem);
 
         deleteUserMenuItem.setText("Delete User");
+        deleteUserMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteUserMenuItemActionPerformed(evt);
+            }
+        });
         staffMenu.add(deleteUserMenuItem);
 
         deleteOUMenuItem.setText("Delete OU");
+        deleteOUMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteOUMenuItemActionPerformed(evt);
+            }
+        });
         staffMenu.add(deleteOUMenuItem);
 
         mainMenuBar.add(staffMenu);
@@ -469,6 +527,58 @@ public class mainPage extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void logoutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutMenuItemActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+
+    }//GEN-LAST:event_logoutMenuItemActionPerformed
+
+    private void addUserMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserMenuItemActionPerformed
+        // TODO add your handling code here:
+        new addUser().setVisible(true);
+    }//GEN-LAST:event_addUserMenuItemActionPerformed
+
+    private void addOUMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addOUMenuItemActionPerformed
+        // TODO add your handling code here:
+        new addOU().setVisible(true);
+    }//GEN-LAST:event_addOUMenuItemActionPerformed
+
+    private void deleteUserMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteUserMenuItemActionPerformed
+        // TODO add your handling code here:
+        new deleteUser().setVisible(true);
+    }//GEN-LAST:event_deleteUserMenuItemActionPerformed
+
+    private void deleteOUMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteOUMenuItemActionPerformed
+        // TODO add your handling code here:
+        new deleteOU().setVisible(true);
+    }//GEN-LAST:event_deleteOUMenuItemActionPerformed
+
+    private void buyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyBtnActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Asset Bought");
+
+    }//GEN-LAST:event_buyBtnActionPerformed
+
+    private void sellBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellBtnActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Asset Sold");
+    }//GEN-LAST:event_sellBtnActionPerformed
+
+    private void buyRemoveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyRemoveBtnActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Buy Order Removed");
+    }//GEN-LAST:event_buyRemoveBtnActionPerformed
+
+    private void sellRemoveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellRemoveBtnActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Sell Order Removed");
+    }//GEN-LAST:event_sellRemoveBtnActionPerformed
+
+    private void createBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Order Created");
+    }//GEN-LAST:event_createBtnActionPerformed
 
     /**
      * @param args the command line arguments

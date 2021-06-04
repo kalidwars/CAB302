@@ -1,6 +1,8 @@
 package userInterface;
 
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author n10245090
@@ -23,27 +25,32 @@ public class deleteOU extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        deleteOULabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
+        OUList = new javax.swing.JList<>();
+        deleteOUBtn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Delete OU");
 
-        jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
-        jLabel1.setText("DELETE OU");
+        deleteOULabel.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        deleteOULabel.setText("DELETE OU");
 
-        jList1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        OUList.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        OUList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "OU 1", "OU 2", "OU 3", "OU 4", "OU 5", "OU 6", "OU 7", "OU 8", "OU 9", "OU 10" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(OUList);
 
-        jButton1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jButton1.setText("DELETE");
+        deleteOUBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        deleteOUBtn.setText("DELETE");
+        deleteOUBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteOUBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -57,26 +64,31 @@ public class deleteOU extends javax.swing.JFrame {
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jLabel1)
+                                                .addComponent(deleteOULabel)
                                                 .addGap(104, 104, 104))
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jButton1)
+                                                .addComponent(deleteOUBtn)
                                                 .addGap(110, 110, 110))))
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jLabel1)
+                                .addComponent(deleteOULabel)
                                 .addGap(18, 18, 18)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton1)
+                                .addComponent(deleteOUBtn)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void deleteOUBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteOUBtnActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "OU Removed");
+    }//GEN-LAST:event_deleteOUBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -114,10 +126,9 @@ public class deleteOU extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> OUList;
+    private javax.swing.JButton deleteOUBtn;
+    private javax.swing.JLabel deleteOULabel;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
-

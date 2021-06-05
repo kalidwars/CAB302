@@ -17,15 +17,15 @@ public class SellOrder extends Asset implements Serializable
      *                   for sale/requests
      * @param value      (DOUBLE) The price of which people are willing to buy or sell
      * @param QTY        (INT) The number wanted/up for sale
-     * @param USER (STRING) Enter the user responsible for putting up the Asset
+     * @param username (STRING) Enter the user responsible for putting up the Asset
      *
      * @author Hugh Glas
      *
      * @version 1.0
      *
      */
-    public SellOrder(String asset_name, double value, int QTY, User USER) throws StockExceptions
+    public SellOrder(String asset_name, double value, int QTY, String username) throws StockExceptions
     {
-        super(asset_name, value, QTY, USER);
+        super(asset_name, value, QTY, username);
     }
 }

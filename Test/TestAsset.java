@@ -27,9 +27,12 @@ public class TestAsset {
         TestUnit = new OrganisationUnit("Buys",0,null);
         BuyUser = new User("BuyTest","PW", TestUnit);
         SellUser = new User("SellTest","PW",TestUnit);
-        Test1 = new BuyOrder("asset name", 300, 5,BuyUser);
-        Test2 = new SellOrder("asset name 2",550,6,SellUser);
-        asset = new Asset("Test Asset 1",100.0,10,BuyUser);
+        Test1 = new BuyOrder("asset name", 300, 5,BuyUser.GetUserID());
+        Test2 = new SellOrder("asset name 2",550,6,SellUser.GetUserID());
+        asset = new Asset("Test Asset 1",100.0,10,BuyUser.GetUserID());
+        ServerConnection testconnection = new ServerConnection();
+        testconnection.AddUser(BuyUser);
+        testconnection.AddUser(SellUser);
     }
 
     // Test if asset name is correct
@@ -115,13 +118,13 @@ public class TestAsset {
     {
         User UserExcep = new User("Exception","asdf",TestUnit);
         assertThrows(StockExceptions.class, () -> {
-            BuyOrder Test1 = new BuyOrder("Test1", -2,50,UserExcep);
+            BuyOrder Test1 = new BuyOrder("Test1", -2,50,UserExcep.GetUserID());
         });
         assertThrows(StockExceptions.class, () -> {
-            SellOrder Test2 = new SellOrder("Test2",0,-10,UserExcep);
+            SellOrder Test2 = new SellOrder("Test2",0,-10,UserExcep.GetUserID());
         });
         assertThrows(StockExceptions.class, () -> {
-            BuyOrder Test3 = new BuyOrder("Test3",6,0,UserExcep);
+            BuyOrder Test3 = new BuyOrder("Test3",6,0,UserExcep.GetUserID());
         });
     }
     @Test
@@ -143,14 +146,14 @@ public class TestAsset {
     @DisplayName("Testing removing assets from the database")
     public void RemoveAssetFromDB() throws StockExceptions {
         ServerConnection testConnection = new ServerConnection();
-        assertEquals(true,testConnection.RemoveAsset(new Asset("Test Asset 1",100.0,10,BuyUser)));
+        assertEquals(true,testConnection.RemoveAsset(new Asset("Test Asset 1",100.0,10,BuyUser.GetUserID())));
     }
 
     @Test
     @DisplayName("Testing retrieving assets from the database")
     public void RetrieveAssetsFromDB() throws StockExceptions {
         ServerConnection testConnection = new ServerConnection();
-        Asset asset = new Asset("Test Asset 1",100.0,10,BuyUser);
+        Asset asset = new Asset("Test Asset 1",100.0,10,BuyUser.GetUserID());
         testConnection.AddAsset(asset);
         ArrayList<Asset> testArrayList = new ArrayList<>();
         testArrayList = testConnection.GetAssets(BuyUser);

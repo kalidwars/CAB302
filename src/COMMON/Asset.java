@@ -1,9 +1,12 @@
 package COMMON;
 
+import Client.ServerConnection;
 import CustomExceptions.*;
 
+import java.io.Console;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Asset implements Serializable
 {
@@ -26,7 +29,7 @@ public class Asset implements Serializable
      *
      * @param QTY (INT) The number wanted/up for sale
      *
-     * @param USER (USER) Enter the user responsible for putting up the Asset
+     * @param username (String) Enter the user responsible for putting up the Asset
      *
      * @exception Exception Thrown in 2 cases:
      *                      a) When the Value is negative
@@ -37,11 +40,17 @@ public class Asset implements Serializable
      * @version 1.2
      *
      */
-    public Asset(String asset_name, Double value, int QTY, User USER) throws StockExceptions
+    public Asset(String asset_name, Double value, int QTY, String username) throws StockExceptions
     {
         //Assign values into class
         this.name_of_asset = asset_name;
-        this.USERResponsible = USER;
+        ServerConnection connection = new ServerConnection();
+        ArrayList<User> users = connection.GetUsers();
+        for(User user : users) {
+            if(user.GetUserID().equals(username)) {
+                this.USERResponsible = user;
+            }
+        }
         if(value < 0)
         {
             throw new StockExceptions("Expected a Positive Value or 0 value for credits");

@@ -166,7 +166,7 @@ public class DataSource
             rs = getAssets.executeQuery();
             while(rs.next())
             {
-                Asset asset = new Asset(rs.getString("AssetName"),rs.getDouble("Price"),rs.getInt("amount"),user);
+                Asset asset = new Asset(rs.getString("AssetName"),rs.getDouble("Price"),rs.getInt("amount"),user.GetUserID());
                 temp.add(asset);
             }
         }

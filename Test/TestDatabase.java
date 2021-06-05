@@ -41,9 +41,9 @@ public class TestDatabase
         test_Case_2 = new AdminUser("root","root");
         BuyUser = new User("BuyTest","PW", TestUnit);
         SellUser = new User("SellTest","PW",TestUnit);
-        test_case_1_B = new BuyOrder("Test",0.69,6,test_Case_1);
-        test_case_2_S = new SellOrder("test2", 55,78,test_Case_2);
-        Test2 = new SellOrder("asset name 2",550,6,SellUser);
+        test_case_1_B = new BuyOrder("Test",0.69,6,test_Case_1.GetUserID());
+        test_case_2_S = new SellOrder("test2", 55,78,test_Case_2.GetUserID());
+        Test2 = new SellOrder("asset name 2",550,6,SellUser.GetUserID());
     }
 
     @Test
@@ -119,7 +119,7 @@ public class TestDatabase
     @Test
     @DisplayName("AddAssetToDB")
     public void test_4() throws StockExceptions {
-        Asset Asset1 = new Asset("Test Asset 1",100.0,30,SellUser);
+        Asset Asset1 = new Asset("Test Asset 1",100.0,30,SellUser.GetUserID());
         ServerConnection test = new ServerConnection();
         test.AddAsset(Asset1);
     }
@@ -128,7 +128,7 @@ public class TestDatabase
     @Test
     @DisplayName("RemoveAssetFromDB")
     public void test_5() throws StockExceptions {
-        Asset Asset1 = new Asset("Test Asset 1",100.0,30,BuyUser);
+        Asset Asset1 = new Asset("Test Asset 1",100.0,30,BuyUser.GetUserID());
         ServerConnection test = new ServerConnection();
         test.RemoveAsset(Asset1);
     }

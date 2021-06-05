@@ -45,13 +45,13 @@ public class TestOrders {
     @Test
     @DisplayName("Creating Buy order and storing in DB")
     public void SendBuyOrder() throws StockExceptions {
-        buyOrder = new BuyOrder("CPU HOUR",10,20,BuyingUser);
+        buyOrder = new BuyOrder("CPU HOUR",10,20,BuyingUser.GetUserID());
         testconneciton.AddOrder(buyOrder);
     }
     @Test
     @DisplayName("Creating Buy order and storing in DB")
     public void SendSellOrder() throws StockExceptions {
-        sellOrder = new SellOrder("CPU HOUR",10,20,SellingUser);
+        sellOrder = new SellOrder("CPU HOUR",10,20,SellingUser.GetUserID());
         testconneciton.AddOrder(sellOrder);
     }
 }

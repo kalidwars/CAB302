@@ -34,8 +34,8 @@ public class TestOrganisationUnit
     void setup() throws StockExceptions, IOException
     {
             Test = new User("Test", "PW", TestUnit);
-            SubTest1 =  new BuyOrder("Chip", 5, 8, Test);
-            SubTest2 = new SellOrder("GPU", 8.8, 420, Test);
+            SubTest1 =  new BuyOrder("Chip", 5, 8, Test.GetUserID());
+            SubTest2 = new SellOrder("GPU", 8.8, 420, Test.GetUserID());
             organisationUnit = new OrganisationUnit("organisation name", 10000, null);
             AssetTest[0] = (SubTest1);
             AssetTest[1] = (SubTest2);

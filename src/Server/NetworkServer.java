@@ -76,9 +76,15 @@ public class NetworkServer implements Serializable {
         } catch (IOException | ClassCastException | ClassNotFoundException | StockExceptions | SQLException e) {
             System.out.println(String.format("Connection %s closed", socket.toString()));
         }
-        ArrayList<BuyOrder> buyOrder = DataSource.GetBuyOrders();
+        ArrayList<BuyOrder> buyOrders = DataSource.GetBuyOrders();
         ArrayList<SellOrder> sellOrders = DataSource.GetSellOrders();
-
+        for(BuyOrder border : buyOrders) {
+            for(SellOrder sorder : sellOrders) {
+                if(border.GetName().equals(sorder.GetName()) && border.getIndPrice() == sorder.getIndPrice()) {
+                    //NEED TO IMPLEMENT RECONCLIATION HERE
+                }
+            }
+        }
     }
 
 

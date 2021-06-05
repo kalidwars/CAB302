@@ -281,9 +281,9 @@ public class DataSource
             rs = getbuyorders.executeQuery();
             while(rs.next())
             {
-                /// Just need to add what columns we are going to use buyOrders.add(BuyOrder();
+                buyOrders.add(new BuyOrder(rs.getString("AssetName"),rs.getDouble("price"),rs.getInt("amount"),rs.getString("username")));
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException | StockExceptions throwables) {
             throwables.printStackTrace();
         }
         return buyOrders;
@@ -297,11 +297,9 @@ public class DataSource
             rs = getsellorders.executeQuery();
             while(rs.next())
             {
-                GETSPECFICUSER.setString(1,rs.getString("username"));
-                UserDetails = GETSPECFICUSER.executeQuery();
-                UserDetails.next();
+               sellOrders.add(new SellOrder(rs.getString("AssetName"),rs.getDouble("price"),rs.getInt("amount"),rs.getString("username")));
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException | StockExceptions throwables) {
             throwables.printStackTrace();
         }
         return sellOrders;

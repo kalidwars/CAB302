@@ -81,7 +81,15 @@ public class NetworkServer implements Serializable {
         for(BuyOrder border : buyOrders) {
             for(SellOrder sorder : sellOrders) {
                 if(border.GetName().equals(sorder.GetName()) && border.getIndPrice() == sorder.getIndPrice()) {
-                    //NEED TO IMPLEMENT RECONCLIATION HERE
+                    //Store Infomration for later use
+                    String AssetName = border.GetName();
+                    String SellUN = sorder.GetUser();
+                    String BuyUN = border.GetUser();
+                    String SellOU = sorder.GetOUID();
+                    String BuyOU = border.GetOUID();
+                    int QTY = border.getNumAvailable();
+                    double Price = border.getNumAvailable() * sorder.getIndPrice();
+                    DataSource.AddTrade(AssetName,SellUN,BuyUN,SellOU,BuyOU,QTY,Price);
                 }
             }
         }

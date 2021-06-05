@@ -43,6 +43,12 @@ public class DataSource
     private static final String EDIT_USER = "UPDATE users set password=? where username = ?";
     private static final String ADD_ORDER = "Insert INTO Assets (AssetName, username, OrgUnit,Price,Amount,AssetType) VALUES (?, ?, ?, ?,?,?);";
     private static final String GET_SPECFIC_USER = "Select * from users where username = ?";
+    private static final String ADD_TRADE = "INSERT INTO trade_history (Name,OrgUnitBuy,OrgUnitSell,UserSeller,UserBuyer,QTY,PRICE) VALUES (?,?,?,?,?,?,?);";
+    private static final String ADJUST_BUY = "UPDATE Assets SET QTY=(QTY - ?) WHERE (OrgUnit=? AND username=? AND AssetType = false);";
+    private static final String ADJUST_SELL = "UPDATE Assets SET QTY=(QTY - ?) WHERE (OrgUnit=? AND username=? AND AssetType = true);";
+    private static final String ADJUST_OU_BUY = "UPDATE organisationunits SET creadits = creadits - ( ? * ?) WHERE (Orgunit = ?);";
+    private static final String ADJUST_OU_SELL = "UPDATE organisationunits SET creadits = creadits + ( ? * ?) WHERE (Orgunit = ?);";
+    private static final String CLEAN_UP_ASSETS = "DELETE FROM Assets WHERE (QTY = 0 AND AssetType <> NULL);";
     //Testing SQL Methods
     private static final String TESTING  = "DELETE FROM users WHERE true;";
     private static final String TESTING2 = "DELETE FROM organisationunits WHERE true;";
@@ -62,7 +68,7 @@ public class DataSource
     private static final String CREATE_TABLE_USERS =
             "CREATE TABLE IF NOT EXISTS users (username varchar(45) NOT NULL,password blob NOT NULL,privilege boolean NOT NULL,orgunit varchar(45),PRIMARY KEY (username),FOREIGN KEY (orgunit) REFERENCES organisationunits(orgunit));";
     private static final String CREATE_TABLE_HISTORY =
-            "CREATE TABLE IF NOT EXISTS trade_history (TradeID int(11) NOT NULL AUTO_INCREMENT, OrgUnitBuy varchar(45) NOT NULL,OrgUnitSell varchar(45) NOT NULL,UserSeller varchar(45) NOT NULL,UserBuyer varchar(45) NOT NULL,QTY int(11) NOT NULL,PRICE double(11,2) NOT NULL, PRIMARY KEY(TradeID)," +
+            "CREATE TABLE IF NOT EXISTS trade_history (TradeID int(11) NOT NULL AUTO_INCREMENT, Name varchar(45), OrgUnitBuy varchar(45) NOT NULL,OrgUnitSell varchar(45) NOT NULL,UserSeller varchar(45) NOT NULL,UserBuyer varchar(45) NOT NULL,QTY int(11) NOT NULL,PRICE double(11,2) NOT NULL, PRIMARY KEY(TradeID)," +
                     "FOREIGN KEY (OrgUnitBuy) REFERENCES organisationunits (Orgunit)," +
                     "FOREIGN KEY (OrgUnitSell) REFERENCES organisationunits (Orgunit)," +
                     "FOREIGN KEY (UserSeller) REFERENCES users (username)," +
@@ -88,6 +94,12 @@ public class DataSource
     private PreparedStatement ADDASSETNAME;
     private PreparedStatement ADDORDER;
     private PreparedStatement GETSPECFICUSER;
+    private PreparedStatement ADDTRADE;
+    private PreparedStatement ADJUSTBUY;
+    private PreparedStatement ADJUSTSELL;
+    private PreparedStatement ADJUSTASSETBUY;
+    private PreparedStatement ADJUSTASSETSELL;
+    private PreparedStatement CLEANUPASSETS;
     public DataSource()
     {
         connection = DBConnection.getInstance();
@@ -120,6 +132,12 @@ public class DataSource
             ADDASSETNAME = connection.prepareStatement(ADD_ASSET_NAME);
             ADDORDER = connection.prepareStatement(ADD_ORDER);
             GETSPECFICUSER = connection.prepareStatement(GET_SPECFIC_USER);
+            ADDTRADE = connection.prepareStatement(ADD_TRADE);
+            ADJUSTBUY = connection.prepareStatement(ADJUST_BUY);
+            ADJUSTSELL = connection.prepareStatement(ADJUST_SELL);
+            ADJUSTASSETBUY = connection.prepareStatement(ADJUST_OU_BUY);
+            ADJUSTASSETSELL = connection.prepareStatement(ADJUST_OU_SELL);
+            CLEANUPASSETS = connection.prepareStatement(CLEAN_UP_ASSETS);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -502,6 +520,80 @@ public class DataSource
             ADDORDER.execute();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+
+
+    /**
+     *
+     * PARAMATERS what they are obvious to mean
+     *
+     * @param asset
+     * @param sellUn
+     * @param buyUn
+     * @param sellOU
+     * @param buyOU
+     * @param brought
+     * @param selling
+     */
+    public void AddTrade(String asset, String sellUn, String buyUn, String sellOU, String buyOU, int brought, double selling)
+    {
+        //ADD TRADE TO THE DATABASE
+        try
+        {
+            //(Name, OrgUnitBuy,OrgUnitSell,UserSeller,UserBuyer,QTY,PRICE)
+            ADDTRADE.setString(1,asset);
+            ADDTRADE.setString(2,buyOU);
+            ADDTRADE.setString(3,sellOU);
+            ADDTRADE.setString(4,sellUn);
+            ADDTRADE.setString(5,buyUn);
+            ADDTRADE.setInt(6,brought);
+            ADDTRADE.setDouble(7,selling);
+            ADDTRADE.execute();
+        }
+        catch (SQLException throwing)
+        {
+            throwing.printStackTrace();
+        }
+
+        // ADJUST ASSETS/OU
+        try
+        {
+            //UPDATE Assets SET QTY=(QTY - ?) WHERE (OrgUnit=? AND username=? AND AssetType = false);
+            ADJUSTBUY.setInt(1,brought);
+            ADJUSTBUY.setString(2,buyOU);
+            ADJUSTBUY.setString(3,buyUn);
+            ADJUSTBUY.execute();
+            //"UPDATE Assets SET QTY=(QTY - ?) WHERE (OrgUnit=? AND username=? AND AssetType = true);"
+            ADJUSTSELL.setInt(1,brought);
+            ADJUSTSELL.setString(2,sellOU);
+            ADJUSTSELL.setString(3,sellUn);
+            ADJUSTSELL.execute();
+            //UPDATE organisationunits SET creadits = creadits - ( ? * ?) WHERE (Orgunit = ?)
+            ADJUSTASSETBUY.setInt(1,brought);
+            ADJUSTASSETBUY.setDouble(2,selling);
+            ADJUSTASSETBUY.setString(3,buyOU);
+            ADJUSTASSETBUY.execute();
+            //SELL UPDATE organisationunits SET creadits = creadits + ( ? * ?) WHERE (Orgunit = ?);
+            ADJUSTASSETSELL.setInt(1,brought);
+            ADJUSTASSETSELL.setDouble(2,selling);
+            ADJUSTASSETSELL.setString(3,sellOU);
+            ADJUSTASSETSELL.execute();
+
+
+        }
+        catch (SQLException adjusting)
+        {
+            adjusting.printStackTrace();
+        }
+        //CLEAN UP QTY 0
+        try
+        {
+            CLEANUPASSETS.execute();
+        }
+        catch (SQLException cleaning)
+        {
+            cleaning.printStackTrace();
         }
     }
 }

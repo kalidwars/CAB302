@@ -63,7 +63,7 @@ public class TestDatabase
 
         ArrayList<OrganisationUnit> checkOU = new ArrayList<OrganisationUnit>();
 
-        OU_test.Upload();
+        //OU_test.Upload();
 
         checkOU = test.GetAllOU();
 
@@ -81,9 +81,9 @@ public class TestDatabase
     {
         //This needs to be done to clear table and to allow for primary keys
         test.UNITTESTING();
-        OU_test.Upload();
+        //OU_test.Upload();
         OrganisationUnit ADMIN = new OrganisationUnit("ADMINS", 0, null);
-        ADMIN.Upload();
+        //ADMIN.Upload();
 
         //Test Case 1
         ArrayList<User> check1 = new ArrayList<User>();

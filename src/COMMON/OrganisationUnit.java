@@ -203,7 +203,7 @@ public class OrganisationUnit implements Serializable
      *
      * @throws SQLException Occurs if the Database ecounters a problem
      */
-    public boolean Upload() throws SQLException
+    /*public boolean Upload() throws SQLException
     {
         //Variable to return True or false if the operation has been succesful
         boolean toReturn = true;
@@ -226,5 +226,5 @@ public class OrganisationUnit implements Serializable
         }
 
         return toReturn;
-    }
+    }*/
 }

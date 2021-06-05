@@ -14,7 +14,6 @@ public class Asset implements Serializable
     private double ind_price;
     private int num_available;
     private User USERResponsible;
-
     /**
      *
      * This class is to describe the asset and the value of the asset
@@ -43,7 +42,6 @@ public class Asset implements Serializable
         //Assign values into class
         this.name_of_asset = asset_name;
         this.USERResponsible = USER;
-
         if(value < 0)
         {
             throw new StockExceptions("Expected a Positive Value or 0 value for credits");

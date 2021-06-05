@@ -25,8 +25,9 @@ public class DataSource
 
     //Useful methods
     private static final String GET_ASSETS = "SELECT * FROM assets WHERE username=?";
-    private static final String ADD_ASSET = "INSERT INTO assets (name, username, amount,value) VALUES (?, ?, ?, ?);";
-    private static final String REMOVE_ASSET = "DELETE FROM assets WHERE name=? AND username=? AND amount=? AND value=?";
+    private static final String ADD_ASSET = "INSERT INTO assets (AssetName, username, OrgUnit, Amount) VALUES (?, ?, ?, ?);";
+    private static final String ADD_ASSET_NAME = "INSERT INTO AssetNames VALUES (?);";
+    private static final String REMOVE_ASSET = "DELETE FROM assets WHERE AssetName=? AND username=? AND OrgUnit=?";
     private static final String GET_ALL_USER = "SELECT * FROM users";
     private static final String GET_ALL_OU = "SELECT * FROM organisationunits;";
     private static final String GET_BUY_ORDER = "SELECT * FROM orders where offertype = buy AND complete = 0";
@@ -53,13 +54,13 @@ public class DataSource
     //Each variable name is what the table is designed for
     //Designed by Hugh and Adam
     private static final String CREATE_TABLE_ASSETS =
-            "CREATE TABLE IF NOT EXISTS Assets (SaleID int(50) NOT NULL AUTO_INCREMENT, Name varchar(45) NOT NULL, username VARCHAR(45) NOT NULL,OrgUnit varchar(45) NOT NULL, Price double(11,2) NOT NULL, Amount int(11) NOT NULL, PRIMARY KEY (SaleId), KEY fk_orgunit (orgunit),  CONSTRAINT sale_orgunit FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit), FOREIGN KEY (username) REFERENCES users(username));";
+            "CREATE TABLE IF NOT EXISTS Assets (AssetID int(50) NOT NULL AUTO_INCREMENT, AssetName varchar(45) NOT NULL, username VARCHAR(45) NOT NULL, OrgUnit varchar(45) NOT NULL, Price double(11,2), Amount int(11) NOT NULL, AssetType Boolean, PRIMARY KEY (AssetID),KEY fk_orgunit (orgunit),KEY fk_username (username),KEY fk_NameTest (AssetName),FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit), FOREIGN KEY (username) REFERENCES users(username), FOREIGN KEY (AssetName) REFERENCES assetnames(name));";
     private static final String CREATE_TABLE_ASSETNAMES =
-            "CREATE TABLE IF NOT EXISTS AssetNames (AssetID int(50) NOT NULL AUTO_INCREMENT, Name varchar(45) NOT NULL);";
+            "CREATE TABLE IF NOT EXISTS AssetNames (Name varchar(45) NOT NULL, PRIMARY KEY(Name));";
     private static final String CREATE_TABLE_USERS =
-            "CREATE TABLE IF NOT EXISTS users (username varchar(45) NOT NULL,password blob NOT NULL,privilege varchar(45) NOT NULL,orgunit varchar(45),PRIMARY KEY (username),FOREIGN KEY (orgunit) REFERENCES organisationunits(orgunit));";
+            "CREATE TABLE IF NOT EXISTS users (username varchar(45) NOT NULL,password blob NOT NULL,privilege boolean NOT NULL,orgunit varchar(45),PRIMARY KEY (username),FOREIGN KEY (orgunit) REFERENCES organisationunits(orgunit));";
     private static final String CREATE_TABLE_HISTORY =
-            "CREATE TABLE IF NOT EXISTS trade_history (TradeID int(11) NOT NULL AUTO_INCREMENT, OrgUnitBuy varchar(45) NOT NULL,OrgUnitSell varchar(45) NOT NULL,UserSeller varchar(45) NOT NULL,UserBuyer varchar(45) NOT NULL,QTY int(11) NOT NULL,PRICE double(11,2) NOT NULL, PRIMARY KEY(TradeID),\n" +
+            "CREATE TABLE IF NOT EXISTS trade_history (TradeID int(11) NOT NULL AUTO_INCREMENT, OrgUnitBuy varchar(45) NOT NULL,OrgUnitSell varchar(45) NOT NULL,UserSeller varchar(45) NOT NULL,UserBuyer varchar(45) NOT NULL,QTY int(11) NOT NULL,PRICE double(11,2) NOT NULL, PRIMARY KEY(TradeID)," +
                     "FOREIGN KEY (OrgUnitBuy) REFERENCES organisationunits (Orgunit)," +
                     "FOREIGN KEY (OrgUnitSell) REFERENCES organisationunits (Orgunit)," +
                     "FOREIGN KEY (UserSeller) REFERENCES users (username)," +
@@ -82,7 +83,7 @@ public class DataSource
     private PreparedStatement GETSpecficOU;
     private PreparedStatement REMOVEUSER;
     private PreparedStatement EDITUSER;
-
+    private PreparedStatement ADDASSETNAME;
     public DataSource()
     {
         connection = DBConnection.getInstance();
@@ -91,8 +92,8 @@ public class DataSource
             //Create Tables from above statementes
             st.execute(CREATE_TABLE_OU);
             st.execute(CREATE_TABLE_USERS);
-            //st.execute(CREATE_TABLE_BUY_ORDERS);
-            //st.execute(CREATE_TABLE_SELL_ASSETS);
+            st.execute(CREATE_TABLE_ASSETNAMES);
+            st.execute(CREATE_TABLE_ASSETS);
             st.execute(CREATE_TABLE_HISTORY);
 
             //Prepare 'concrete' statements
@@ -112,6 +113,7 @@ public class DataSource
             GETSpecficOU = connection.prepareStatement(GET_SPECIFIC_OU);
             REMOVEUSER = connection.prepareStatement(REMOVE_USER);
             EDITUSER = connection.prepareStatement(EDIT_USER);
+            ADDASSETNAME = connection.prepareStatement(ADD_ASSET_NAME);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -158,7 +160,7 @@ public class DataSource
             rs = getAssets.executeQuery();
             while(rs.next())
             {
-                Asset asset = new Asset(rs.getString("name"),rs.getDouble("value"),rs.getInt("amount"),user);
+                Asset asset = new Asset(rs.getString("AssetName"),rs.getDouble("Price"),rs.getInt("amount"),user);
                 temp.add(asset);
             }
         }
@@ -175,15 +177,18 @@ public class DataSource
     public void AddAsset(Asset asset) throws SQLException {
         addAsset.setString(1, asset.GetName());
         addAsset.setString(2, asset.GetUser());
-        addAsset.setInt(3, asset.getNumAvailable());
-        addAsset.setDouble(4,asset.getIndPrice());
+        addAsset.setString(3, asset.GetOUID());
+        addAsset.setInt(4,asset.getNumAvailable());
         addAsset.execute();
+    }
+    public void AddAssetName(String Name) throws SQLException {
+        ADDASSETNAME.setString(1, Name);
+        ADDASSETNAME.execute();
     }
     public void RemoveAsset(Asset asset) throws SQLException {
         removeAsset.setString(1, asset.GetName());
         removeAsset.setString(2, asset.GetUser());
-        removeAsset.setInt(3, asset.getNumAvailable());
-        removeAsset.setDouble(4,asset.getIndPrice());
+        removeAsset.setString(3, asset.GetOUID());
         removeAsset.execute();
     }
 
@@ -394,7 +399,7 @@ public class DataSource
             byte[] ByteArray = test.toByteArray();
             ADDUSER.setString(1,user1.GetUserID());
             ADDUSER.setBlob(2, new ByteArrayInputStream(ByteArray), ByteArray.length);
-            ADDUSER.setString(3, "test");
+            ADDUSER.setBoolean(3, false);
             ADDUSER.setString(4,user1.OUID_Owner());
             ADDUSER.execute();
         }
@@ -466,4 +471,5 @@ public class DataSource
             e.printStackTrace();
         }
     }
+
 }

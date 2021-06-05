@@ -58,6 +58,10 @@ public class NetworkServer implements Serializable {
                         Asset asset = (Asset) ois.readObject();
                         DataSource.AddAsset(asset);
                         break;
+                    case "ADD_ASSET_NAME":
+                        String AssetName = ois.readUTF();
+                        DataSource.AddAssetName(AssetName);
+                        break;
                     case "REMOVE_ASSET":
                         Asset assettoremove = (Asset) ois.readObject();
                         DataSource.RemoveAsset(assettoremove);

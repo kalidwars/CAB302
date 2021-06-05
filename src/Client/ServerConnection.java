@@ -219,4 +219,17 @@ public class ServerConnection implements Serializable
             return false;
         }
     }
+
+    public boolean AddAssetName(String getName) {
+        try {
+            objectOutputStream.writeUTF("ADD_ASSET_NAME");
+            objectOutputStream.flush();
+            objectOutputStream.writeUTF(getName);
+            objectOutputStream.flush();
+            return true;
+        }
+        catch (IOException e) {
+            return false;
+        }
+    }
 }

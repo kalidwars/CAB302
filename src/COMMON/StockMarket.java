@@ -34,7 +34,7 @@ public class StockMarket implements Serializable {
 
         //This Is to prevent any SQL Error throws
         OrganisationUnit ADMIN = new OrganisationUnit("ADMINS", 0, null);
-        ADMIN.Upload();
+        //ADMIN.Upload();
         StockMarketLive.add(ADMIN);
     }
 

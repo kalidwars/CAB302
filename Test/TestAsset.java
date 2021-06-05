@@ -19,6 +19,7 @@ public class TestAsset {
     User BuyUser;
     User SellUser;
     OrganisationUnit TestUnit;
+    Asset asset;
 
     @BeforeEach
     void setup() throws StockExceptions, IOException
@@ -28,6 +29,7 @@ public class TestAsset {
         SellUser = new User("SellTest","PW",TestUnit);
         Test1 = new BuyOrder("asset name", 300, 5,BuyUser);
         Test2 = new SellOrder("asset name 2",550,6,SellUser);
+        asset = new Asset("Test Asset 1",100.0,10,BuyUser);
     }
 
     // Test if asset name is correct
@@ -123,10 +125,18 @@ public class TestAsset {
         });
     }
     @Test
+    @DisplayName("Testing adding AssetName to the asset register in db")
+    public void AddAssetNametoDB() {
+        ServerConnection testConnection = new ServerConnection();
+        assertEquals(true,testConnection.AddAssetName(asset.GetName()));
+    }
+    @Test
     @DisplayName("Testing adding assets to the database")
     public void AddAssetToDB() throws StockExceptions {
         ServerConnection testConnection = new ServerConnection();
-        assertEquals(true,testConnection.AddAsset(new Asset("Test Asset 1",100.0,10,BuyUser)));
+        testConnection.AddOU(TestUnit);
+        testConnection.AddUser(BuyUser);
+        assertEquals(true,testConnection.AddAsset(asset));
     }
 
     @Test

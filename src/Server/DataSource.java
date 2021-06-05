@@ -30,8 +30,8 @@ public class DataSource
     private static final String REMOVE_ASSET = "DELETE FROM assets WHERE AssetName=? AND username=? AND OrgUnit=?";
     private static final String GET_ALL_USER = "SELECT * FROM users";
     private static final String GET_ALL_OU = "SELECT * FROM organisationunits;";
-    private static final String GET_BUY_ORDER = "SELECT * FROM orders where offertype = buy AND complete = 0";
-    private static final String GET_SELL_ORDER = "SELECT * FROM orders where offertype = sell AND complete = 0";
+    private static final String GET_BUY_ORDER = "SELECT * FROM assets where AssetType = true";
+    private static final String GET_SELL_ORDER = "SELECT * FROM assets where AssetType = false";
     private static final String ADD_OU = "INSERT INTO organisationunits (Orgunit, credits) VALUES (?, ?);";
     private static final String REMOVE_OU = "DELETE FROM organisationunits WHERE Orgunit=? AND credits=?";
     private static final String GET_OUS = "SELECT * from organisationunits";
@@ -41,6 +41,8 @@ public class DataSource
     private static final String GET_USERS = "select * from users";
     private static final String REMOVE_USER = "DELETE FROM users WHERE username=?";
     private static final String EDIT_USER = "UPDATE users set password=? where username = ?";
+    private static final String ADD_ORDER = "Insert INTO Assets (AssetName, username, OrgUnit,Price,Amount,AssetType) VALUES (?, ?, ?, ?,?,?);";
+    private static final String GET_SPECFIC_USER = "Select * from users where username = ?";
     //Testing SQL Methods
     private static final String TESTING  = "DELETE FROM users WHERE true;";
     private static final String TESTING2 = "DELETE FROM organisationunits WHERE true;";
@@ -84,6 +86,8 @@ public class DataSource
     private PreparedStatement REMOVEUSER;
     private PreparedStatement EDITUSER;
     private PreparedStatement ADDASSETNAME;
+    private PreparedStatement ADDORDER;
+    private PreparedStatement GETSPECFICUSER;
     public DataSource()
     {
         connection = DBConnection.getInstance();
@@ -114,6 +118,8 @@ public class DataSource
             REMOVEUSER = connection.prepareStatement(REMOVE_USER);
             EDITUSER = connection.prepareStatement(EDIT_USER);
             ADDASSETNAME = connection.prepareStatement(ADD_ASSET_NAME);
+            ADDORDER = connection.prepareStatement(ADD_ORDER);
+            GETSPECFICUSER = connection.prepareStatement(GET_SPECFIC_USER);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -283,14 +289,17 @@ public class DataSource
         return buyOrders;
     }
 
-    public ArrayList<BuyOrder> GetSellOrders() {
-        ArrayList<BuyOrder> sellOrders = new ArrayList<>();
+    public ArrayList<SellOrder> GetSellOrders() {
+        ArrayList<SellOrder> sellOrders = new ArrayList<>();
         ResultSet rs = null;
+        ResultSet UserDetails = null;
         try {
             rs = getsellorders.executeQuery();
             while(rs.next())
             {
-                /// Just need to add what columns we are going to use buyOrders.add(BuyOrder();
+                GETSPECFICUSER.setString(1,rs.getString("username"));
+                UserDetails = GETSPECFICUSER.executeQuery();
+                UserDetails.next();
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -471,5 +480,30 @@ public class DataSource
             e.printStackTrace();
         }
     }
-
+    public void AddOrder(BuyOrder order) {
+        try {
+            ADDORDER.setString(1, order.GetName());
+            ADDORDER.setString(2, order.GetUser());
+            ADDORDER.setString(3, order.GetOUID());
+            ADDORDER.setDouble(4, order.getIndPrice());
+            ADDORDER.setInt(5, order.getNumAvailable());
+            ADDORDER.setBoolean(6, false);
+            ADDORDER.execute();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+    public void AddOrder(SellOrder order) {
+        try {
+            ADDORDER.setString(1, order.GetName());
+            ADDORDER.setString(2, order.GetUser());
+            ADDORDER.setString(3, order.GetOUID());
+            ADDORDER.setDouble(4, order.getIndPrice());
+            ADDORDER.setInt(5, order.getNumAvailable());
+            ADDORDER.setBoolean(6, true);
+            ADDORDER.execute();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 }

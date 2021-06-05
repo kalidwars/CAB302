@@ -232,4 +232,25 @@ public class ServerConnection implements Serializable
             return false;
         }
     }
+
+    public void AddOrder(BuyOrder Order) {
+        try {
+            objectOutputStream.writeUTF("ADD_BUY_ORDER");
+            objectOutputStream.flush();
+            objectOutputStream.writeObject(Order);
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void AddOrder(SellOrder Order) {
+        try {
+            objectOutputStream.writeUTF("ADD_SELL_ORDER");
+            objectOutputStream.flush();
+            objectOutputStream.writeObject(Order);
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

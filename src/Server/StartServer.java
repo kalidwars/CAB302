@@ -32,11 +32,7 @@ public class StartServer {
         CurrentStockMarket = new StockMarket();
         //Initialise Server
         NetworkServer test = new NetworkServer();
-        try {
-            test.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        test.start();
         SERVER = new DataSource();
         SERVER.UNITTESTING();
 

@@ -1,13 +1,17 @@
 package Server;
 
 import COMMON.*;
+import CustomExceptions.StockExceptions;
 
+import javax.xml.crypto.Data;
 import java.io.*;
 import java.io.Serial;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -35,13 +39,51 @@ public class NetworkServer implements Serializable {
      *
      *
      */
-    private void handleConnection(Socket socket) throws Exception
-    {
-        try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
-            for(;;) {
-                oos.flush();
-                String command = ois.readUTF();
+    private void handleConnection(Socket socket) {
+        try {
+            /**
+             * We create the streams once at connection time, and re-use them until the client disconnects.
+             * This **must** be in the opposite order to the client, because creating an ObjectInputStream
+             * reads data, and an ObjectOutputStream writes data.
+             */
+            final ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+            final ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
+
+            /**
+             * while(true) here might seem a bit confusing - why do we have an infinite loop?
+             * That's because we don't want to exit until the client disconnects, and when they do, readObject()
+             * will throw an IOException, which will cause this method to exit. Another option could be to have
+             * a "close" message/command sent by the client, but if the client closes improperly, or they lose
+             * their network connection, it's not going to get sent anyway.
+             */
+            while (true) {
+                try {
+                    /**
+                     * Read the command, this tells us what to send the client back.
+                     * If the client has disconnected, this will throw an exception.
+                     */
+                    final String command = inputStream.readUTF();
+                    handleClientConnection(socket, inputStream, outputStream, command);
+                } catch (SocketTimeoutException e) {
+                    /**
+                     * We catch SocketTimeoutExceptions, because that just means the client hasn't sent
+                     * any new requests. We don't want to disconnect them otherwise. Another way to
+                     * check if they're "still there would be with ping/pong commands.
+                     */
+                    continue;
+                }
+            }
+        } catch (IOException | ClassCastException | ClassNotFoundException | StockExceptions | SQLException e) {
+            System.out.println(String.format("Connection %s closed", socket.toString()));
+        }
+        ArrayList<BuyOrder> buyOrder = DataSource.GetBuyOrders();
+        ArrayList<SellOrder> sellOrders = DataSource.GetSellOrders();
+
+    }
+
+
+
+    private void handleClientConnection(Socket socket,ObjectInputStream ois, ObjectOutputStream oos, String command) throws IOException, ClassNotFoundException, StockExceptions, SQLException {
                 switch (command)
                 {
                     case "GET_ASSETS":
@@ -121,22 +163,16 @@ public class NetworkServer implements Serializable {
                         String NewPass = ois.readUTF();
                         DataSource.EditUser(usertoedit,NewPass);
                         break;
+                    case "ADD_BUY_ORDER":
+                        BuyOrder buyorder = (BuyOrder) ois.readObject();
+                        DataSource.AddOrder(buyorder);
+                        break;
+                    case "ADD_SELL_ORDER":
+                        SellOrder sellOrder = (SellOrder) ois.readObject();
+                        DataSource.AddOrder(sellOrder);
+                        break;
                 }
-                ArrayList<BuyOrder> BuyOrders = DataSource.GetBuyOrders();
-                ArrayList<BuyOrder> SellOrders = DataSource.GetSellOrders();
-                for(int i = 0; i < BuyOrders.size(); i++) {
-                    for(int j = 0; j < SellOrders.size(); j++) {
-                        if(BuyOrders.get(i).GetName() == SellOrders.get(j).GetName()
-                        && BuyOrders.get(i).getIndPrice() == SellOrders.get(j).getIndPrice()
-                        ) {
-                            //NEED TO ADD IN WHATS GONNA HAPPEN HERE
-                        }
-                    }
-                }
-
             }
-        }
-    }
 
     /**
      * Returns the port the server is configured to use
@@ -150,17 +186,19 @@ public class NetworkServer implements Serializable {
     /**
      * Starts the server running on the default port
      */
-    public void start() throws IOException {
+    public void start() {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             serverSocket.setSoTimeout(SOCKET_TIMEOUT);
-            for (;;) {
+            for (; ; ) {
                 if (!running.get()) {
                     // The server is no longer running
                     break;
                 }
                 try {
-                    Socket socket = serverSocket.accept();
-                    handleConnection(socket);
+                    final Socket socket = serverSocket.accept();
+                    socket.setSoTimeout(SOCKET_TIMEOUT);
+                    final Thread clientThread = new Thread(() -> handleConnection(socket));
+                    clientThread.start();
                 } catch (SocketTimeoutException ignored) {
                     // Do nothing. A timeout is normal- we just want the socket to
                     // occasionally timeout so we can check if the server is still running
@@ -180,7 +218,6 @@ public class NetworkServer implements Serializable {
         // Close down the server
         System.exit(0);
     }
-
     /**
      * Requests the server to shut down
      */
@@ -188,4 +225,7 @@ public class NetworkServer implements Serializable {
         // Shut the server down
         running.set(false);
     }
+
+
+
 }

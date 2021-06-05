@@ -5,13 +5,9 @@ import CustomExceptions.*;
 import Server.*;
 
 import javax.crypto.NoSuchPaddingException;
-import java.io.IOException;
+import java.io.*;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 
@@ -28,14 +24,22 @@ public class DataSource
 {
 
     //Useful methods
-    private static final String GET_ASSETS = "SELECT * FROM assets WHERE OrgUnit=?";
+    private static final String GET_ASSETS = "SELECT * FROM assets WHERE username=?";
     private static final String ADD_ASSET = "INSERT INTO assets (name, username, amount,value) VALUES (?, ?, ?, ?);";
     private static final String REMOVE_ASSET = "DELETE FROM assets WHERE name=? AND username=? AND amount=? AND value=?";
     private static final String GET_ALL_USER = "SELECT * FROM users";
     private static final String GET_ALL_OU = "SELECT * FROM organisationunits;";
     private static final String GET_BUY_ORDER = "SELECT * FROM orders where offertype = buy AND complete = 0";
     private static final String GET_SELL_ORDER = "SELECT * FROM orders where offertype = sell AND complete = 0";
-
+    private static final String ADD_OU = "INSERT INTO organisationunits (Orgunit, credits) VALUES (?, ?);";
+    private static final String REMOVE_OU = "DELETE FROM organisationunits WHERE Orgunit=? AND credits=?";
+    private static final String GET_OUS = "SELECT * from organisationunits";
+    private static final String GET_SPECIFIC_OU = "SELECT * from organisationunits where Orgunit = ?";
+    private static final String EDIT_OU = "UPDATE organisationunits set credits=? where Orgunit = ?";
+    private static final String ADD_USER = "INSERT INTO Users (username, password, privilege, orgunit) VALUES (?, ?, ?, ?);";
+    private static final String GET_USERS = "select * from users";
+    private static final String REMOVE_USER = "DELETE FROM users WHERE username=?";
+    private static final String EDIT_USER = "UPDATE users set password=? where username = ?";
     //Testing SQL Methods
     private static final String TESTING  = "DELETE FROM users WHERE true;";
     private static final String TESTING2 = "DELETE FROM organisationunits WHERE true;";
@@ -48,10 +52,10 @@ public class DataSource
     //Create String For Creating tables in Server
     //Each variable name is what the table is designed for
     //Designed by Hugh and Adam
-    private static final String CREATE_TABLE_SELL_ASSETS =
-            "CREATE TABLE IF NOT EXISTS sells (SaleID int(50) NOT NULL AUTO_INCREMENT, Name varchar(45) NOT NULL, username VARCHAR(45) NOT NULL,OrgUnit varchar(45) NOT NULL, Price double(11,2) NOT NULL, Amount int(11) NOT NULL, PRIMARY KEY (SaleId), KEY fk_orgunit (orgunit),  CONSTRAINT sale_orgunit FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit), FOREIGN KEY (username) REFERENCES users(username));";
-    private static final String CREATE_TABLE_BUY_ORDERS =
-            "CREATE TABLE IF NOT EXISTS buys (AssetID int(50) NOT NULL AUTO_INCREMENT, Name varchar(45) NOT NULL, username VARCHAR(45) NOT NULL,OrgUnit varchar(45) NOT NULL, Price double(11,2) NOT NULL, Amount int(11) NOT NULL, PRIMARY KEY (AssetID), KEY fk_orgunit (orgunit),  CONSTRAINT fk_orgunit FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit), FOREIGN KEY (username) REFERENCES users(username));";
+    private static final String CREATE_TABLE_ASSETS =
+            "CREATE TABLE IF NOT EXISTS Assets (SaleID int(50) NOT NULL AUTO_INCREMENT, Name varchar(45) NOT NULL, username VARCHAR(45) NOT NULL,OrgUnit varchar(45) NOT NULL, Price double(11,2) NOT NULL, Amount int(11) NOT NULL, PRIMARY KEY (SaleId), KEY fk_orgunit (orgunit),  CONSTRAINT sale_orgunit FOREIGN KEY (orgunit) REFERENCES organisationunits (Orgunit), FOREIGN KEY (username) REFERENCES users(username));";
+    private static final String CREATE_TABLE_ASSETNAMES =
+            "CREATE TABLE IF NOT EXISTS AssetNames (AssetID int(50) NOT NULL AUTO_INCREMENT, Name varchar(45) NOT NULL);";
     private static final String CREATE_TABLE_USERS =
             "CREATE TABLE IF NOT EXISTS users (username varchar(45) NOT NULL,password blob NOT NULL,privilege varchar(45) NOT NULL,orgunit varchar(45),PRIMARY KEY (username),FOREIGN KEY (orgunit) REFERENCES organisationunits(orgunit));";
     private static final String CREATE_TABLE_HISTORY =
@@ -69,6 +73,15 @@ public class DataSource
     private PreparedStatement getAllOU;
     private PreparedStatement getbuyorders;
     private PreparedStatement getsellorders;
+    private PreparedStatement ADDOU;
+    private PreparedStatement RemoveOU;
+    private PreparedStatement GETOUS;
+    private PreparedStatement EDITOU;
+    private PreparedStatement ADDUSER;
+    private PreparedStatement GETUSERS;
+    private PreparedStatement GETSpecficOU;
+    private PreparedStatement REMOVEUSER;
+    private PreparedStatement EDITUSER;
 
     public DataSource()
     {
@@ -78,8 +91,8 @@ public class DataSource
             //Create Tables from above statementes
             st.execute(CREATE_TABLE_OU);
             st.execute(CREATE_TABLE_USERS);
-            st.execute(CREATE_TABLE_BUY_ORDERS);
-            st.execute(CREATE_TABLE_SELL_ASSETS);
+            //st.execute(CREATE_TABLE_BUY_ORDERS);
+            //st.execute(CREATE_TABLE_SELL_ASSETS);
             st.execute(CREATE_TABLE_HISTORY);
 
             //Prepare 'concrete' statements
@@ -90,6 +103,15 @@ public class DataSource
             removeAsset = connection.prepareStatement(REMOVE_ASSET);
             getbuyorders = connection.prepareStatement(GET_BUY_ORDER);
             getsellorders = connection.prepareStatement(GET_SELL_ORDER);
+            ADDOU = connection.prepareStatement(ADD_OU);
+            RemoveOU = connection.prepareStatement(REMOVE_OU);
+            GETOUS = connection.prepareStatement(GET_OUS);
+            EDITOU = connection.prepareStatement(EDIT_OU);
+            ADDUSER = connection.prepareStatement(ADD_USER);
+            GETUSERS = connection.prepareStatement(GET_USERS);
+            GETSpecficOU = connection.prepareStatement(GET_SPECIFIC_OU);
+            REMOVEUSER = connection.prepareStatement(REMOVE_USER);
+            EDITUSER = connection.prepareStatement(EDIT_USER);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -116,7 +138,7 @@ public class DataSource
      *
      * Collects Array list of Assets of the Query OU
      *
-     * @param OUName (STRING) - Raw String of the OU name to retrieve data
+     * @param user (User) - Raw String of the OU name to retrieve data
      *
      * @return (ARRAYLIST<Asset>) Returns the list of assets
      *
@@ -126,18 +148,18 @@ public class DataSource
      *
      * @author Adam
      */
-    public ArrayList<Asset> getAssets(String OUName) throws SQLException, StockExceptions
+    public ArrayList<Asset> getAssets(User user) throws SQLException, StockExceptions
     {
         ArrayList<Asset> temp = new ArrayList<>();
-        User TOPass;
+        //User TOPass;
         ResultSet rs = null;
         try {
-            getAssets.setString(1,OUName);
+            getAssets.setString(1,user.GetUserID());
             rs = getAssets.executeQuery();
             while(rs.next())
             {
-                TOPass = StartServer.CurrentStockMarket.getUserFromID(rs.getString("UserName"));
-                temp.add(new SellOrder(rs.getString("Name"),rs.getDouble("Amount"),rs.getInt("Price"),TOPass));
+                Asset asset = new Asset(rs.getString("name"),rs.getDouble("value"),rs.getInt("amount"),user);
+                temp.add(asset);
             }
         }
         catch (SQLException throwable)
@@ -152,7 +174,7 @@ public class DataSource
     }
     public void AddAsset(Asset asset) throws SQLException {
         addAsset.setString(1, asset.GetName());
-        addAsset.setString(2, asset.GetOUID());
+        addAsset.setString(2, asset.GetUser());
         addAsset.setInt(3, asset.getNumAvailable());
         addAsset.setDouble(4,asset.getIndPrice());
         addAsset.execute();
@@ -309,5 +331,139 @@ public class DataSource
 
 
         return toReturn;
+    }
+    //Adds an organisation unit to the DB
+    public void AddOU(OrganisationUnit OU) {
+        try {
+            ADDOU.setString(1,OU.orgName());
+            ADDOU.setDouble(2,OU.currentCredits());
+            ADDOU.execute();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void RemoveOU(OrganisationUnit OU) {
+        try {
+            RemoveOU.setString(1,OU.orgName());
+            RemoveOU.setDouble(2,OU.currentCredits());
+            RemoveOU.execute();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public ArrayList<OrganisationUnit> getOUs() {
+        ArrayList<OrganisationUnit> temp = new ArrayList<>();
+        ResultSet rs = null;
+        try {
+            rs = GETOUS.executeQuery();
+            while(rs.next())
+            {
+                OrganisationUnit OU = new OrganisationUnit(rs.getString("OrgUnit"),rs.getDouble("credits"),null);
+                temp.add(OU);
+            }
+        }
+        catch (SQLException throwable)
+        {
+            throwable.printStackTrace();
+        }
+        catch (StockExceptions e)
+        {
+            //Do Nothing as this error doesn't occur here
+        }
+        return temp;
+    }
+
+    public void EditOU(OrganisationUnit ou, double credits) {
+        try {
+            EDITOU.setDouble(1,credits);
+            EDITOU.setString(2,ou.orgName());
+            EDITOU.executeUpdate();
+        }
+        catch (SQLException throwable) {
+            throwable.printStackTrace();
+        }
+    }
+
+    public void AddUser(User user1) {
+        try {
+            ByteArrayOutputStream test = new ByteArrayOutputStream();
+            ObjectOutputStream parse = new ObjectOutputStream(test);
+            parse.writeObject(user1.GetPassword());
+            byte[] ByteArray = test.toByteArray();
+            ADDUSER.setString(1,user1.GetUserID());
+            ADDUSER.setBlob(2, new ByteArrayInputStream(ByteArray), ByteArray.length);
+            ADDUSER.setString(3, "test");
+            ADDUSER.setString(4,user1.OUID_Owner());
+            ADDUSER.execute();
+        }
+        catch (SQLException | IOException throwable) {
+            throwable.printStackTrace();
+        }
+    }
+
+    public ArrayList<User> getUsers() {
+        ArrayList<User> temp = new ArrayList<>();
+        ResultSet rs = null;
+        ResultSet orgunit = null;
+        try {
+            rs = GETUSERS.executeQuery();
+            while(rs.next())
+            {
+                Blob passblob = rs.getBlob("password");
+                byte[] password = passblob.getBytes(1,(int) passblob.length());
+                ByteArrayInputStream byteStream = new ByteArrayInputStream(password);
+                ObjectInputStream objectInputStream = new ObjectInputStream(byteStream);
+                SerialData serialised = (SerialData) objectInputStream.readObject();
+                String PlainPass = serialised.getHiddenValue();
+                GETSpecficOU.setString(1,rs.getString("orgunit"));
+                orgunit = GETSpecficOU.executeQuery();
+                orgunit.next();
+                OrganisationUnit temporg = new OrganisationUnit(orgunit.getString("Orgunit"),orgunit.getDouble("credits"),null);
+                User user = new User(rs.getString("username"),PlainPass, temporg);
+                temp.add(user);
+            }
+        }
+        catch (SQLException throwable)
+        {
+            throwable.printStackTrace();
+        }
+        catch (StockExceptions e)
+        {
+            //Do Nothing as this error doesn't occur here
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
+
+    public void RemoveUser(User user2) {
+        try {
+            REMOVEUSER.setString(1,user2.GetUserID());
+            REMOVEUSER.execute();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void EditUser(User usertoedit, String newPass) {
+        try {
+            usertoedit.SetPassword(newPass);
+            ByteArrayOutputStream test = new ByteArrayOutputStream();
+            ObjectOutputStream parse = new ObjectOutputStream(test);
+            parse.writeObject(usertoedit.GetPassword());
+            byte[] ByteArray = test.toByteArray();
+            EDITUSER.setString(2, usertoedit.GetUserID());
+            EDITUSER.setBlob(1, new ByteArrayInputStream(ByteArray), ByteArray.length);
+            EDITUSER.executeUpdate();
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

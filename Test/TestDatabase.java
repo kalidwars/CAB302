@@ -139,7 +139,7 @@ public class TestDatabase
     {
         ServerConnection test = new ServerConnection();
         test.AddAsset(Test2);
-        ArrayList<Asset> testassets = test.GetAssets("Buys");
+        ArrayList<Asset> testassets = test.GetAssets(BuyUser);
     }
 
     @Test

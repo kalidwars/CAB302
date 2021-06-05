@@ -122,5 +122,30 @@ public class TestAsset {
             BuyOrder Test3 = new BuyOrder("Test3",6,0,UserExcep);
         });
     }
+    @Test
+    @DisplayName("Testing adding assets to the database")
+    public void AddAssetToDB() throws StockExceptions {
+        ServerConnection testConnection = new ServerConnection();
+        assertEquals(true,testConnection.AddAsset(new Asset("Test Asset 1",100.0,10,BuyUser)));
+    }
+
+    @Test
+    @DisplayName("Testing removing assets from the database")
+    public void RemoveAssetFromDB() throws StockExceptions {
+        ServerConnection testConnection = new ServerConnection();
+        assertEquals(true,testConnection.RemoveAsset(new Asset("Test Asset 1",100.0,10,BuyUser)));
+    }
+
+    @Test
+    @DisplayName("Testing retrieving assets from the database")
+    public void RetrieveAssetsFromDB() throws StockExceptions {
+        ServerConnection testConnection = new ServerConnection();
+        Asset asset = new Asset("Test Asset 1",100.0,10,BuyUser);
+        testConnection.AddAsset(asset);
+        ArrayList<Asset> testArrayList = new ArrayList<>();
+        testArrayList = testConnection.GetAssets(BuyUser);
+        assertNotNull(testArrayList);
+    }
+
 
 }

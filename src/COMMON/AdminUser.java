@@ -38,7 +38,7 @@ public class AdminUser extends COMMON.User implements Serializable
      * @author Hugh
      *
      */
-    @Override
+    /*@Override
     public boolean Upload() throws SQLException
     {
         boolean toReturn = true;
@@ -61,7 +61,7 @@ public class AdminUser extends COMMON.User implements Serializable
         }
 
         return toReturn;
-    }
+    }*/
 
 
 

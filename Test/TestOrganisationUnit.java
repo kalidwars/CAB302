@@ -1,11 +1,14 @@
+import Client.ServerConnection;
 import CustomExceptions.*;
 import COMMON.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -26,7 +29,6 @@ public class TestOrganisationUnit
     {
 
     }
-
 
     @BeforeEach
     void setup() throws StockExceptions, IOException
@@ -80,6 +82,33 @@ public class TestOrganisationUnit
         assertThrows(StockExceptions.class, () -> {
             OrganisationUnit ExceptionTest = new OrganisationUnit("Exception",-20,AssetTest);
         });
+    }
+
+    @Test
+    @DisplayName("Testing Adding an OU to the database via server")
+    public void AddOUToServer() {
+        ServerConnection testConnection = new ServerConnection();
+        assertEquals(true,testConnection.AddOU(organisationUnit));
+    }
+    @Test
+    @DisplayName("Removing an OU from the database via server")
+    public void RemoveOUFromServer() {
+        ServerConnection testConnection = new ServerConnection();
+        assertEquals(true,testConnection.RemoveOU(organisationUnit));
+    }
+    @Test
+    @DisplayName("Get a list of OU's from the server")
+    public void GetOUsFromServer() {
+        ServerConnection testConnection = new ServerConnection();
+        ArrayList<OrganisationUnit> testOUList = testConnection.GetOUs();
+        assertNotNull(testOUList);
+    }
+    @Test
+    @DisplayName("Get a list of OU's from the server")
+    public void EditOUCredits() {
+        ServerConnection testConnection = new ServerConnection();
+        testConnection.AddOU(organisationUnit);
+        assertEquals(true, testConnection.EditOU(organisationUnit, 3001.0));
     }
 
 }

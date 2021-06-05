@@ -18,7 +18,7 @@ public class StartServer {
 
     /**
      *
-     * Entry Point of the program this will set up GUI and also server connection
+     * Entry Point of the program this will set up server connection
      *
      * @param  args left NULL
      *

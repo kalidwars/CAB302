@@ -30,8 +30,10 @@ public class NetworkServer implements Serializable {
     private AtomicBoolean running = new AtomicBoolean(true);
     private DataSource DataSource = new DataSource();
     /**
-     * Handles the connection received from ServerSocket
+     * Handles the connection received from ServerSocket as well as reconcilation of trades
      * @param socket The socket used to communicate with the currently connected client
+     *
+     *
      */
     private void handleConnection(Socket socket) throws Exception
     {
@@ -43,30 +45,78 @@ public class NetworkServer implements Serializable {
                 switch (command)
                 {
                     case "GET_ASSETS":
-                        String OUName = ois.readUTF();
+                        User user = (User) ois.readObject();
                         ArrayList<Asset> temp = new ArrayList<>();
-                        temp = DataSource.getAssets(OUName);
+                        temp = DataSource.getAssets(user);
                         oos.writeInt(temp.size());
                         for(Asset asset : temp) {
                             oos.writeObject(asset);
                             oos.flush();
                         }
+                        break;
                     case "ADD_ASSET":
                         Asset asset = (Asset) ois.readObject();
                         DataSource.AddAsset(asset);
+                        break;
                     case "REMOVE_ASSET":
                         Asset assettoremove = (Asset) ois.readObject();
                         DataSource.RemoveAsset(assettoremove);
+                        break;
                     case "GET_ALL_USER":
                         String QStock = ois.readUTF();
                         ArrayList<User> tempUser = new ArrayList<User>();
                         //tempUser = DataSource.convertToUsers();
                         oos.writeInt(tempUser.size());
-                        for(User user : tempUser)
+                        for(User user1 : tempUser)
                         {
-                            oos.writeObject(user);
+                            oos.writeObject(user1);
                             oos.flush();
                         }
+                        break;
+                    case "ADD_OU":
+                        OrganisationUnit OU = (OrganisationUnit) ois.readObject();
+                        DataSource.AddOU(OU);
+                        break;
+                    case "REMOVE_OU":
+                        OU = (OrganisationUnit) ois.readObject();
+                        DataSource.RemoveOU(OU);
+                        break;
+                    case "GET_OUS":
+                        ArrayList<OrganisationUnit> tempOUs = new ArrayList<>();
+                        tempOUs = DataSource.getOUs();
+                        oos.writeInt(tempOUs.size());
+                        for(OrganisationUnit OrgUnit : tempOUs) {
+                            oos.writeObject(OrgUnit);
+                            oos.flush();
+                        }
+                        break;
+                    case "EDIT_OU":
+                        OU = (OrganisationUnit) ois.readObject();
+                        double credits = ois.readDouble();
+                        DataSource.EditOU(OU, credits);
+                        break;
+                    case "ADD_USER":
+                        User User1 = (User) ois.readObject();
+                        DataSource.AddUser(User1);
+                        break;
+                    case "GET_USERS":
+                        ArrayList<User> tempUsers = new ArrayList<>();
+                        tempUsers = DataSource.getUsers();
+                        oos.writeInt(tempUsers.size());
+                        for(User user1 : tempUsers) {
+                            oos.writeObject(user1);
+                            oos.flush();
+                        }
+                        break;
+                    case "REMOVE_USER":
+                        User User2 = (User) ois.readObject();
+                        DataSource.RemoveUser(User2);
+                        break;
+                    case "EDIT_USER_PASSWORD":
+                        User usertoedit = (User) ois.readObject();
+                        String NewPass = ois.readUTF();
+                        DataSource.EditUser(usertoedit,NewPass);
+                        break;
                 }
                 ArrayList<BuyOrder> BuyOrders = DataSource.GetBuyOrders();
                 ArrayList<BuyOrder> SellOrders = DataSource.GetSellOrders();

@@ -4,25 +4,21 @@ import Server.*;
 //Needed Library
 import java.sql.*;
 import java.io.*;
-
+import java.io.Serial;
+import java.io.Serializable;
 //May be Deleted later
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
-import java.security.Security;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.NoSuchAlgorithmException;
 
 
-public class User
+public class User implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = -2393708718755176852L;
     //User Variables
     private String ID;
-    private String PassWord;
-    private Serial privatePassWord;
+    //private String PassWord;
+    private SerialData privatePassWord;
     private OrganisationUnit OU_OWNER;
 
     //Private Variables used for encryption and decryption
@@ -56,8 +52,12 @@ public class User
     public User(String id, String passWord, OrganisationUnit ParentUnit) throws IOException {
         this.ID = id;
         this.OU_OWNER = ParentUnit;
-        this.privatePassWord = new Serial(passWord);
-        privatePassWord.EncryptPassword();
+        this.privatePassWord = new SerialData(passWord);
+        //privatePassWord.EncryptPassword();
+    }
+
+    public SerialData GetPassword() {
+        return privatePassWord;
     }
 
     /**
@@ -115,7 +115,8 @@ public class User
 
     public String RetrivePassword()
     {
-        return this.privatePassWord.getHiddenData();
+        //return this.privatePassWord.getHiddenData();
+        return "test";
     }
 
     public String OUID_Owner()
@@ -150,7 +151,7 @@ public class User
         {
             UPLOADING = connection.prepareStatement(upload_statement);
             UPLOADING.setString(1,this.ID);
-            UPLOADING.setString(2,this.PassWord);
+            //UPLOADING.setString(2,this.PassWord);
             UPLOADING.setString(3,String.valueOf(false));
             UPLOADING.setString(4,this.OU_OWNER.orgName());
             UPLOADING.executeQuery();
@@ -162,5 +163,9 @@ public class User
         }
 
         return toReturn;
+    }
+
+    public void SetPassword(String newPass) {
+        this.privatePassWord = new SerialData(newPass);
     }
 }

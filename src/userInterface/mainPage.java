@@ -1,6 +1,5 @@
 package userInterface;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -30,22 +29,22 @@ public class mainPage extends javax.swing.JFrame {
         titleLabel = new javax.swing.JLabel();
         bottomPanel = new javax.swing.JPanel();
         availableOrdersPanel = new javax.swing.JPanel();
-        avaialbleTabbedPane = new javax.swing.JTabbedPane();
+        availableTabbedPane = new javax.swing.JTabbedPane();
         avBuyPanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        buyScrollPane = new javax.swing.JScrollPane();
+        buyTable = new javax.swing.JTable();
         avSellPanel = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        sellScrollPane = new javax.swing.JScrollPane();
+        sellTable = new javax.swing.JTable();
         currentOrdersPanel = new javax.swing.JPanel();
         currentTabbedPane = new javax.swing.JTabbedPane();
         currBuyPanel = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        currBuyScrollPane = new javax.swing.JScrollPane();
+        currBuyTable = new javax.swing.JTable();
         buyRemoveBtn = new javax.swing.JButton();
         currSellPanel = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        currSellScrollPane = new javax.swing.JScrollPane();
+        currSellTable = new javax.swing.JTable();
         sellRemoveBtn = new javax.swing.JButton();
         createOrdersPanel = new javax.swing.JPanel();
         createLabel = new javax.swing.JLabel();
@@ -56,7 +55,7 @@ public class mainPage extends javax.swing.JFrame {
         valueTextField = new javax.swing.JTextField();
         qtyTextField = new javax.swing.JTextField();
         createBtn = new javax.swing.JButton();
-        jPanel10 = new javax.swing.JPanel();
+        graphPanel = new javax.swing.JPanel();
         mainMenuBar = new javax.swing.JMenuBar();
         settingsMenu = new javax.swing.JMenu();
         logoutMenuItem = new javax.swing.JMenuItem();
@@ -96,10 +95,10 @@ public class mainPage extends javax.swing.JFrame {
 
         availableOrdersPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Available Orders", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Century Gothic", 0, 11))); // NOI18N
 
-        avaialbleTabbedPane.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        availableTabbedPane.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
 
-        jTable1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        buyTable.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        buyTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
                         {null, null, null, null},
                         {null, null, null, null},
@@ -124,22 +123,22 @@ public class mainPage extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        buyScrollPane.setViewportView(buyTable);
 
         javax.swing.GroupLayout avBuyPanelLayout = new javax.swing.GroupLayout(avBuyPanel);
         avBuyPanel.setLayout(avBuyPanelLayout);
         avBuyPanelLayout.setHorizontalGroup(
                 avBuyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+                        .addComponent(buyScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
         );
         avBuyPanelLayout.setVerticalGroup(
                 avBuyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                        .addComponent(buyScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
         );
 
-        avaialbleTabbedPane.addTab("Available Buy Orders", avBuyPanel);
+        availableTabbedPane.addTab("Available Buy Orders", avBuyPanel);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        sellTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
                         {null, null, null, null},
                         {null, null, null, null},
@@ -164,30 +163,30 @@ public class mainPage extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable3);
+        sellScrollPane.setViewportView(sellTable);
 
         javax.swing.GroupLayout avSellPanelLayout = new javax.swing.GroupLayout(avSellPanel);
         avSellPanel.setLayout(avSellPanelLayout);
         avSellPanelLayout.setHorizontalGroup(
                 avSellPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+                        .addComponent(sellScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
         );
         avSellPanelLayout.setVerticalGroup(
                 avSellPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                        .addComponent(sellScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
         );
 
-        avaialbleTabbedPane.addTab("Available Sell Orders", avSellPanel);
+        availableTabbedPane.addTab("Available Sell Orders", avSellPanel);
 
         javax.swing.GroupLayout availableOrdersPanelLayout = new javax.swing.GroupLayout(availableOrdersPanel);
         availableOrdersPanel.setLayout(availableOrdersPanelLayout);
         availableOrdersPanelLayout.setHorizontalGroup(
                 availableOrdersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(avaialbleTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(availableTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         availableOrdersPanelLayout.setVerticalGroup(
                 availableOrdersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(avaialbleTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(availableTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         bottomPanel.add(availableOrdersPanel);
@@ -197,7 +196,7 @@ public class mainPage extends javax.swing.JFrame {
 
         currentTabbedPane.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        currBuyTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
                         {null, null, null, null},
                         {null, null, null, null},
@@ -222,9 +221,9 @@ public class mainPage extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane4.setViewportView(jTable4);
-        if (jTable4.getColumnModel().getColumnCount() > 0) {
-            jTable4.getColumnModel().getColumn(0).setResizable(false);
+        currBuyScrollPane.setViewportView(currBuyTable);
+        if (currBuyTable.getColumnModel().getColumnCount() > 0) {
+            currBuyTable.getColumnModel().getColumn(0).setResizable(false);
         }
 
         buyRemoveBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
@@ -239,7 +238,7 @@ public class mainPage extends javax.swing.JFrame {
         currBuyPanel.setLayout(currBuyPanelLayout);
         currBuyPanelLayout.setHorizontalGroup(
                 currBuyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+                        .addComponent(currBuyScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
                         .addGroup(currBuyPanelLayout.createSequentialGroup()
                                 .addGap(157, 157, 157)
                                 .addComponent(buyRemoveBtn)
@@ -248,7 +247,7 @@ public class mainPage extends javax.swing.JFrame {
         currBuyPanelLayout.setVerticalGroup(
                 currBuyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(currBuyPanelLayout.createSequentialGroup()
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                                .addComponent(currBuyScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(buyRemoveBtn)
                                 .addContainerGap())
@@ -256,7 +255,7 @@ public class mainPage extends javax.swing.JFrame {
 
         currentTabbedPane.addTab("Your Current Buy Orders", currBuyPanel);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        currSellTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
                         {null, null, null, null},
                         {null, null, null, null},
@@ -281,7 +280,7 @@ public class mainPage extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable2);
+        currSellScrollPane.setViewportView(currSellTable);
 
         sellRemoveBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         sellRemoveBtn.setText("REMOVE");
@@ -295,7 +294,7 @@ public class mainPage extends javax.swing.JFrame {
         currSellPanel.setLayout(currSellPanelLayout);
         currSellPanelLayout.setHorizontalGroup(
                 currSellPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+                        .addComponent(currSellScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
                         .addGroup(currSellPanelLayout.createSequentialGroup()
                                 .addGap(157, 157, 157)
                                 .addComponent(sellRemoveBtn)
@@ -304,7 +303,7 @@ public class mainPage extends javax.swing.JFrame {
         currSellPanelLayout.setVerticalGroup(
                 currSellPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(currSellPanelLayout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                                .addComponent(currSellScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(sellRemoveBtn)
                                 .addContainerGap())
@@ -410,21 +409,21 @@ public class mainPage extends javax.swing.JFrame {
 
         bottomPanel.add(createOrdersPanel);
 
-        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Asset History - Graph", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Century Gothic", 0, 11))); // NOI18N
-        jPanel10.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        graphPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Asset History - Graph", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Century Gothic", 0, 11))); // NOI18N
+        graphPanel.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
 
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-                jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout graphPanelLayout = new javax.swing.GroupLayout(graphPanel);
+        graphPanel.setLayout(graphPanelLayout);
+        graphPanelLayout.setHorizontalGroup(
+                graphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGap(0, 421, Short.MAX_VALUE)
         );
-        jPanel10Layout.setVerticalGroup(
-                jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        graphPanelLayout.setVerticalGroup(
+                graphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGap(0, 266, Short.MAX_VALUE)
         );
 
-        bottomPanel.add(jPanel10);
+        bottomPanel.add(graphPanel);
 
         settingsMenu.setText("Settings");
 
@@ -576,34 +575,34 @@ public class mainPage extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> assetTypeComboBox;
     private javax.swing.JPanel avBuyPanel;
     private javax.swing.JPanel avSellPanel;
-    private javax.swing.JTabbedPane avaialbleTabbedPane;
+    private javax.swing.JTabbedPane availableTabbedPane;
     private javax.swing.JPanel availableOrdersPanel;
     private javax.swing.JPanel bottomPanel;
     private javax.swing.JButton buyRemoveBtn;
+    private javax.swing.JScrollPane buyScrollPane;
     private javax.swing.JComboBox<String> buySellComboBox;
+    private javax.swing.JTable buyTable;
     private javax.swing.JButton createBtn;
     private javax.swing.JLabel createLabel;
     private javax.swing.JPanel createOrdersPanel;
     private javax.swing.JPanel currBuyPanel;
+    private javax.swing.JScrollPane currBuyScrollPane;
+    private javax.swing.JTable currBuyTable;
     private javax.swing.JPanel currSellPanel;
+    private javax.swing.JScrollPane currSellScrollPane;
+    private javax.swing.JTable currSellTable;
     private javax.swing.JPanel currentOrdersPanel;
     private javax.swing.JTabbedPane currentTabbedPane;
     private javax.swing.JMenuItem deleteOUMenuItem;
     private javax.swing.JMenuItem deleteUserMenuItem;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable4;
+    private javax.swing.JPanel graphPanel;
     private javax.swing.JMenuItem logoutMenuItem;
     private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JLabel qtyLabel;
     private javax.swing.JTextField qtyTextField;
     private javax.swing.JButton sellRemoveBtn;
+    private javax.swing.JScrollPane sellScrollPane;
+    private javax.swing.JTable sellTable;
     private javax.swing.JMenu settingsMenu;
     private javax.swing.JMenu staffMenu;
     private javax.swing.JLabel titleLabel;

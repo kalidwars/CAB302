@@ -5,6 +5,8 @@ import COMMON.OrganisationUnit;
 import Client.ServerConnection;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
@@ -12,7 +14,8 @@ import java.util.ArrayList;
  * @author n10245090
  */
 public class editOU extends javax.swing.JFrame {
-
+    private  ArrayList<OrganisationUnit> OrgUnits;
+    private ArrayList<Asset> Assets;
     /**
      * Creates new form editOU
      */
@@ -28,7 +31,7 @@ public class editOU extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        ArrayList<OrganisationUnit> OrgUnits = new ArrayList<>();
+        OrgUnits = new ArrayList<>();
         ServerConnection DataConnection = new ServerConnection();
         OrgUnits = DataConnection.GetOUs();
         OrganisationUnit SelectedOU = null;
@@ -56,7 +59,12 @@ public class editOU extends javax.swing.JFrame {
         for(OrganisationUnit OU : OrgUnits) {
             editOUComboBox.addItem(OU.orgName());
         }
-
+        editOUComboBox.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                NewOUSelected(e);
+            }
+        });
         newCreditsLabel.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         newCreditsLabel.setText("Enter new credits for OU:");
 
@@ -144,12 +152,39 @@ public class editOU extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void NewOUSelected(ActionEvent e) {
+        ServerConnection DataSource = new ServerConnection();
+        Assets = DataSource.GetAllAssets_OU( (String) editOUComboBox.getSelectedItem());
+        for(Asset asset : Assets) {
+            assetTypeComboBox.addItem(asset.GetName());
+        }
+    }
+
     private void newAssetsTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newAssetsTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_newAssetsTextFieldActionPerformed
 
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
         // TODO add your handling code here:
+        OrganisationUnit SelectedOrgUnit = null;
+        Asset SelectAsset = null;
+        ServerConnection Datasource = new ServerConnection();
+        if(!newCreditsTextField.getText().isEmpty()) {
+            for (OrganisationUnit OU : OrgUnits) {
+                if (OU.orgName().equals(editOUComboBox.getSelectedItem())) {
+                    SelectedOrgUnit = OU;
+                }
+            }
+            Datasource.EditOU(SelectedOrgUnit, Double.parseDouble(newCreditsTextField.getText()));
+        }
+        if(!newAssetsTextField.getText().isEmpty()) {
+            for(Asset asset : Assets) {
+                if(asset.GetName().equals(assetTypeComboBox.getSelectedItem())) {
+                    SelectAsset = asset;
+                }
+            }
+            Datasource.EditAsset(SelectAsset,(String) newAssetsTextField.getText());
+        }
         JOptionPane.showMessageDialog(this, "OU Edited");
     }//GEN-LAST:event_editBtnActionPerformed
 

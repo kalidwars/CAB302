@@ -2,6 +2,7 @@ package Client;
 
 import COMMON.*;
 
+import javax.swing.*;
 import java.io.*;
 import java.io.Serial;
 import java.net.Socket;
@@ -374,5 +375,18 @@ public class ServerConnection implements Serializable
             e.printStackTrace();
         }
         return adminUsers;
+    }
+
+    public void EditAsset(Asset selectAsset, String qty) {
+        try {
+            objectOutputStream.writeUTF("EDIT_ASSET");
+            objectOutputStream.flush();
+            objectOutputStream.writeObject(selectAsset);
+            objectOutputStream.flush();
+            objectOutputStream.writeInt(Integer.parseInt(qty));
+            objectOutputStream.flush();
+        }
+        catch (IOException e) {
+        }
     }
 }

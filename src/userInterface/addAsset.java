@@ -1,5 +1,7 @@
 package userInterface;
 
+import Client.ServerConnection;
+
 import javax.swing.*;
 
 /**
@@ -84,6 +86,8 @@ public class addAsset extends javax.swing.JFrame {
 
     private void addAssetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAssetBtnActionPerformed
         // TODO add your handling code here:
+        ServerConnection Database = new ServerConnection();
+        Database.AddAssetName( (String) addAssetTextField.getText());
         JOptionPane.showMessageDialog(this, "Asset Added");
     }//GEN-LAST:event_addAssetBtnActionPerformed
 

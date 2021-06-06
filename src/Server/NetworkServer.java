@@ -289,6 +289,11 @@ public class NetworkServer implements Serializable {
                             oos.flush();
                         }
                         break;
+                    case "EDIT_ASSET":
+                        Asset asset1 = (Asset) ois.readObject();
+                        Integer NewQTY = ois.readInt();
+                        DataSource.EditAsset(asset1,NewQTY);
+                        break;
                 }
             }
 

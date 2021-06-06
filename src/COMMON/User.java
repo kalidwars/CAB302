@@ -76,7 +76,11 @@ public class User implements Serializable
      */
     public Boolean PassWordCorrect(String PasswordAttempt)
     {
-        return null;
+        Boolean toReturn = false;
+
+        toReturn = (this.privatePassWord.getHiddenValue() == PasswordAttempt);
+
+        return toReturn;
     }
 
     public String RetrivePassword()

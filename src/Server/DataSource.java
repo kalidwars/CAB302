@@ -39,6 +39,7 @@ public class DataSource
     private static final String EDIT_OU = "UPDATE organisationunits set credits=? where Orgunit = ?";
     private static final String ADD_USER = "INSERT INTO Users (username, password, privilege, orgunit) VALUES (?, ?, ?, ?);";
     private static final String ADD_ADMIN_USER = "INSERT INTO Users (username, password, privilege, orgunit) VALUES (?, ?, ?, ?);";
+    private static final String GET_ALL_USERS = "SELECT * from users;";
     private static final String GET_USERS = "select * from users where privilege = false";
     private static final String GET_ADMIN_USERS = "select * from users where privilege = true";
     private static final String REMOVE_USER = "DELETE FROM users WHERE username=?";
@@ -92,6 +93,7 @@ public class DataSource
     private PreparedStatement ADDUSER;
     private PreparedStatement AddAdminUser;
     private PreparedStatement GETUSERS;
+    private PreparedStatement GETALLUSERS;
     private PreparedStatement GetAdminUsers;
     private PreparedStatement GETSpecficOU;
     private PreparedStatement REMOVEUSER;
@@ -147,6 +149,7 @@ public class DataSource
             AddAdminUser = connection.prepareStatement(ADD_ADMIN_USER);
             GetAdminUsers = connection.prepareStatement(GET_ADMIN_USERS);
             GETTRADE = connection.prepareStatement(GET_TRADES);
+            GETALLUSERS = connection.prepareStatement(GET_ALL_USERS);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -423,6 +426,41 @@ public class DataSource
         catch (SQLException throwable) {
             throwable.printStackTrace();
         }
+    }
+
+    public ArrayList<User> GETALLUSERS()
+    {
+        ArrayList<User> toReturn = new ArrayList<>();
+        ResultSet rs = null;
+        ResultSet orgUnit = null;
+        OrganisationUnit ORGunit = null;
+
+        try
+        {
+            rs = GETALLUSERS.executeQuery();
+            while(rs.next())
+            {
+                Blob passBlob = rs.getBlob("password");
+                byte[] password = passBlob.getBytes(1,(int)passBlob.length());
+                ByteArrayInputStream bStream = new ByteArrayInputStream(password);
+                ObjectInputStream oStream = new ObjectInputStream(bStream);
+                SerialData serlised = (SerialData) oStream.readObject();
+                String PlainPass = serlised.getHiddenValue();
+                GETSpecficOU.setString(1,rs.getString("orgunit"));
+                orgUnit = GETSpecficOU.executeQuery();
+                if(orgUnit.next())
+                {
+                    ORGunit = new OrganisationUnit(orgUnit.getString("Orgunit"),orgUnit.getDouble("credits"),null);
+                }
+                User user = new User(rs.getString("username"),PlainPass, ORGunit);
+                toReturn.add(user);
+            }
+        }
+        catch(SQLException | IOException | ClassNotFoundException | StockExceptions e)
+        {
+            e.printStackTrace();
+        }
+        return toReturn;
     }
 
     public void AddUser(User user1) {

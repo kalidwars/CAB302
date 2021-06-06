@@ -190,7 +190,7 @@ public class ServerConnection implements Serializable
     public ArrayList<User> GetUsers() {
         ArrayList<User> users = new ArrayList<>();
         try {
-            objectOutputStream.writeUTF("GET_USERS");
+            objectOutputStream.writeUTF("GET_ALL_USERS");
             objectOutputStream.flush();
             int numOUS = objectInputStream.readInt();
             for(int i = 0; i < numOUS; i++) {
@@ -206,7 +206,20 @@ public class ServerConnection implements Serializable
 
     public boolean AttemptLogin(String Username, String Password)
     {
-        return false;
+        boolean toReturn = false;
+
+        ArrayList<User> rawInfor = this.GetUsers();
+        User placeHolder;
+        for(int j = 0; j < rawInfor.size(); j++)
+        {
+            placeHolder = rawInfor.get(j);
+            if(placeHolder.GetUserID() == Username)
+            {
+                toReturn = placeHolder.PassWordCorrect(Password);
+            }
+        }
+
+        return toReturn;
     }
 
     public boolean RemoveUser(User test_case_1) {

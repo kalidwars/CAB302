@@ -1,8 +1,11 @@
 package userInterface;
 
 
+import Client.ServerConnection;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import Client.*;
 
 /**
  *
@@ -10,7 +13,7 @@ import java.awt.event.ActionListener;
  */
 public class login extends javax.swing.JFrame
 {
-
+    private ServerConnection loginSC = new ServerConnection();
 
     /**
      * Creates new form login
@@ -47,7 +50,8 @@ public class login extends javax.swing.JFrame
             public void actionPerformed(ActionEvent e) {
                 String usernameRaw = usernameTextField.getText();
                 String passwordRaw = passwordTextField.getText();
-
+                Boolean attempt = loginSC.AttemptLogin(usernameRaw,passwordRaw);
+                System.out.println((attempt));
             }
         });
 

@@ -1,5 +1,6 @@
 package userInterface;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,7 +30,7 @@ public class mainPage extends javax.swing.JFrame {
         titleLabel = new javax.swing.JLabel();
         bottomPanel = new javax.swing.JPanel();
         availableOrdersPanel = new javax.swing.JPanel();
-        availableTabbedPane = new javax.swing.JTabbedPane();
+        avaialbleTabbedPane = new javax.swing.JTabbedPane();
         avBuyPanel = new javax.swing.JPanel();
         buyScrollPane = new javax.swing.JScrollPane();
         buyTable = new javax.swing.JTable();
@@ -64,6 +65,8 @@ public class mainPage extends javax.swing.JFrame {
         addOUMenuItem = new javax.swing.JMenuItem();
         deleteUserMenuItem = new javax.swing.JMenuItem();
         deleteOUMenuItem = new javax.swing.JMenuItem();
+        editOUMenuItem = new javax.swing.JMenuItem();
+        addAssetTpeMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Trading System");
@@ -95,7 +98,7 @@ public class mainPage extends javax.swing.JFrame {
 
         availableOrdersPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Available Orders", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Century Gothic", 0, 11))); // NOI18N
 
-        availableTabbedPane.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        avaialbleTabbedPane.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
 
         buyTable.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         buyTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -136,7 +139,7 @@ public class mainPage extends javax.swing.JFrame {
                         .addComponent(buyScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
         );
 
-        availableTabbedPane.addTab("Available Buy Orders", avBuyPanel);
+        avaialbleTabbedPane.addTab("Available Buy Orders", avBuyPanel);
 
         sellTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
@@ -176,17 +179,17 @@ public class mainPage extends javax.swing.JFrame {
                         .addComponent(sellScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
         );
 
-        availableTabbedPane.addTab("Available Sell Orders", avSellPanel);
+        avaialbleTabbedPane.addTab("Available Sell Orders", avSellPanel);
 
         javax.swing.GroupLayout availableOrdersPanelLayout = new javax.swing.GroupLayout(availableOrdersPanel);
         availableOrdersPanel.setLayout(availableOrdersPanelLayout);
         availableOrdersPanelLayout.setHorizontalGroup(
                 availableOrdersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(availableTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(avaialbleTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         availableOrdersPanelLayout.setVerticalGroup(
                 availableOrdersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(availableTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(avaialbleTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         bottomPanel.add(availableOrdersPanel);
@@ -471,6 +474,22 @@ public class mainPage extends javax.swing.JFrame {
         });
         staffMenu.add(deleteOUMenuItem);
 
+        editOUMenuItem.setText("Edit OU");
+        editOUMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editOUMenuItemActionPerformed(evt);
+            }
+        });
+        staffMenu.add(editOUMenuItem);
+
+        addAssetTpeMenuItem.setText("Add Asset Type");
+        addAssetTpeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addAssetTpeMenuItemActionPerformed(evt);
+            }
+        });
+        staffMenu.add(addAssetTpeMenuItem);
+
         mainMenuBar.add(staffMenu);
 
         setJMenuBar(mainMenuBar);
@@ -534,6 +553,16 @@ public class mainPage extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Order Created");
     }//GEN-LAST:event_createBtnActionPerformed
 
+    private void editOUMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editOUMenuItemActionPerformed
+        // TODO add your handling code here:
+        new editOU().setVisible(true);
+    }//GEN-LAST:event_editOUMenuItemActionPerformed
+
+    private void addAssetTpeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAssetTpeMenuItemActionPerformed
+        // TODO add your handling code here:
+        new addAsset().setVisible(true);
+    }//GEN-LAST:event_addAssetTpeMenuItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -565,17 +594,19 @@ public class mainPage extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new mainPage().setVisible(true);
+
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem addAssetTpeMenuItem;
     private javax.swing.JMenuItem addOUMenuItem;
     private javax.swing.JMenuItem addUserMenuItem;
     private javax.swing.JComboBox<String> assetTypeComboBox;
     private javax.swing.JPanel avBuyPanel;
     private javax.swing.JPanel avSellPanel;
-    private javax.swing.JTabbedPane availableTabbedPane;
+    private javax.swing.JTabbedPane avaialbleTabbedPane;
     private javax.swing.JPanel availableOrdersPanel;
     private javax.swing.JPanel bottomPanel;
     private javax.swing.JButton buyRemoveBtn;
@@ -595,6 +626,7 @@ public class mainPage extends javax.swing.JFrame {
     private javax.swing.JTabbedPane currentTabbedPane;
     private javax.swing.JMenuItem deleteOUMenuItem;
     private javax.swing.JMenuItem deleteUserMenuItem;
+    private javax.swing.JMenuItem editOUMenuItem;
     private javax.swing.JPanel graphPanel;
     private javax.swing.JMenuItem logoutMenuItem;
     private javax.swing.JMenuBar mainMenuBar;
@@ -604,7 +636,7 @@ public class mainPage extends javax.swing.JFrame {
     private javax.swing.JScrollPane sellScrollPane;
     private javax.swing.JTable sellTable;
     private javax.swing.JMenu settingsMenu;
-    private javax.swing.JMenu staffMenu;
+    public javax.swing.JMenu staffMenu;
     private javax.swing.JLabel titleLabel;
     private javax.swing.JPanel topPanel;
     private javax.swing.JLabel valueLabel;

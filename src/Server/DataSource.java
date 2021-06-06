@@ -308,7 +308,8 @@ public class DataSource
             rs = getbuyorders.executeQuery();
             while(rs.next())
             {
-                buyOrders.add(new BuyOrder(rs.getString("AssetName"),rs.getDouble("price"),rs.getInt("amount"),rs.getString("username")));
+                BuyOrder border = new BuyOrder(rs.getString("AssetName"),rs.getDouble("price"),rs.getInt("amount"),rs.getString("username"));
+                buyOrders.add(border);
             }
         } catch (SQLException | StockExceptions throwables) {
             throwables.printStackTrace();

@@ -17,6 +17,7 @@ public class Asset implements Serializable
     private double ind_price;
     private int num_available;
     private User USERResponsible;
+    private String Username;
     /**
      *
      * This class is to describe the asset and the value of the asset
@@ -44,13 +45,7 @@ public class Asset implements Serializable
     {
         //Assign values into class
         this.name_of_asset = asset_name;
-        ServerConnection connection = new ServerConnection();
-        ArrayList<User> users = connection.GetUsers();
-        for(User user : users) {
-            if(user.GetUserID().equals(username)) {
-                this.USERResponsible = user;
-            }
-        }
+        this.Username = username;
         if(value < 0)
         {
             throw new StockExceptions("Expected a Positive Value or 0 value for credits");
@@ -211,6 +206,13 @@ public class Asset implements Serializable
      */
     public String GetOUID()
     {
+        ServerConnection connection = new ServerConnection();
+        ArrayList<User> users = connection.GetUsers();
+        for(User user : users) {
+             if(user.GetUserID().equals(this.Username)) {
+                 this.USERResponsible = user;
+            }
+        }
         return this.USERResponsible.OUID_Owner();
     }
 }

@@ -1,21 +1,26 @@
 package userInterface;
 
+import COMMON.BuyOrder;
+import COMMON.SellOrder;
+import Client.ServerConnection;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
 
 /**
  *
  * @author n10245090
  */
 public class mainPage extends javax.swing.JFrame {
-
+    private ServerConnection GUIConnection;
     /**
      * Creates new form mainPage
      */
     public mainPage() {
         initComponents();
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -101,18 +106,11 @@ public class mainPage extends javax.swing.JFrame {
         avaialbleTabbedPane.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
 
         jTable1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        ArrayList<BuyOrder> BuyOrders = new ArrayList<>();
+        GUIConnection = new ServerConnection();
+        BuyOrders = GUIConnection.GetBuyOrders();
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null}
+                new Object[][] {
                 },
                 new String [] {
                         "OU", "Asset Name", "Qty", "Price"
@@ -126,6 +124,10 @@ public class mainPage extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        for(BuyOrder buyOrder : BuyOrders) {
+            model.addRow(new Object[]{buyOrder.GetOUID(),buyOrder.GetName(),buyOrder.getIndPrice(),buyOrder.getNumAvailable()});
+        }
         jScrollPane1.setViewportView(jTable1);
 
         buyBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
@@ -156,19 +158,11 @@ public class mainPage extends javax.swing.JFrame {
         );
 
         avaialbleTabbedPane.addTab("Available Buy Orders", avBuyPanel);
-
+        ArrayList<SellOrder> SellOrders = new ArrayList<>();
+        GUIConnection = new ServerConnection();
+        SellOrders = GUIConnection.GetSellOrders();
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null}
                 },
                 new String [] {
                         "OU", "Asset Name", "Qty", "Price"
@@ -183,7 +177,10 @@ public class mainPage extends javax.swing.JFrame {
             }
         });
         jScrollPane3.setViewportView(jTable3);
-
+        model = (DefaultTableModel) jTable3.getModel();
+        for(SellOrder sellOrder : SellOrders) {
+            model.addRow(new Object[]{sellOrder.GetOUID(),sellOrder.GetName(),sellOrder.getIndPrice(),sellOrder.getNumAvailable()});
+        }
         sellBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         sellBtn.setText("SELL");
         sellBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -537,11 +534,13 @@ public class mainPage extends javax.swing.JFrame {
     private void addUserMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserMenuItemActionPerformed
         // TODO add your handling code here:
         new addUser().setVisible(true);
+
     }//GEN-LAST:event_addUserMenuItemActionPerformed
 
     private void addOUMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addOUMenuItemActionPerformed
         // TODO add your handling code here:
         new addOU().setVisible(true);
+
     }//GEN-LAST:event_addOUMenuItemActionPerformed
 
     private void deleteUserMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteUserMenuItemActionPerformed

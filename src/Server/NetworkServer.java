@@ -84,16 +84,16 @@ public class NetworkServer implements Serializable {
     private void handleClientConnection(Socket socket,ObjectInputStream ois, ObjectOutputStream oos, String command) throws IOException, ClassNotFoundException, StockExceptions, SQLException {
         switch (command)
                 {
-                    case "GET_ASSETS":
+                    case "GET_ASSETS_USER":
                         User user = (User) ois.readObject();
                         ArrayList<Asset> temp = new ArrayList<>();
                         synchronized (DataSource) {
                             temp = DataSource.getAssets(user);
-                            oos.writeInt(temp.size());
-                            for(Asset asset : temp) {
-                                oos.writeObject(asset);
-                                oos.flush();
-                            }
+                        }
+                        oos.writeInt(temp.size());
+                        for(Asset asset : temp) {
+                            oos.writeObject(asset);
+                            oos.flush();
                         }
                         break;
                     case "ADD_ASSET":
@@ -119,12 +119,12 @@ public class NetworkServer implements Serializable {
                         ArrayList<User> tempUser = new ArrayList<User>();
                         synchronized (DataSource) {
                             tempUser = DataSource.getUsers();
-                            oos.writeInt(tempUser.size());
-                            for(User user1 : tempUser)
-                            {
-                                oos.writeObject(user1);
-                                oos.flush();
-                            }
+                        }
+                        oos.writeInt(tempUser.size());
+                        for(User user1 : tempUser)
+                        {
+                            oos.writeObject(user1);
+                            oos.flush();
                         }
                         break;
                     case "ADD_OU":
@@ -143,11 +143,11 @@ public class NetworkServer implements Serializable {
                         ArrayList<OrganisationUnit> tempOUs = new ArrayList<>();
                         synchronized (DataSource) {
                             tempOUs = DataSource.getOUs();
-                            oos.writeInt(tempOUs.size());
-                            for(OrganisationUnit OrgUnit : tempOUs) {
-                                oos.writeObject(OrgUnit);
-                                oos.flush();
-                            }
+                        }
+                        oos.writeInt(tempOUs.size());
+                        for(OrganisationUnit OrgUnit : tempOUs) {
+                            oos.writeObject(OrgUnit);
+                            oos.flush();
                         }
                         break;
                     case "EDIT_OU":
@@ -167,22 +167,22 @@ public class NetworkServer implements Serializable {
                         ArrayList<User> tempUsers = new ArrayList<>();
                         synchronized (DataSource) {
                             tempUsers = DataSource.getUsers();
-                            oos.writeInt(tempUsers.size());
-                            for(User user1 : tempUsers) {
-                                oos.writeObject(user1);
-                                oos.flush();
-                            }
+                        }
+                        oos.writeInt(tempUsers.size());
+                        for(User user1 : tempUsers) {
+                            oos.writeObject(user1);
+                            oos.flush();
                         }
                         break;
                     case "GET_ADMIN_USERS":
                         ArrayList<AdminUser> tempAdminUsers = new ArrayList<>();
                         synchronized (DataSource) {
                             tempAdminUsers = DataSource.getAdminUsers();
-                            oos.writeInt(tempAdminUsers.size());
-                            for(AdminUser adminUser : tempAdminUsers) {
-                                oos.writeObject(adminUser);
-                                oos.flush();
-                            }
+                        }
+                        oos.writeInt(tempAdminUsers.size());
+                        for(AdminUser adminUser : tempAdminUsers) {
+                            oos.writeObject(adminUser);
+                            oos.flush();
                         }
                         break;
                     case "REMOVE_USER":
@@ -231,6 +231,30 @@ public class NetworkServer implements Serializable {
                     case "GET_TRADES_NAME":
                         String Critera = (String) ois.readObject();
                         DataSource.GetTrades(Critera);
+                        break;
+                    case "GET_BUY_ORDERS":
+                        ArrayList<BuyOrder> tempBuyOrders = new ArrayList<>();
+                        synchronized (DataSource) {
+                            tempBuyOrders  = DataSource.GetBuyOrders();
+                        }
+                        oos.writeInt(tempBuyOrders.size());
+                        oos.flush();
+                        for(BuyOrder buyOrder : tempBuyOrders) {
+                            oos.writeObject(buyOrder);
+                            oos.flush();
+                        }
+                        break;
+                    case "GET_SELL_ORDERS":
+                        ArrayList<SellOrder> tempSellOrders = new ArrayList<>();
+                        synchronized (DataSource) {
+                            tempSellOrders  = DataSource.GetSellOrders();
+                        }
+                        oos.writeInt(tempSellOrders.size());
+                        oos.flush();
+                        for(SellOrder sellOrder1 : tempSellOrders) {
+                            oos.writeObject(sellOrder1);
+                            oos.flush();
+                        }
                         break;
                 }
             }

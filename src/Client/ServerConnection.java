@@ -48,7 +48,7 @@ public class ServerConnection implements Serializable
     public ArrayList<Asset> GetAssets(User user) {
         ArrayList<Asset> assets = new ArrayList<>();
         try {
-            objectOutputStream.writeUTF("GET_ASSETS");
+            objectOutputStream.writeUTF("GET_ASSETS_USER");
             objectOutputStream.flush();
             objectOutputStream.writeObject(user);
             objectOutputStream.flush();
@@ -62,6 +62,22 @@ public class ServerConnection implements Serializable
             e.printStackTrace();
         }
         return assets;
+    }
+    public ArrayList<BuyOrder> GetBuyOrders() {
+        ArrayList<BuyOrder> buyOrders = new ArrayList<>();
+        try {
+            objectOutputStream.writeUTF("GET_BUY_ORDERS");
+            objectOutputStream.flush();
+            int numAssets = objectInputStream.readInt();
+            for(int i = 0; i < numAssets; i++) {
+                BuyOrder buyOrder = (BuyOrder) objectInputStream.readObject();
+                buyOrders.add(buyOrder);
+            }
+        }
+        catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return buyOrders;
     }
 
     //Method for sending an asset to the server for it to be stored in the database
@@ -284,5 +300,22 @@ public class ServerConnection implements Serializable
         {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<SellOrder> GetSellOrders() {
+        ArrayList<SellOrder> sellOrders = new ArrayList<>();
+        try {
+            objectOutputStream.writeUTF("GET_SELL_ORDERS");
+            objectOutputStream.flush();
+            int numAssets = objectInputStream.readInt();
+            for(int i = 0; i < numAssets; i++) {
+                SellOrder sellOrder = (SellOrder) objectInputStream.readObject();
+                sellOrders.add(sellOrder);
+            }
+        }
+        catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return sellOrders;
     }
 }

@@ -1,5 +1,9 @@
 package userInterface;
 
+import COMMON.OrganisationUnit;
+import Client.ServerConnection;
+import CustomExceptions.StockExceptions;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -114,6 +118,16 @@ public class addOU extends javax.swing.JFrame {
 
     private void createOUBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createOUBtnActionPerformed
         // TODO add your handling code here:
+        OrganisationUnit OU = null;
+        String OUName = OUNameTextField.getText();
+        Double OUCredits = Double.parseDouble(OUCreditsTextField.getText());
+        try {
+            OU = new OrganisationUnit(OUName,OUCredits,null);
+        } catch (StockExceptions stockExceptions) {
+            stockExceptions.printStackTrace();
+        }
+        ServerConnection AddOU = new ServerConnection();
+        AddOU.AddOU(OU);
         JOptionPane.showMessageDialog(this, "OU Added");
     }//GEN-LAST:event_createOUBtnActionPerformed
 

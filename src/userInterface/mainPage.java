@@ -34,11 +34,9 @@ public class mainPage extends javax.swing.JFrame {
         avBuyPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        buyBtn = new javax.swing.JButton();
         avSellPanel = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
-        sellBtn = new javax.swing.JButton();
         currentOrdersPanel = new javax.swing.JPanel();
         currentTabbedPane = new javax.swing.JTabbedPane();
         currBuyPanel = new javax.swing.JPanel();
@@ -128,31 +126,15 @@ public class mainPage extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        buyBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        buyBtn.setText("BUY");
-        buyBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buyBtnActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout avBuyPanelLayout = new javax.swing.GroupLayout(avBuyPanel);
         avBuyPanel.setLayout(avBuyPanelLayout);
         avBuyPanelLayout.setHorizontalGroup(
                 avBuyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
-                        .addGroup(avBuyPanelLayout.createSequentialGroup()
-                                .addGap(165, 165, 165)
-                                .addComponent(buyBtn)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         avBuyPanelLayout.setVerticalGroup(
                 avBuyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(avBuyPanelLayout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(buyBtn)
-                                .addContainerGap())
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
         );
 
         avaialbleTabbedPane.addTab("Available Buy Orders", avBuyPanel);
@@ -184,31 +166,15 @@ public class mainPage extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(jTable3);
 
-        sellBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        sellBtn.setText("SELL");
-        sellBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sellBtnActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout avSellPanelLayout = new javax.swing.GroupLayout(avSellPanel);
         avSellPanel.setLayout(avSellPanelLayout);
         avSellPanelLayout.setHorizontalGroup(
                 avSellPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGroup(avSellPanelLayout.createSequentialGroup()
-                                .addGap(165, 165, 165)
-                                .addComponent(sellBtn)
-                                .addContainerGap(196, Short.MAX_VALUE))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
         );
         avSellPanelLayout.setVerticalGroup(
                 avSellPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(avSellPanelLayout.createSequentialGroup()
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(sellBtn)
-                                .addContainerGap())
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
         );
 
         avaialbleTabbedPane.addTab("Available Sell Orders", avSellPanel);
@@ -554,17 +520,6 @@ public class mainPage extends javax.swing.JFrame {
         new deleteOU().setVisible(true);
     }//GEN-LAST:event_deleteOUMenuItemActionPerformed
 
-    private void buyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyBtnActionPerformed
-        // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Asset Bought");
-
-    }//GEN-LAST:event_buyBtnActionPerformed
-
-    private void sellBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellBtnActionPerformed
-        // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Asset Sold");
-    }//GEN-LAST:event_sellBtnActionPerformed
-
     private void buyRemoveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyRemoveBtnActionPerformed
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(this, "Buy Order Removed");
@@ -624,7 +579,6 @@ public class mainPage extends javax.swing.JFrame {
     private javax.swing.JTabbedPane avaialbleTabbedPane;
     private javax.swing.JPanel availableOrdersPanel;
     private javax.swing.JPanel bottomPanel;
-    private javax.swing.JButton buyBtn;
     private javax.swing.JButton buyRemoveBtn;
     private javax.swing.JComboBox<String> buySellComboBox;
     private javax.swing.JButton createBtn;
@@ -649,7 +603,6 @@ public class mainPage extends javax.swing.JFrame {
     private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JLabel qtyLabel;
     private javax.swing.JTextField qtyTextField;
-    private javax.swing.JButton sellBtn;
     private javax.swing.JButton sellRemoveBtn;
     private javax.swing.JMenu settingsMenu;
     private javax.swing.JMenu staffMenu;

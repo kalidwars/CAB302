@@ -109,21 +109,25 @@ public class mainPage extends javax.swing.JFrame {
         buyTable.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         buyTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null}
-        jTable1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+                },
+                new String [] {
+                        "OU", "Asset Name", "Qty", "Price"
+                }
+        )
+        {
+            Class[] types = new Class [] {
+                    java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        buyTable.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         ArrayList<BuyOrder> BuyOrders = new ArrayList<>();
         GUIConnection = new ServerConnection();
         BuyOrders = GUIConnection.GetBuyOrders();
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        buyTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][] {
                 },
                 new String [] {
@@ -139,19 +143,19 @@ public class mainPage extends javax.swing.JFrame {
             }
         });
         buyScrollPane.setViewportView(buyTable);
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) buyTable.getModel();
         for(BuyOrder buyOrder : BuyOrders) {
             model.addRow(new Object[]{buyOrder.GetOUID(),buyOrder.GetName(),buyOrder.getIndPrice(),buyOrder.getNumAvailable()});
         }
-        jScrollPane1.setViewportView(jTable1);
+        buyScrollPane.setViewportView(buyTable);
 
-        buyBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        buyBtn.setText("BUY");
-        buyBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buyBtnActionPerformed(evt);
-            }
-        });
+        //buyBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        //buyBtn.setText("BUY");
+        //buyBtn.addActionListener(new java.awt.event.ActionListener() {
+        //    public void actionPerformed(java.awt.event.ActionEvent evt) {
+        //        buyBtnActionPerformed(evt);
+        //    }
+        //});
 
         javax.swing.GroupLayout avBuyPanelLayout = new javax.swing.GroupLayout(avBuyPanel);
         avBuyPanel.setLayout(avBuyPanelLayout);
@@ -166,17 +170,18 @@ public class mainPage extends javax.swing.JFrame {
 
         avaialbleTabbedPane.addTab("Available Buy Orders", avBuyPanel);
 
-        sellTable.setModel(new javax.swing.table.DefaultTableModel(
+        sellTable.setModel(new javax.swing.table.DefaultTableModel());
         ArrayList<SellOrder> SellOrders = new ArrayList<>();
         GUIConnection = new ServerConnection();
         SellOrders = GUIConnection.GetSellOrders();
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        sellTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
                 },
                 new String [] {
                         "OU", "Asset Name", "Qty", "Price"
                 }
-        ) {
+        )
+        {
             Class[] types = new Class [] {
                     java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
             };
@@ -185,18 +190,18 @@ public class mainPage extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable3);
-        model = (DefaultTableModel) jTable3.getModel();
+        sellScrollPane.setViewportView(sellTable);
+        model = (DefaultTableModel) sellTable.getModel();
         for(SellOrder sellOrder : SellOrders) {
             model.addRow(new Object[]{sellOrder.GetOUID(),sellOrder.GetName(),sellOrder.getIndPrice(),sellOrder.getNumAvailable()});
         }
-        sellBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        sellBtn.setText("SELL");
-        sellBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sellBtnActionPerformed(evt);
-            }
-        });
+        //sellBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        //sellBtn.setText("SELL");
+        //sellBtn.addActionListener(new java.awt.event.ActionListener() {
+        //    public void actionPerformed(java.awt.event.ActionEvent evt) {
+        //        sellBtnActionPerformed(evt);
+        //    }
+        //});
         sellScrollPane.setViewportView(sellTable);
 
         javax.swing.GroupLayout avSellPanelLayout = new javax.swing.GroupLayout(avSellPanel);
@@ -670,8 +675,6 @@ public class mainPage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new mainPage().setVisible(true);
-
                 new mainPage(LoggedIn).setVisible(true);
             }
         });

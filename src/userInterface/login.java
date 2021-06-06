@@ -16,18 +16,14 @@ import javax.swing.*;
  *
  * @author n10245090
  */
-public class login extends javax.swing.JFrame
-{
-
 public class login extends javax.swing.JFrame {
-
     /**
      * Creates new form login
      */
+    private User LoggedinUser;
     public login() {
         initComponents();
     }
-    private User LoggedinUser;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -51,9 +47,6 @@ public class login extends javax.swing.JFrame {
 
         loginBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         loginBtn.setText("Login");
-        loginBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {createlogin(e);}
         loginBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginBtnActionPerformed(evt);
@@ -113,17 +106,12 @@ public class login extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
-    mainPage mainPage = new mainPage();
+    } // </editor-fold>//GEN-END:initComponents
+
+
+
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         // TODO add your handling code here:
-        mainPage.setVisible(true);
-        mainPage.staffMenu.setVisible(false);
-
-
-    }//GEN-LAST:event_loginBtnActionPerformed
-
-    private void createlogin(ActionEvent e) {
         String username = this.usernameTextField.getText();
         String Password = this.passwordTextField.getText();
         ArrayList<User> users = null;
@@ -132,12 +120,17 @@ public class login extends javax.swing.JFrame {
         for(User user : users) {
             if(user.GetUserID().equals(username) && user.GetPassword().getHiddenValue().equals(Password)) {
                 LoggedinUser = user;
-                mainPage.main(null,user);
+                mainPage mainPage = new mainPage(LoggedinUser);
+                mainPage.setVisible(true);
+                mainPage.staffMenu.setVisible(false);
             }
         }
-    }
-    public User GetLoggedInUser() {
-        return LoggedinUser;
+
+
+    }//GEN-LAST:event_loginBtnActionPerformed
+
+    private void createlogin(ActionEvent e) {
+
     }
     /**
      * @param args the command line arguments
@@ -182,3 +175,4 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
 }
+

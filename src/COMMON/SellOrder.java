@@ -1,10 +1,14 @@
-package PROGRAM;
+package COMMON;
 
-import CustomExceptions.StockExceptions;
+import CustomExceptions.*;
 
-public class SellOrder extends Asset
+import java.io.Serial;
+import java.io.Serializable;
+
+public class SellOrder extends Asset implements Serializable
 {
-
+    @Serial
+    private static final long serialVersionUID = -2393708718755176852L;
     /**
      * This class is to describe the asset and the value of the asset
      * additionally it keeps tracks of the QTY
@@ -13,14 +17,15 @@ public class SellOrder extends Asset
      *                   for sale/requests
      * @param value      (DOUBLE) The price of which people are willing to buy or sell
      * @param QTY        (INT) The number wanted/up for sale
+     * @param username (STRING) Enter the user responsible for putting up the Asset
      *
      * @author Hugh Glas
      *
      * @version 1.0
      *
      */
-    public SellOrder(String asset_name, double value, int QTY) throws StockExceptions
+    public SellOrder(String asset_name, double value, int QTY, String username) throws StockExceptions
     {
-        super(asset_name, value, QTY);
+        super(asset_name, value, QTY, username);
     }
 }

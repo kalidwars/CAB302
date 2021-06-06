@@ -1,14 +1,22 @@
-package PROGRAM;
+package COMMON;
 
-import CustomExceptions.StockExceptions;
+import Client.ServerConnection;
+import CustomExceptions.*;
 
-public class Asset
+import java.io.Console;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Asset implements Serializable
 {
+    @Serial
+    private static final long serialVersionUID = -2393708718755176852L;
     //Variables to use throughout the class
     private String name_of_asset;
     private double ind_price;
     private int num_available;
-
+    private User USERResponsible;
     /**
      *
      * This class is to describe the asset and the value of the asset
@@ -21,20 +29,28 @@ public class Asset
      *
      * @param QTY (INT) The number wanted/up for sale
      *
-     * @exception StockExceptions Thrown in 2 casses:
+     * @param username (String) Enter the user responsible for putting up the Asset
+     *
+     * @exception Exception Thrown in 2 cases:
      *                      a) When the Value is negative
      *                      b) When QTY is negative or zeros
      *
      * @author Hugh Glas
      *
-     * @version 1.1
+     * @version 1.2
      *
      */
-    public Asset(String asset_name, Double value, int QTY) throws StockExceptions
+    public Asset(String asset_name, Double value, int QTY, String username) throws StockExceptions
     {
         //Assign values into class
         this.name_of_asset = asset_name;
-
+        ServerConnection connection = new ServerConnection();
+        ArrayList<User> users = connection.GetUsers();
+        for(User user : users) {
+            if(user.GetUserID().equals(username)) {
+                this.USERResponsible = user;
+            }
+        }
         if(value < 0)
         {
             throw new StockExceptions("Expected a Positive Value or 0 value for credits");
@@ -168,6 +184,33 @@ public class Asset
      */
     public String GetName()
     {
-        return name_of_asset;
+        return this.name_of_asset;
+    }
+
+    /**
+     *
+     * Method to return the user responsible for putting up the Asset
+     *
+     * @return  (STRING) returns the user responsible for putting up the Asset
+     *
+     * @author Hugh
+     *
+     * @version 1.0
+     *
+     */
+    public String GetUser()
+    {
+        return this.USERResponsible.GetUserID();
+    }
+
+    /**
+     *
+     * Method mainly for the use of finding the asset belongs too
+     *
+     * @return (STRING) returns the OU name that the user belongs too
+     */
+    public String GetOUID()
+    {
+        return this.USERResponsible.OUID_Owner();
     }
 }

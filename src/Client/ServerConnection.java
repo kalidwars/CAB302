@@ -265,4 +265,19 @@ public class ServerConnection implements Serializable
             e.printStackTrace();
         }
     }
+
+    public void GetTrades(String AssetName)
+    {
+        try
+        {
+            objectOutputStream.writeUTF("GET_TRADES_NAME");
+            objectOutputStream.flush();
+            objectOutputStream.writeUTF(AssetName);
+            objectOutputStream.flush();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

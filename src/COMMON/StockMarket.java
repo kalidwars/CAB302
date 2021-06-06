@@ -77,6 +77,14 @@ public class StockMarket implements Serializable {
         return toReturn;
     }
 
+    public ArrayList<Trade> DBfindTrade(String AssetName)
+    {
+        ArrayList<Trade> toReturn = new ArrayList<Trade>();
+
+
+        return toReturn;
+    }
+
     /**
      * Database information
      * Method to return Orgnisation Unit from OU_name

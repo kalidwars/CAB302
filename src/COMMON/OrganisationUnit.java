@@ -132,7 +132,7 @@ public class OrganisationUnit implements Serializable
     private boolean Complete_Sale(OrganisationUnit SELLER, BuyOrder order_fulfilled, SellOrder sale_taken)
     {
         boolean completed_sucessfully;
-        Trade to_be_added = new Trade(SELLER,sale_taken.GetUser(),order_fulfilled);
+        Trade to_be_added = new Trade(SELLER.orgName(),sale_taken.GetUser(),order_fulfilled);
 
         int num_brought = order_fulfilled.getNumAvailable();
         int current_available = sale_taken.getNumAvailable();

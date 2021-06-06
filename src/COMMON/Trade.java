@@ -9,7 +9,7 @@ public class Trade implements Serializable
 {
     @Serial
     private static final long serialVersionUID = -2393708718755176852L;
-    private OrganisationUnit seller_org;
+    private String seller_org;
     private Asset asset_brought;
     private String userSeller;
 
@@ -29,7 +29,7 @@ public class Trade implements Serializable
      * @version 1.0
      *
      */
-    public Trade(OrganisationUnit seller, String sellerUser, BuyOrder fulfilled)
+    public Trade(String seller, String sellerUser, BuyOrder fulfilled)
     {
         this.seller_org = seller;
         this.asset_brought = fulfilled;

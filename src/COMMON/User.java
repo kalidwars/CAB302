@@ -6,9 +6,7 @@ import java.sql.*;
 import java.io.*;
 import java.io.Serial;
 import java.io.Serializable;
-//May be Deleted later
-import java.security.InvalidKeyException;
-import javax.crypto.spec.SecretKeySpec;
+
 
 
 public class User implements Serializable
@@ -20,13 +18,6 @@ public class User implements Serializable
     //private String PassWord;
     private SerialData privatePassWord;
     private OrganisationUnit OU_OWNER;
-
-    //Private Variables used for encryption and decryption
-    //private Cipher internallCipher;
-    //Setup Key
-    private byte[] keyBytes = new byte[]{11,0,5,50,100,60,78,55};
-    private String SecretAlgorithm = "EnCrYpTeD";
-    private SecretKeySpec GeneratedKey = new SecretKeySpec(keyBytes, SecretAlgorithm);
 
     //SQL Variables
     private Connection connection;
@@ -53,37 +44,12 @@ public class User implements Serializable
         this.ID = id;
         this.OU_OWNER = ParentUnit;
         this.privatePassWord = new SerialData(passWord);
-        //privatePassWord.EncryptPassword();
     }
 
     public SerialData GetPassword() {
         return privatePassWord;
     }
 
-    /**
-     *
-     * Method to Complete PassWord Encryption
-     *
-     * @param RawPassword - String PassWord Pass through
-     * @return (BYTE) Encrypted Password array
-     *
-     * @exception InvalidKeyException - is thrown when a key isn't generated correctly
-     *            BadPaddingException - is thrown when a variable size is passed
-     *            IllegalBlockSizeException - is thrown when a vairable size is incorrect
-     *
-     * @version 1.0
-     *
-     * @author Hugh Glas
-     */
-    //public byte[] PassWordEncryption(String RawPassword) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException
-    //{
-        //Initialise Encryption Mode of cipher
-        //internallCipher.init(Cipher.ENCRYPT_MODE,GeneratedKey);
-        //Get into acceptable passable variables
-        //byte[] plainText = RawPassword.getBytes(StandardCharsets.UTF_8);
-        //byte[] CipherText = internallCipher.doFinal(plainText);
-        //return CipherText;
-    //}
 
     /**
      *

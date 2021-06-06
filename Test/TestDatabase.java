@@ -148,5 +148,11 @@ public class TestDatabase
         test_Case_2.Upload();
     }
 
+    @Test
+    @DisplayName("Test Trade Implmentation")
+    void test_8() throws SQLException
+    {
+
+    }
 
 }

@@ -46,11 +46,12 @@ public class DataSource
     private static final String ADD_ORDER = "Insert INTO Assets (AssetName, username, OrgUnit,Price,Amount,AssetType) VALUES (?, ?, ?, ?,?,?);";
     private static final String GET_SPECFIC_USER = "Select * from users where username = ?";
     private static final String ADD_TRADE = "INSERT INTO trade_history (Name,OrgUnitBuy,OrgUnitSell,UserSeller,UserBuyer,QTY,PRICE) VALUES (?,?,?,?,?,?,?);";
-    private static final String ADJUST_BUY = "UPDATE Assets SET amount=(amount - ?) WHERE (OrgUnit=? AND username=? AND AssetType = 0);";
-    private static final String ADJUST_SELL = "UPDATE Assets SET amount=(amount - ?) WHERE (OrgUnit=? AND username=? AND AssetType = 1);";
-    private static final String ADJUST_OU_BUY = "UPDATE organisationunits SET credits = credits -  ? WHERE (Orgunit = ?);";
-    private static final String ADJUST_OU_SELL = "UPDATE organisationunits SET credits = credits + ? WHERE (Orgunit = ?);";
-    private static final String CLEAN_UP_ASSETS = "DELETE FROM Assets WHERE amount = 0 AND AssetType IS NOT NULL;";
+    private static final String ADJUST_BUY = "UPDATE Assets SET QTY=(QTY - ?) WHERE (OrgUnit=? AND username=? AND AssetType = false);";
+    private static final String ADJUST_SELL = "UPDATE Assets SET QTY=(QTY - ?) WHERE (OrgUnit=? AND username=? AND AssetType = true);";
+    private static final String ADJUST_OU_BUY = "UPDATE organisationunits SET creadits = creadits - ( ? * ?) WHERE (Orgunit = ?);";
+    private static final String ADJUST_OU_SELL = "UPDATE organisationunits SET creadits = creadits + ( ? * ?) WHERE (Orgunit = ?);";
+    private static final String CLEAN_UP_ASSETS = "DELETE FROM Assets WHERE (QTY = 0 AND AssetType <> NULL);";
+    private static final String GET_TRADES = "SELECT * FROM trade_history;";
     //Testing SQL Methods
     private static final String TESTING  = "DELETE FROM users WHERE true;";
     private static final String TESTING2 = "DELETE FROM organisationunits WHERE true;";
@@ -104,6 +105,7 @@ public class DataSource
     private PreparedStatement ADJUSTASSETBUY;
     private PreparedStatement ADJUSTASSETSELL;
     private PreparedStatement CLEANUPASSETS;
+    private PreparedStatement GETTRADE;
     public DataSource()
     {
         connection = DBConnection.getInstance();
@@ -144,6 +146,7 @@ public class DataSource
             CLEANUPASSETS = connection.prepareStatement(CLEAN_UP_ASSETS);
             AddAdminUser = connection.prepareStatement(ADD_ADMIN_USER);
             GetAdminUsers = connection.prepareStatement(GET_ADMIN_USERS);
+            GETTRADE = connection.prepareStatement(GET_TRADES);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -649,4 +652,62 @@ public class DataSource
             cleaning.printStackTrace();
         }
     }
+
+
+    /**
+     *
+     * A function to return all trades based on the Asset Name
+     *
+     * @param searching (STRING) Asset name to pass through
+     * @return Returns null array if no assets matched, Returns an array of trades with matching asset name
+     * @throws StockExceptions - This should not through
+     *
+     * @version 1.0
+     *
+     * @author Hugh
+     */
+    public ArrayList<Trade> GetTrades(String searching) throws StockExceptions
+    {
+        ArrayList<Trade> toReturn = new ArrayList<Trade>();
+
+        //"SELECT * FROM trade_history WHERE Name = ?;";
+        ResultSet rawInfo = null;
+
+        // Place Holder to make trade history
+        String AName;
+        Double Pricing;
+        int QTY;
+        String buyUN;
+        BuyOrder placeHolder;
+        String sellUN;
+        String sellOu;
+
+        try
+        {
+            rawInfo = GETTRADE.executeQuery();
+            while(rawInfo.next())
+            {
+                if(rawInfo.getString("AssetName") == searching)
+                {
+                    //(TradeID int(11) NOT NULL AUTO_INCREMENT, Name varchar(45), OrgUnitBuy varchar(45) NOT NULL,OrgUnitSell varchar(45) NOT NULL,
+                    // UserSeller varchar(45) NOT NULL,UserBuyer varchar(45) NOT NULL,QTY int(11) NOT NULL,PRICE double(11,2) NOT NULL
+                    AName = rawInfo.getString("AssetName");
+                    Pricing = rawInfo.getDouble("PRICE");
+                    QTY = rawInfo.getInt("QTY");
+                    buyUN = rawInfo.getString("UserBuyer");
+                    placeHolder = new BuyOrder(AName,Pricing,QTY,buyUN);
+                    sellUN = rawInfo.getString("UserSeller");
+                    sellOu = rawInfo.getString("OrgUnitSell");
+                    toReturn.add(new Trade(sellOu,sellUN,placeHolder));
+                }
+            }
+        }
+        catch (SQLException exp)
+        {
+            exp.printStackTrace();
+        }
+
+        return toReturn;
+    }
+
 }

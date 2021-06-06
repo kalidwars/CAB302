@@ -228,8 +228,13 @@ public class NetworkServer implements Serializable {
                             DataSource.AddAdminUser(AdminUser);
                         }
                         break;
+                    case "GET_TRADES_NAME":
+                        String Critera = (String) ois.readObject();
+                        DataSource.GetTrades(Critera);
+                        break;
                 }
             }
+
 
     /**
      * Returns the port the server is configured to use

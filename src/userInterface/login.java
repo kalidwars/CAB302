@@ -1,11 +1,16 @@
 package userInterface;
 
 
+import COMMON.User;
 import Client.ServerConnection;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 import Client.*;
+
+import javax.swing.*;
 
 /**
  *
@@ -13,7 +18,6 @@ import Client.*;
  */
 public class login extends javax.swing.JFrame
 {
-    private ServerConnection loginSC = new ServerConnection();
 
     /**
      * Creates new form login
@@ -47,12 +51,7 @@ public class login extends javax.swing.JFrame
         loginBtn.setText("Login");
         loginBtn.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                String usernameRaw = usernameTextField.getText();
-                String passwordRaw = passwordTextField.getText();
-                Boolean attempt = loginSC.AttemptLogin(usernameRaw,passwordRaw);
-                System.out.println((attempt));
-            }
+            public void actionPerformed(ActionEvent e) {createlogin(e);}
         });
 
         usernameLabel.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
@@ -110,6 +109,19 @@ public class login extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void createlogin(ActionEvent e) {
+        String username = this.usernameTextField.getText();
+        String Password = this.passwordTextField.getText();
+        ArrayList<User> users = null;
+        ServerConnection test = new ServerConnection();
+        users = test.GetUsers();
+        for(User user : users) {
+            if(user.GetUserID().equals(username) && user.GetPassword().getHiddenValue().equals(Password)) {
+                mainPage.main(null);
+            }
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -136,7 +148,6 @@ public class login extends javax.swing.JFrame
             java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -154,5 +165,4 @@ public class login extends javax.swing.JFrame
     private javax.swing.JLabel usernameLabel;
     private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
-
 }

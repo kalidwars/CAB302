@@ -114,13 +114,15 @@ public class NetworkServer implements Serializable {
                             DataSource.RemoveAsset(assettoremove);
                         }
                         break;
-                    case "GET_ALL_USER":
-                        String QStock = ois.readUTF();
+                    case "GET_ALL_USERS":
                         ArrayList<User> tempUser = new ArrayList<User>();
+                        int size = 0;
                         synchronized (DataSource) {
                             tempUser = DataSource.getUsers();
+                            size = tempUser.size();
                         }
-                        oos.writeInt(tempUser.size());
+                        oos.writeInt(size);
+                        oos.flush();
                         for(User user1 : tempUser)
                         {
                             oos.writeObject(user1);

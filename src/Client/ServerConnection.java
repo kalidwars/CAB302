@@ -205,10 +205,11 @@ public class ServerConnection implements Serializable
 
     public ArrayList<User> GetUsers() {
         ArrayList<User> users = new ArrayList<>();
+        int numOUS = 0;
         try {
             objectOutputStream.writeUTF("GET_ALL_USERS");
             objectOutputStream.flush();
-            int numOUS = objectInputStream.readInt();
+            numOUS = objectInputStream.readInt();
             for(int i = 0; i < numOUS; i++) {
                 User user = (User) objectInputStream.readObject();
                 users.add(user);

@@ -273,6 +273,22 @@ public class NetworkServer implements Serializable {
                             oos.flush();
                         }
                         break;
+                    case "GET_ALL_ADMIN_USERS":
+                        ArrayList<AdminUser> tmpAdminUsers = new ArrayList<>();
+                        sizeOF = 0;
+                        synchronized (DataSource)
+                        {
+                            tmpAdminUsers= DataSource.getAdminUsers();
+                            sizeOF = tmpAdminUsers.size();
+                        }
+                        oos.writeInt(sizeOF);
+                        oos.flush();
+                        for(AdminUser adminUser1: tmpAdminUsers)
+                        {
+                            oos.writeObject(adminUser1);
+                            oos.flush();
+                        }
+                        break;
                 }
             }
 

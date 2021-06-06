@@ -1,6 +1,11 @@
 package userInterface;
 
+import COMMON.Asset;
+import COMMON.OrganisationUnit;
+import Client.ServerConnection;
+
 import javax.swing.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -23,7 +28,10 @@ public class editOU extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+        ArrayList<OrganisationUnit> OrgUnits = new ArrayList<>();
+        ServerConnection DataConnection = new ServerConnection();
+        OrgUnits = DataConnection.GetOUs();
+        OrganisationUnit SelectedOU = null;
         editOUTitleLabel = new javax.swing.JLabel();
         editOULabel = new javax.swing.JLabel();
         editOUComboBox = new javax.swing.JComboBox<>();
@@ -44,7 +52,10 @@ public class editOU extends javax.swing.JFrame {
         editOULabel.setText("Select OU to edit:");
 
         editOUComboBox.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        editOUComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "OU 1", "OU 2", "OU 3", "OU 4" }));
+        //editOUComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "OU 1", "OU 2", "OU 3", "OU 4" }));
+        for(OrganisationUnit OU : OrgUnits) {
+            editOUComboBox.addItem(OU.orgName());
+        }
 
         newCreditsLabel.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         newCreditsLabel.setText("Enter new credits for OU:");
@@ -55,7 +66,8 @@ public class editOU extends javax.swing.JFrame {
         assetTypeLabel.setText("Select asset type for OU:");
 
         assetTypeComboBox.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        assetTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        //assetTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
 
         newAssetsLabel.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         newAssetsLabel.setText("Enter new assets for OU:");

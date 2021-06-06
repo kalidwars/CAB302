@@ -357,4 +357,22 @@ public class ServerConnection implements Serializable
 
         return toReturn;
     }
+
+    public ArrayList<AdminUser> GetAdminUsers() {
+        ArrayList<AdminUser> adminUsers = new ArrayList<>();
+        int numOUS = 0;
+        try {
+            objectOutputStream.writeUTF("GET_ALL_ADMIN_USERS");
+            objectOutputStream.flush();
+            numOUS = objectInputStream.readInt();
+            for(int i = 0; i < numOUS; i++) {
+                AdminUser adminUser = (AdminUser) objectInputStream.readObject();
+                adminUsers.add(adminUser);
+            }
+        }
+        catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return adminUsers;
+    }
 }

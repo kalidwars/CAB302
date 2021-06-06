@@ -1,6 +1,7 @@
 package userInterface;
 
 
+import COMMON.AdminUser;
 import COMMON.User;
 import Client.ServerConnection;
 
@@ -112,20 +113,34 @@ public class login extends javax.swing.JFrame {
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         // TODO add your handling code here:
+        boolean regular = false;
         String username = this.usernameTextField.getText();
         String Password = this.passwordTextField.getText();
         ArrayList<User> users = null;
+        ArrayList<AdminUser> Adminusers = null;
         ServerConnection test = new ServerConnection();
         users = test.GetUsers();
+        Adminusers = test.GetAdminUsers();
         for(User user : users) {
             if(user.GetUserID().equals(username) && user.GetPassword().getHiddenValue().equals(Password)) {
                 LoggedinUser = user;
                 mainPage mainPage = new mainPage(LoggedinUser);
+                regular = true;
                 mainPage.setVisible(true);
                 mainPage.staffMenu.setVisible(false);
             }
         }
-
+        if(regular == false) {
+            for(AdminUser auser : Adminusers) {
+                if(auser.GetUserID().equals(username) && auser.GetPassword().getHiddenValue().equals(Password)) {
+                    LoggedinUser = auser;
+                    mainPage mainPage = new mainPage(LoggedinUser);
+                    regular = false;
+                    mainPage.setVisible(true);
+                    mainPage.staffMenu.setVisible(true);
+                }
+            }
+        }
 
     }//GEN-LAST:event_loginBtnActionPerformed
 

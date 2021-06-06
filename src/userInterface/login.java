@@ -25,7 +25,7 @@ public class login extends javax.swing.JFrame
     public login() {
         initComponents();
     }
-
+    private User LoggedinUser;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -117,11 +117,14 @@ public class login extends javax.swing.JFrame
         users = test.GetUsers();
         for(User user : users) {
             if(user.GetUserID().equals(username) && user.GetPassword().getHiddenValue().equals(Password)) {
-                new mainPage(user);
+                LoggedinUser = user;
+                mainPage.main(null,user);
             }
         }
     }
-
+    public User GetLoggedInUser() {
+        return LoggedinUser;
+    }
     /**
      * @param args the command line arguments
      */

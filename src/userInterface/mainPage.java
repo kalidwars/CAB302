@@ -15,12 +15,12 @@ import java.util.ArrayList;
  */
 public class mainPage extends javax.swing.JFrame {
     private ServerConnection GUIConnection;
-    private User UserRunning;
+    private static User UserRunning;
     /**
      * Creates new form mainPage
      */
-    public mainPage(User Passthrough) {
-        this.UserRunning = Passthrough;
+    public mainPage(User LoggedIn) {
+        UserRunning = LoggedIn;
         initComponents();
     }
 
@@ -32,7 +32,6 @@ public class mainPage extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         topPanel = new javax.swing.JPanel();
         titleLabel = new javax.swing.JLabel();
         bottomPanel = new javax.swing.JPanel();
@@ -368,6 +367,7 @@ public class mainPage extends javax.swing.JFrame {
         buySellComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BUY", "SELL" }));
 
         assetTypeComboBox.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+
         ArrayList<Asset> RAWInfo = GUIConnection.GetAllAssets_OU(this.UserRunning.OUID_Owner());
         String[] RawNames = new String[RAWInfo.size()];
         for(int i = 0; i < RAWInfo.size(); i++)
@@ -626,12 +626,13 @@ public class mainPage extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[],User LoggedIn) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -653,7 +654,7 @@ public class mainPage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new mainPage(null).setVisible(true);
+                new mainPage(LoggedIn).setVisible(true);
             }
         });
     }

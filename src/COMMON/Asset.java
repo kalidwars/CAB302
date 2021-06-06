@@ -195,7 +195,7 @@ public class Asset implements Serializable
      */
     public String GetUser()
     {
-        return this.USERResponsible.GetUserID();
+        return this.Username;
     }
 
     /**

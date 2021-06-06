@@ -25,7 +25,7 @@ public class DataSource
 
     //Useful methods
     private static final String GET_ASSETS = "SELECT * FROM assets WHERE username=?";
-    private static final String GET_ASSETS_OU = "SELECT * FROM assets WHERE (OrgUnit=? AND AssetType=NULL);";
+    private static final String GET_ASSETS_OU = "SELECT * FROM assets WHERE (OrgUnit=? AND AssetType IS NULL);";
     private static final String ADD_ASSET = "INSERT INTO assets (AssetName, username, OrgUnit, Amount) VALUES (?, ?, ?, ?);";
     private static final String ADD_ASSET_NAME = "INSERT INTO AssetNames VALUES (?);";
     private static final String REMOVE_ASSET = "DELETE FROM assets WHERE AssetName=? AND username=? AND OrgUnit=?";
@@ -52,7 +52,7 @@ public class DataSource
     private static final String ADJUST_SELL = "UPDATE Assets SET QTY=(QTY - ?) WHERE (OrgUnit=? AND username=? AND AssetType = true);";
     private static final String ADJUST_OU_BUY = "UPDATE organisationunits SET creadits = creadits - ( ? * ?) WHERE (Orgunit = ?);";
     private static final String ADJUST_OU_SELL = "UPDATE organisationunits SET creadits = creadits + ( ? * ?) WHERE (Orgunit = ?);";
-    private static final String CLEAN_UP_ASSETS = "DELETE FROM Assets WHERE (QTY = 0 AND AssetType <> NULL);";
+    private static final String CLEAN_UP_ASSETS = "DELETE FROM Assets WHERE (QTY = 0 AND AssetType IS NOT NULL);";
     private static final String GET_TRADES = "SELECT * FROM trade_history;";
     //Testing SQL Methods
     private static final String TESTING  = "DELETE FROM users WHERE true;";
@@ -770,8 +770,8 @@ public class DataSource
                 {
                     Aname = rs.getString("AssetName");
                     AssetUserName = rs.getString("username");
-                    Pricing = rs.getDouble("PRICE");
-                    Quantity = rs.getInt("QTY");
+                    Pricing = rs.getDouble("price");
+                    Quantity = rs.getInt("amount");
                     toAdd = new Asset(Aname,Pricing,Quantity,AssetUserName);
                     toReturn.add(toAdd);
                 }

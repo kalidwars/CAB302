@@ -98,9 +98,7 @@ public class NetworkServer implements Serializable {
                         break;
                     case "ADD_ASSET":
                         Asset asset = (Asset) ois.readObject();
-                        synchronized (DataSource) {
-                            DataSource.AddAsset(asset);
-                        }
+                        DataSource.AddAsset(asset);
                         break;
                     case "ADD_ASSET_NAME":
                         String AssetName = ois.readUTF();
@@ -260,7 +258,7 @@ public class NetworkServer implements Serializable {
                         break;
                     case "GET_ASSETS_OU":
                         ArrayList<Asset> tmp = new ArrayList<>();
-                        String search = (String) ois.readObject();
+                        String search = ois.readUTF();
                         int sizeOF = 0;
                         synchronized (DataSource)
                         {

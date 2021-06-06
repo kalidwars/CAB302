@@ -1,11 +1,16 @@
 package userInterface;
 
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
  *
  * @author n10245090
  */
-public class login extends javax.swing.JFrame {
+public class login extends javax.swing.JFrame
+{
+
 
     /**
      * Creates new form login
@@ -37,6 +42,14 @@ public class login extends javax.swing.JFrame {
 
         loginBtn.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         loginBtn.setText("Login");
+        loginBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String usernameRaw = usernameTextField.getText();
+                String passwordRaw = passwordTextField.getText();
+
+            }
+        });
 
         usernameLabel.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         usernameLabel.setText("Username:");
@@ -126,6 +139,7 @@ public class login extends javax.swing.JFrame {
                 new login().setVisible(true);
             }
         });
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -136,4 +150,5 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JLabel usernameLabel;
     private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
+
 }

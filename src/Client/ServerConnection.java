@@ -204,6 +204,11 @@ public class ServerConnection implements Serializable
         return users;
     }
 
+    public boolean AttemptLogin(String Username, String Password)
+    {
+        return false;
+    }
+
     public boolean RemoveUser(User test_case_1) {
         try {
             objectOutputStream.writeUTF("REMOVE_USER");

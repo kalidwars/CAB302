@@ -117,7 +117,7 @@ public class login extends javax.swing.JFrame
         users = test.GetUsers();
         for(User user : users) {
             if(user.GetUserID().equals(username) && user.GetPassword().getHiddenValue().equals(Password)) {
-                mainPage.main(null);
+                new mainPage(user);
             }
         }
     }

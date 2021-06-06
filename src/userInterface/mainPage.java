@@ -1,8 +1,8 @@
 package userInterface;
 
-import COMMON.BuyOrder;
-import COMMON.SellOrder;
+import COMMON.*;
 import Client.ServerConnection;
+import CustomExceptions.StockExceptions;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -15,10 +15,12 @@ import java.util.ArrayList;
  */
 public class mainPage extends javax.swing.JFrame {
     private ServerConnection GUIConnection;
+    private User UserRunning;
     /**
      * Creates new form mainPage
      */
-    public mainPage() {
+    public mainPage(User Passthrough) {
+        this.UserRunning = Passthrough;
         initComponents();
     }
 
@@ -366,7 +368,13 @@ public class mainPage extends javax.swing.JFrame {
         buySellComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BUY", "SELL" }));
 
         assetTypeComboBox.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        assetTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ASSET TYPE 1", "ASSET TYPE 2", "ASSET TYPE 3", "ASSET TYPE 4" }));
+        ArrayList<Asset> RAWInfo = GUIConnection.GetAllAssets_OU(this.UserRunning.OUID_Owner());
+        String[] RawNames = new String[RAWInfo.size()];
+        for(int i = 0; i < RAWInfo.size(); i++)
+        {
+            RawNames[i] = RAWInfo.get(i).GetName();
+        }
+        assetTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(RawNames));
 
         valueLabel.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         valueLabel.setText("Enter value of the asset you wish to sell/buy:");
@@ -382,7 +390,11 @@ public class mainPage extends javax.swing.JFrame {
         createBtn.setText("CREATE ORDER");
         createBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createBtnActionPerformed(evt);
+                try {
+                    createBtnActionPerformed(evt);
+                } catch (StockExceptions stockExceptions) {
+                    stockExceptions.printStackTrace();
+                }
             }
         });
 
@@ -574,9 +586,41 @@ public class mainPage extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Sell Order Removed");
     }//GEN-LAST:event_sellRemoveBtnActionPerformed
 
-    private void createBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnActionPerformed
-        // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Order Created");
+    private void createBtnActionPerformed(java.awt.event.ActionEvent evt) throws StockExceptions {//GEN-FIRST:event_createBtnActionPerformed
+        //Setup variables for later usage
+        int QTY = 0;
+        double pricing = 0;
+        boolean correctFormat = true;
+        Asset placeHolder;
+        //Grab inputs on screen
+        String assertName = (String) assetTypeComboBox.getSelectedItem();
+        String typeOfOrder = (String)buySellComboBox.getSelectedItem();
+        String QTYstring = (qtyTextField.getText());
+        String pricingstring = (valueTextField.getText());
+        //Test if inputs can be transfered to the correct foramte
+        try {
+            QTY = Integer.parseInt(QTYstring);
+            pricing = Double.parseDouble(pricingstring);
+        }
+        catch(NumberFormatException e)
+        {
+            correctFormat = false;
+        }
+        if(!QTYstring.isBlank() & !pricingstring.isBlank() & correctFormat)
+        {
+            if (typeOfOrder.equals("BUY")) {
+                placeHolder = new BuyOrder(assertName,pricing,QTY,this.UserRunning.GetUserID());
+            } else {
+                placeHolder = new SellOrder(assertName,pricing,QTY,this.UserRunning.GetUserID());
+            }
+            GUIConnection.AddAsset(placeHolder);
+            JOptionPane.showMessageDialog(this, "Order Created");
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this,"Error: While Creating Order");
+        }
+        //JOptionPane.showMessageDialog(this, "Order Created");
     }//GEN-LAST:event_createBtnActionPerformed
 
     /**
@@ -609,7 +653,7 @@ public class mainPage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new mainPage().setVisible(true);
+                new mainPage(null).setVisible(true);
             }
         });
     }

@@ -258,6 +258,23 @@ public class NetworkServer implements Serializable {
                             oos.flush();
                         }
                         break;
+                    case "GET_ASSETS_OU":
+                        ArrayList<Asset> tmp = new ArrayList<>();
+                        String search = (String) ois.readObject();
+                        int sizeOF = 0;
+                        synchronized (DataSource)
+                        {
+                            tmp = DataSource.GetAssetFromOU(search);
+                            sizeOF = tmp.size();
+                        }
+                        oos.writeInt(sizeOF);
+                        oos.flush();
+                        for(Asset asset1: tmp)
+                        {
+                            oos.writeObject(asset1);
+                            oos.flush();
+                        }
+                        break;
                 }
             }
 

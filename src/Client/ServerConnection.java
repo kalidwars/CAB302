@@ -332,4 +332,29 @@ public class ServerConnection implements Serializable
         }
         return sellOrders;
     }
+
+    public ArrayList<Asset> GetAllAssets_OU(String OU_Name)
+    {
+        int numAssets = 0;
+        ArrayList<Asset> toReturn = new ArrayList<Asset>();
+        try
+        {
+            objectOutputStream.writeUTF("GET_ASSETS_OU");
+            objectOutputStream.flush();
+            objectOutputStream.writeUTF(OU_Name);
+            objectOutputStream.flush();
+            numAssets = objectInputStream.readInt();
+            for(int i =0; i < numAssets; i++)
+            {
+                Asset placeHolder = (Asset)objectInputStream.readObject();
+                toReturn.add(placeHolder);
+            }
+        }
+        catch (IOException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+        return toReturn;
+    }
 }

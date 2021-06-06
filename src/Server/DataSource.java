@@ -25,6 +25,7 @@ public class DataSource
 
     //Useful methods
     private static final String GET_ASSETS = "SELECT * FROM assets WHERE username=?";
+    private static final String GET_ASSETS_OU = "SELECT * FROM assets WHERE (OrgUnit=? AND AssetType=NULL);";
     private static final String ADD_ASSET = "INSERT INTO assets (AssetName, username, OrgUnit, Amount) VALUES (?, ?, ?, ?);";
     private static final String ADD_ASSET_NAME = "INSERT INTO AssetNames VALUES (?);";
     private static final String REMOVE_ASSET = "DELETE FROM assets WHERE AssetName=? AND username=? AND OrgUnit=?";
@@ -81,6 +82,7 @@ public class DataSource
             "CREATE TABLE IF NOT EXISTS organisationunits (Orgunit varchar(45) NOT NULL, credits double(11,2), PRIMARY KEY (Orgunit));";
     private PreparedStatement getAssets;
     private PreparedStatement getAllUsers;
+    private PreparedStatement getAssetOU;
     private PreparedStatement addAsset;
     private PreparedStatement removeAsset;
     private PreparedStatement getAllOU;
@@ -150,6 +152,7 @@ public class DataSource
             GetAdminUsers = connection.prepareStatement(GET_ADMIN_USERS);
             GETTRADE = connection.prepareStatement(GET_TRADES);
             GETALLUSERS = connection.prepareStatement(GET_ALL_USERS);
+            getAssetOU = connection.prepareStatement(GET_ASSETS_OU);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -744,6 +747,39 @@ public class DataSource
         catch (SQLException exp)
         {
             exp.printStackTrace();
+        }
+
+        return toReturn;
+    }
+
+    public ArrayList<Asset> GetAssetFromOU(String OUName)
+    {
+        ArrayList<Asset> toReturn = new ArrayList<>();
+        Asset toAdd;
+        ResultSet rs = null;
+        String Aname;
+        String AssetUserName;
+        Double Pricing;
+        int Quantity;
+        try {
+            getAssetOU.setString(1, OUName);
+            rs = getAssetOU.executeQuery();
+            if(rs != null)
+            {
+                while(rs.next())
+                {
+                    Aname = rs.getString("AssetName");
+                    AssetUserName = rs.getString("username");
+                    Pricing = rs.getDouble("PRICE");
+                    Quantity = rs.getInt("QTY");
+                    toAdd = new Asset(Aname,Pricing,Quantity,AssetUserName);
+                    toReturn.add(toAdd);
+                }
+            }
+        }
+        catch (SQLException | StockExceptions exxp)
+        {
+            exxp.printStackTrace();
         }
 
         return toReturn;

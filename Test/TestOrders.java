@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+//Alot of these exceptions are listed in the TestAsset class
 
 public class TestOrders {
     private OrganisationUnit SellingOrg;

@@ -1,7 +1,13 @@
 package userInterface;
 
 
+import COMMON.OrganisationUnit;
+import COMMON.User;
+import Client.ServerConnection;
+
 import javax.swing.JOptionPane;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -9,6 +15,8 @@ import javax.swing.JOptionPane;
  */
 public class addUser extends javax.swing.JFrame {
 
+    private ServerConnection serverConnection;
+    private ArrayList<OrganisationUnit> OrganisationUnits;
     /**
      * Creates new form addUser
      */
@@ -43,7 +51,11 @@ public class addUser extends javax.swing.JFrame {
         createBtn.setText("CREATE");
         createBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createBtnActionPerformed(evt);
+                try {
+                    createBtnActionPerformed(evt);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -62,8 +74,12 @@ public class addUser extends javax.swing.JFrame {
 
         newPassTextField.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
 
-        OUcomboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "OU 1", "OU 2", "OU 3", "OU 4" }));
-
+        //OUcomboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "OU 1", "OU 2", "OU 3", "OU 4" }));
+        serverConnection = new ServerConnection();
+        OrganisationUnits = serverConnection.GetOUs();
+        for(OrganisationUnit OU : OrganisationUnits) {
+            OUcomboBox.addItem(OU.orgName());
+        }
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,8 +136,19 @@ public class addUser extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_newUserTextFieldActionPerformed
 
-    private void createBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnActionPerformed
+    private void createBtnActionPerformed(java.awt.event.ActionEvent evt) throws IOException {//GEN-FIRST:event_createBtnActionPerformed
         // TODO add your handling code here:
+        serverConnection = new ServerConnection();
+        String Username = newUserTextField.getText();
+        OrganisationUnit SelectedOrgUnit = null;
+        String Password = newPassTextField.getText();
+        String OUName = (String) OUcomboBox.getSelectedItem();
+        for(OrganisationUnit OU : OrganisationUnits) {
+            if(OU.orgName().equals(OUName)) {
+                SelectedOrgUnit = OU;
+            }
+        }
+        serverConnection.AddUser(new User(Username,Password,SelectedOrgUnit));
         JOptionPane.showMessageDialog(this, "User Added");
     }//GEN-LAST:event_createBtnActionPerformed
 

@@ -48,10 +48,10 @@ public class DataSource
     private static final String ADD_ORDER = "Insert INTO Assets (AssetName, username, OrgUnit,Price,Amount,AssetType) VALUES (?, ?, ?, ?,?,?);";
     private static final String GET_SPECFIC_USER = "Select * from users where username = ?";
     private static final String ADD_TRADE = "INSERT INTO trade_history (Name,OrgUnitBuy,OrgUnitSell,UserSeller,UserBuyer,QTY,PRICE) VALUES (?,?,?,?,?,?,?);";
-    private static final String ADJUST_BUY = "UPDATE Assets SET QTY=(QTY - ?) WHERE (OrgUnit=? AND username=? AND AssetType = false);";
-    private static final String ADJUST_SELL = "UPDATE Assets SET QTY=(QTY - ?) WHERE (OrgUnit=? AND username=? AND AssetType = true);";
-    private static final String ADJUST_OU_BUY = "UPDATE organisationunits SET creadits = creadits - ( ? * ?) WHERE (Orgunit = ?);";
-    private static final String ADJUST_OU_SELL = "UPDATE organisationunits SET creadits = creadits + ( ? * ?) WHERE (Orgunit = ?);";
+    private static final String ADJUST_BUY = "UPDATE Assets SET amount=(amount - ?) WHERE (OrgUnit=? AND username=? AND AssetType = false);";
+    private static final String ADJUST_SELL = "UPDATE Assets SET amount=(amount - ?) WHERE (OrgUnit=? AND username=? AND AssetType = true);";
+    private static final String ADJUST_OU_BUY = "UPDATE organisationunits SET creadits = credits - ( ? * ?) WHERE (Orgunit = ?);";
+    private static final String ADJUST_OU_SELL = "UPDATE organisationunits SET creadits = credits + ( ? * ?) WHERE (Orgunit = ?);";
     private static final String CLEAN_UP_ASSETS = "DELETE FROM Assets WHERE (QTY = 0 AND AssetType IS NOT NULL);";
     private static final String GET_TRADES = "SELECT * FROM trade_history;";
     //Testing SQL Methods

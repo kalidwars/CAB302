@@ -19,6 +19,8 @@ import javax.swing.*;
 public class login extends javax.swing.JFrame
 {
 
+public class login extends javax.swing.JFrame {
+
     /**
      * Creates new form login
      */
@@ -52,6 +54,10 @@ public class login extends javax.swing.JFrame
         loginBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {createlogin(e);}
+        loginBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginBtnActionPerformed(evt);
+            }
         });
 
         usernameLabel.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
@@ -108,6 +114,14 @@ public class login extends javax.swing.JFrame
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    mainPage mainPage = new mainPage();
+    private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
+        // TODO add your handling code here:
+        mainPage.setVisible(true);
+        mainPage.staffMenu.setVisible(false);
+
+
+    }//GEN-LAST:event_loginBtnActionPerformed
 
     private void createlogin(ActionEvent e) {
         String username = this.usernameTextField.getText();
@@ -157,7 +171,6 @@ public class login extends javax.swing.JFrame
                 new login().setVisible(true);
             }
         });
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

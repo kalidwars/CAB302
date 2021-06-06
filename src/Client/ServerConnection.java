@@ -174,6 +174,18 @@ public class ServerConnection implements Serializable
             return false;
         }
     }
+    public boolean AddAdminUser(AdminUser user) {
+        try {
+            objectOutputStream.writeUTF("ADD_ADMIN_USER");
+            objectOutputStream.flush();
+            objectOutputStream.writeObject(user);
+            objectOutputStream.flush();
+            return true;
+        }
+        catch (IOException e) {
+            return false;
+        }
+    }
 
     public ArrayList<User> GetUsers() {
         ArrayList<User> users = new ArrayList<>();

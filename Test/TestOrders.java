@@ -25,32 +25,41 @@ public class TestOrders {
     private SellOrder sellOrder;
     private User SellingUser;
     private User BuyingUser;
-    ServerConnection testconneciton = new ServerConnection();
+    private ServerConnection testconneciton;
     @BeforeEach
     void SetUp() throws IOException, StockExceptions, SQLException, InterruptedException {
         SellingOrg = new OrganisationUnit("SellingOrg",1000,null);
         BuyingOrg = new OrganisationUnit("BuyingOrg",1000,null);
         BuyingUser = new User("Buying User","BuyPass",BuyingOrg);
         SellingUser = new User("Selling User", "SellPass", SellingOrg);
+        testconneciton = new ServerConnection();
         testconneciton.AddAssetName("CPU HOUR");
+        TimeUnit.SECONDS.sleep(1);
         testconneciton = new ServerConnection();
         testconneciton.AddOU(SellingOrg);
+        TimeUnit.SECONDS.sleep(1);
         testconneciton = new ServerConnection();
         testconneciton.AddOU(BuyingOrg);
+        TimeUnit.SECONDS.sleep(1);
         testconneciton = new ServerConnection();
         testconneciton.AddUser(BuyingUser);
+        TimeUnit.SECONDS.sleep(1);
         testconneciton = new ServerConnection();
         testconneciton.AddUser(SellingUser);
+        TimeUnit.SECONDS.sleep(1);
     }
     @Test
     @DisplayName("Creating Buy order and storing in DB")
-    public void SendBuyOrder() throws StockExceptions {
+    public void SendBuyOrder() throws StockExceptions, InterruptedException {
+        testconneciton = new ServerConnection();
         buyOrder = new BuyOrder("CPU HOUR",10,20,BuyingUser.GetUserID());
         testconneciton.AddOrder(buyOrder);
+        //TimeUnit.SECONDS.sleep(1);
     }
     @Test
     @DisplayName("Creating Buy order and storing in DB")
     public void SendSellOrder() throws StockExceptions {
+        testconneciton = new ServerConnection();
         sellOrder = new SellOrder("CPU HOUR",10,20,SellingUser.GetUserID());
         testconneciton.AddOrder(sellOrder);
     }

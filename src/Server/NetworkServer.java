@@ -32,7 +32,9 @@ public class NetworkServer implements Serializable {
     private static final int PORT = 5000;
     private static final int SOCKET_TIMEOUT = 100;
     private AtomicBoolean running = new AtomicBoolean(true);
-    private DataSource DataSource = new DataSource();
+    private DataSource DataSource ;
+    private Reconcliation Reconcliation;
+
     /**
      * Handles the connection received from ServerSocket as well as reconcilation of trades
      * @param socket The socket used to communicate with the currently connected client
@@ -40,6 +42,7 @@ public class NetworkServer implements Serializable {
      *
      */
     private void handleConnection(Socket socket) {
+
         try {
             /**
              * We create the streams once at connection time, and re-use them until the client disconnects.
@@ -76,114 +79,154 @@ public class NetworkServer implements Serializable {
         } catch (IOException | ClassCastException | ClassNotFoundException | StockExceptions | SQLException e) {
             System.out.println(String.format("Connection %s closed", socket.toString()));
         }
-        ArrayList<BuyOrder> buyOrders = DataSource.GetBuyOrders();
-        ArrayList<SellOrder> sellOrders = DataSource.GetSellOrders();
-        for(BuyOrder border : buyOrders) {
-            for(SellOrder sorder : sellOrders) {
-                if(border.GetName().equals(sorder.GetName()) && border.getIndPrice() == sorder.getIndPrice()) {
-                    //Store Infomration for later use
-                    String AssetName = border.GetName();
-                    String SellUN = sorder.GetUser();
-                    String BuyUN = border.GetUser();
-                    String SellOU = sorder.GetOUID();
-                    String BuyOU = border.GetOUID();
-                    int QTY = border.getNumAvailable();
-                    double Price = border.getNumAvailable() * sorder.getIndPrice();
-                    DataSource.AddTrade(AssetName,SellUN,BuyUN,SellOU,BuyOU,QTY,Price);
-                }
-            }
-        }
     }
 
-
-
     private void handleClientConnection(Socket socket,ObjectInputStream ois, ObjectOutputStream oos, String command) throws IOException, ClassNotFoundException, StockExceptions, SQLException {
-                switch (command)
+        switch (command)
                 {
                     case "GET_ASSETS":
                         User user = (User) ois.readObject();
                         ArrayList<Asset> temp = new ArrayList<>();
-                        temp = DataSource.getAssets(user);
-                        oos.writeInt(temp.size());
-                        for(Asset asset : temp) {
-                            oos.writeObject(asset);
-                            oos.flush();
+                        synchronized (DataSource) {
+                            temp = DataSource.getAssets(user);
+                            oos.writeInt(temp.size());
+                            for(Asset asset : temp) {
+                                oos.writeObject(asset);
+                                oos.flush();
+                            }
                         }
                         break;
                     case "ADD_ASSET":
                         Asset asset = (Asset) ois.readObject();
-                        DataSource.AddAsset(asset);
+                        synchronized (DataSource) {
+                            DataSource.AddAsset(asset);
+                        }
                         break;
                     case "ADD_ASSET_NAME":
                         String AssetName = ois.readUTF();
-                        DataSource.AddAssetName(AssetName);
+                        synchronized (DataSource) {
+                            DataSource.AddAssetName(AssetName);
+                        }
                         break;
                     case "REMOVE_ASSET":
                         Asset assettoremove = (Asset) ois.readObject();
-                        DataSource.RemoveAsset(assettoremove);
+                        synchronized (DataSource) {
+                            DataSource.RemoveAsset(assettoremove);
+                        }
                         break;
                     case "GET_ALL_USER":
                         String QStock = ois.readUTF();
                         ArrayList<User> tempUser = new ArrayList<User>();
-                        //tempUser = DataSource.convertToUsers();
-                        oos.writeInt(tempUser.size());
-                        for(User user1 : tempUser)
-                        {
-                            oos.writeObject(user1);
-                            oos.flush();
+                        synchronized (DataSource) {
+                            tempUser = DataSource.getUsers();
+                            oos.writeInt(tempUser.size());
+                            for(User user1 : tempUser)
+                            {
+                                oos.writeObject(user1);
+                                oos.flush();
+                            }
                         }
                         break;
                     case "ADD_OU":
                         OrganisationUnit OU = (OrganisationUnit) ois.readObject();
-                        DataSource.AddOU(OU);
+                        synchronized (DataSource) {
+                            DataSource.AddOU(OU);
+                        }
                         break;
                     case "REMOVE_OU":
                         OU = (OrganisationUnit) ois.readObject();
-                        DataSource.RemoveOU(OU);
+                        synchronized (DataSource) {
+                            DataSource.RemoveOU(OU);
+                        }
                         break;
                     case "GET_OUS":
                         ArrayList<OrganisationUnit> tempOUs = new ArrayList<>();
-                        tempOUs = DataSource.getOUs();
-                        oos.writeInt(tempOUs.size());
-                        for(OrganisationUnit OrgUnit : tempOUs) {
-                            oos.writeObject(OrgUnit);
-                            oos.flush();
+                        synchronized (DataSource) {
+                            tempOUs = DataSource.getOUs();
+                            oos.writeInt(tempOUs.size());
+                            for(OrganisationUnit OrgUnit : tempOUs) {
+                                oos.writeObject(OrgUnit);
+                                oos.flush();
+                            }
                         }
                         break;
                     case "EDIT_OU":
                         OU = (OrganisationUnit) ois.readObject();
                         double credits = ois.readDouble();
-                        DataSource.EditOU(OU, credits);
+                        synchronized (DataSource) {
+                            DataSource.EditOU(OU, credits);
+                        }
                         break;
                     case "ADD_USER":
                         User User1 = (User) ois.readObject();
-                        DataSource.AddUser(User1);
+                        synchronized (DataSource) {
+                            DataSource.AddUser(User1);
+                        }
                         break;
                     case "GET_USERS":
                         ArrayList<User> tempUsers = new ArrayList<>();
-                        tempUsers = DataSource.getUsers();
-                        oos.writeInt(tempUsers.size());
-                        for(User user1 : tempUsers) {
-                            oos.writeObject(user1);
-                            oos.flush();
+                        synchronized (DataSource) {
+                            tempUsers = DataSource.getUsers();
+                            oos.writeInt(tempUsers.size());
+                            for(User user1 : tempUsers) {
+                                oos.writeObject(user1);
+                                oos.flush();
+                            }
+                        }
+                        break;
+                    case "GET_ADMIN_USERS":
+                        ArrayList<AdminUser> tempAdminUsers = new ArrayList<>();
+                        synchronized (DataSource) {
+                            tempAdminUsers = DataSource.getAdminUsers();
+                            oos.writeInt(tempAdminUsers.size());
+                            for(AdminUser adminUser : tempAdminUsers) {
+                                oos.writeObject(adminUser);
+                                oos.flush();
+                            }
                         }
                         break;
                     case "REMOVE_USER":
                         User User2 = (User) ois.readObject();
-                        DataSource.RemoveUser(User2);
+                        synchronized (DataSource) {
+                            DataSource.RemoveUser(User2);
+                        }
+                        break;
+                    case "REMOVE_ADMIN_USER":
+                        AdminUser adminUser = (AdminUser) ois.readObject();
+                        synchronized (DataSource) {
+                            DataSource.RemoveUser(adminUser);
+                        }
                         break;
                     case "EDIT_USER_PASSWORD":
                         User usertoedit = (User) ois.readObject();
                         String NewPass = ois.readUTF();
-                        DataSource.EditUser(usertoedit,NewPass);
+                        synchronized (DataSource) {
+                            DataSource.EditUser(usertoedit,NewPass);
+                        }
                         break;
                     case "ADD_BUY_ORDER":
                         BuyOrder buyorder = (BuyOrder) ois.readObject();
-                        DataSource.AddOrder(buyorder);
+                        synchronized (DataSource) {
+                            DataSource.AddOrder(buyorder);
+                        }
+                        synchronized (Reconcliation) {
+                            Reconcliation.Reconcile();
+                        }
                         break;
                     case "ADD_SELL_ORDER":
                         SellOrder sellOrder = (SellOrder) ois.readObject();
-                        DataSource.AddOrder(sellOrder);
+                        synchronized (DataSource) {
+                            DataSource.AddOrder(sellOrder);
+                        }
+                        synchronized (Reconcliation) {
+                            Reconcliation.Reconcile();
+                        }
+                        break;
+                    case "ADD_ADMIN_USER":
+                        AdminUser AdminUser = (AdminUser) ois.readObject();
+                        synchronized (DataSource) {
+                            DataSource.AddAdminUser(AdminUser);
+                        }
                         break;
                 }
             }
@@ -201,6 +244,8 @@ public class NetworkServer implements Serializable {
      * Starts the server running on the default port
      */
     public void start() {
+        DataSource = new DataSource();
+        Reconcliation = new Reconcliation();
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             serverSocket.setSoTimeout(SOCKET_TIMEOUT);
             for (; ; ) {
@@ -240,6 +285,24 @@ public class NetworkServer implements Serializable {
         running.set(false);
     }
 
-
+    private void ReconcileOrders() {
+        ArrayList<BuyOrder> buyOrders = DataSource.GetBuyOrders();
+        ArrayList<SellOrder> sellOrders = DataSource.GetSellOrders();
+        for(BuyOrder border : buyOrders) {
+            for(SellOrder sorder : sellOrders) {
+                if(border.GetName().equals(sorder.GetName()) && border.getIndPrice() == sorder.getIndPrice()) {
+                    //Store Infomration for later use
+                    String AssetName = border.GetName();
+                    String SellUN = sorder.GetUser();
+                    String BuyUN = border.GetUser();
+                    String SellOU = sorder.GetOUID();
+                    String BuyOU = border.GetOUID();
+                    int QTY = border.getNumAvailable();
+                    double Price = border.getNumAvailable() * sorder.getIndPrice();
+                    DataSource.AddTrade(AssetName,SellUN,BuyUN,SellOU,BuyOU,QTY,Price,border.getNumAvailable(),sorder.getNumAvailable());
+                }
+            }
+        }
+    }
 
 }

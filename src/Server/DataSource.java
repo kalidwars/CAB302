@@ -30,25 +30,27 @@ public class DataSource
     private static final String REMOVE_ASSET = "DELETE FROM assets WHERE AssetName=? AND username=? AND OrgUnit=?";
     private static final String GET_ALL_USER = "SELECT * FROM users";
     private static final String GET_ALL_OU = "SELECT * FROM organisationunits;";
-    private static final String GET_BUY_ORDER = "SELECT * FROM assets where AssetType = true";
-    private static final String GET_SELL_ORDER = "SELECT * FROM assets where AssetType = false";
+    private static final String GET_BUY_ORDER = "SELECT * FROM assets where AssetType = false";
+    private static final String GET_SELL_ORDER = "SELECT * FROM assets where AssetType = true";
     private static final String ADD_OU = "INSERT INTO organisationunits (Orgunit, credits) VALUES (?, ?);";
     private static final String REMOVE_OU = "DELETE FROM organisationunits WHERE Orgunit=? AND credits=?";
     private static final String GET_OUS = "SELECT * from organisationunits";
     private static final String GET_SPECIFIC_OU = "SELECT * from organisationunits where Orgunit = ?";
     private static final String EDIT_OU = "UPDATE organisationunits set credits=? where Orgunit = ?";
     private static final String ADD_USER = "INSERT INTO Users (username, password, privilege, orgunit) VALUES (?, ?, ?, ?);";
-    private static final String GET_USERS = "select * from users";
+    private static final String ADD_ADMIN_USER = "INSERT INTO Users (username, password, privilege, orgunit) VALUES (?, ?, ?, ?);";
+    private static final String GET_USERS = "select * from users where privilege = false";
+    private static final String GET_ADMIN_USERS = "select * from users where privilege = true";
     private static final String REMOVE_USER = "DELETE FROM users WHERE username=?";
     private static final String EDIT_USER = "UPDATE users set password=? where username = ?";
     private static final String ADD_ORDER = "Insert INTO Assets (AssetName, username, OrgUnit,Price,Amount,AssetType) VALUES (?, ?, ?, ?,?,?);";
     private static final String GET_SPECFIC_USER = "Select * from users where username = ?";
     private static final String ADD_TRADE = "INSERT INTO trade_history (Name,OrgUnitBuy,OrgUnitSell,UserSeller,UserBuyer,QTY,PRICE) VALUES (?,?,?,?,?,?,?);";
-    private static final String ADJUST_BUY = "UPDATE Assets SET QTY=(QTY - ?) WHERE (OrgUnit=? AND username=? AND AssetType = false);";
-    private static final String ADJUST_SELL = "UPDATE Assets SET QTY=(QTY - ?) WHERE (OrgUnit=? AND username=? AND AssetType = true);";
-    private static final String ADJUST_OU_BUY = "UPDATE organisationunits SET creadits = creadits - ( ? * ?) WHERE (Orgunit = ?);";
-    private static final String ADJUST_OU_SELL = "UPDATE organisationunits SET creadits = creadits + ( ? * ?) WHERE (Orgunit = ?);";
-    private static final String CLEAN_UP_ASSETS = "DELETE FROM Assets WHERE (QTY = 0 AND AssetType <> NULL);";
+    private static final String ADJUST_BUY = "UPDATE Assets SET amount=(amount - ?) WHERE (OrgUnit=? AND username=? AND AssetType = 0);";
+    private static final String ADJUST_SELL = "UPDATE Assets SET amount=(amount - ?) WHERE (OrgUnit=? AND username=? AND AssetType = 1);";
+    private static final String ADJUST_OU_BUY = "UPDATE organisationunits SET credits = credits -  ? WHERE (Orgunit = ?);";
+    private static final String ADJUST_OU_SELL = "UPDATE organisationunits SET credits = credits + ? WHERE (Orgunit = ?);";
+    private static final String CLEAN_UP_ASSETS = "DELETE FROM Assets WHERE amount = 0 AND AssetType IS NOT NULL;";
     //Testing SQL Methods
     private static final String TESTING  = "DELETE FROM users WHERE true;";
     private static final String TESTING2 = "DELETE FROM organisationunits WHERE true;";
@@ -87,7 +89,9 @@ public class DataSource
     private PreparedStatement GETOUS;
     private PreparedStatement EDITOU;
     private PreparedStatement ADDUSER;
+    private PreparedStatement AddAdminUser;
     private PreparedStatement GETUSERS;
+    private PreparedStatement GetAdminUsers;
     private PreparedStatement GETSpecficOU;
     private PreparedStatement REMOVEUSER;
     private PreparedStatement EDITUSER;
@@ -138,6 +142,8 @@ public class DataSource
             ADJUSTASSETBUY = connection.prepareStatement(ADJUST_OU_BUY);
             ADJUSTASSETSELL = connection.prepareStatement(ADJUST_OU_SELL);
             CLEANUPASSETS = connection.prepareStatement(CLEAN_UP_ASSETS);
+            AddAdminUser = connection.prepareStatement(ADD_ADMIN_USER);
+            GetAdminUsers = connection.prepareStatement(GET_ADMIN_USERS);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -437,6 +443,7 @@ public class DataSource
         ArrayList<User> temp = new ArrayList<>();
         ResultSet rs = null;
         ResultSet orgunit = null;
+        OrganisationUnit temporg = null;
         try {
             rs = GETUSERS.executeQuery();
             while(rs.next())
@@ -449,28 +456,53 @@ public class DataSource
                 String PlainPass = serialised.getHiddenValue();
                 GETSpecficOU.setString(1,rs.getString("orgunit"));
                 orgunit = GETSpecficOU.executeQuery();
-                orgunit.next();
-                OrganisationUnit temporg = new OrganisationUnit(orgunit.getString("Orgunit"),orgunit.getDouble("credits"),null);
+                if(orgunit.next()) {
+                    temporg = new OrganisationUnit(orgunit.getString("Orgunit"),orgunit.getDouble("credits"),null);
+                }
                 User user = new User(rs.getString("username"),PlainPass, temporg);
                 temp.add(user);
             }
         }
-        catch (SQLException throwable)
+        catch (SQLException | StockExceptions | IOException |ClassNotFoundException throwable)
         {
             throwable.printStackTrace();
         }
-        catch (StockExceptions e)
+        return temp;
+    }
+    public ArrayList<AdminUser> getAdminUsers() {
+        ArrayList<AdminUser> temp = new ArrayList<>();
+        ResultSet rs = null;
+        try {
+            rs = GetAdminUsers.executeQuery();
+            while(rs.next())
+            {
+                Blob passblob = rs.getBlob("password");
+                byte[] password = passblob.getBytes(1,(int) passblob.length());
+                ByteArrayInputStream byteStream = new ByteArrayInputStream(password);
+                ObjectInputStream objectInputStream = new ObjectInputStream(byteStream);
+                SerialData serialised = (SerialData) objectInputStream.readObject();
+                String PlainPass = serialised.getHiddenValue();
+                AdminUser Adminuser = new AdminUser(rs.getString("username"),PlainPass);
+                temp.add(Adminuser);
+            }
+        }
+        catch (SQLException | IOException |ClassNotFoundException throwable)
         {
-            //Do Nothing as this error doesn't occur here
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            throwable.printStackTrace();
         }
         return temp;
     }
 
     public void RemoveUser(User user2) {
+        try {
+            REMOVEUSER.setString(1,user2.GetUserID());
+            REMOVEUSER.execute();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void RemoveUser(AdminUser user2) {
         try {
             REMOVEUSER.setString(1,user2.GetUserID());
             REMOVEUSER.execute();
@@ -523,6 +555,25 @@ public class DataSource
         }
     }
 
+    public void AddAdminUser(AdminUser adminUser) {
+        try {
+            OrganisationUnit ADMIN = new OrganisationUnit("ADMIN",0,null);
+            AddOU(ADMIN);
+            ByteArrayOutputStream test = new ByteArrayOutputStream();
+            ObjectOutputStream parse = new ObjectOutputStream(test);
+            parse.writeObject(adminUser.GetPassword());
+            byte[] ByteArray = test.toByteArray();
+            AddAdminUser.setString(1,adminUser.GetUserID());
+            AddAdminUser.setBlob(2, new ByteArrayInputStream(ByteArray), ByteArray.length);
+            AddAdminUser.setBoolean(3, true);
+            AddAdminUser.setString(4,ADMIN.orgName());
+            AddAdminUser.execute();
+        }
+        catch (SQLException | IOException | StockExceptions throwable) {
+            throwable.printStackTrace();
+        }
+    }
+
 
     /**
      *
@@ -536,7 +587,7 @@ public class DataSource
      * @param brought
      * @param selling
      */
-    public void AddTrade(String asset, String sellUn, String buyUn, String sellOU, String buyOU, int brought, double selling)
+    public void AddTrade(String asset, String sellUn, String buyUn, String sellOU, String buyOU, int brought, double selling, int previousBuyQuant, int previousSellQuant)
     {
         //ADD TRADE TO THE DATABASE
         try
@@ -559,26 +610,24 @@ public class DataSource
         // ADJUST ASSETS/OU
         try
         {
-            //UPDATE Assets SET QTY=(QTY - ?) WHERE (OrgUnit=? AND username=? AND AssetType = false);
+            //UPDATE Assets SET amount=(amount - ?) WHERE (OrgUnit=? AND username=? AND AssetType = false);
             ADJUSTBUY.setInt(1,brought);
             ADJUSTBUY.setString(2,buyOU);
             ADJUSTBUY.setString(3,buyUn);
-            ADJUSTBUY.execute();
-            //"UPDATE Assets SET QTY=(QTY - ?) WHERE (OrgUnit=? AND username=? AND AssetType = true);"
+            ADJUSTBUY.executeUpdate();
+            //"UPDATE Assets SET amount=(amount - ?) WHERE (OrgUnit=? AND username=? AND AssetType = true);"
             ADJUSTSELL.setInt(1,brought);
             ADJUSTSELL.setString(2,sellOU);
             ADJUSTSELL.setString(3,sellUn);
-            ADJUSTSELL.execute();
-            //UPDATE organisationunits SET creadits = creadits - ( ? * ?) WHERE (Orgunit = ?)
-            ADJUSTASSETBUY.setInt(1,brought);
-            ADJUSTASSETBUY.setDouble(2,selling);
-            ADJUSTASSETBUY.setString(3,buyOU);
-            ADJUSTASSETBUY.execute();
-            //SELL UPDATE organisationunits SET creadits = creadits + ( ? * ?) WHERE (Orgunit = ?);
-            ADJUSTASSETSELL.setInt(1,brought);
-            ADJUSTASSETSELL.setDouble(2,selling);
-            ADJUSTASSETSELL.setString(3,sellOU);
-            ADJUSTASSETSELL.execute();
+            ADJUSTSELL.executeUpdate();
+            //UPDATE organisationunits SET creadits = creadits - ? WHERE (Orgunit = ?)
+            ADJUSTASSETBUY.setDouble(1,selling);
+            ADJUSTASSETBUY.setString(2,buyOU);
+            ADJUSTASSETBUY.executeUpdate();
+            //SELL UPDATE organisationunits SET creadits = creadits + ? WHERE (Orgunit = ?);
+            ADJUSTASSETSELL.setDouble(1,selling);
+            ADJUSTASSETSELL.setString(2,sellOU);
+            ADJUSTASSETSELL.executeUpdate();
 
 
         }
@@ -586,10 +635,14 @@ public class DataSource
         {
             adjusting.printStackTrace();
         }
-        //CLEAN UP QTY 0
+
+
+    }
+    //CLEAN UP QTY 0
+    public void CleanUpAssets() {
         try
         {
-            CLEANUPASSETS.execute();
+            CLEANUPASSETS.executeQuery();
         }
         catch (SQLException cleaning)
         {

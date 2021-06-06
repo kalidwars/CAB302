@@ -68,7 +68,14 @@ public class TestUser
         assertEquals(true,testConnection.AddUser(test_Case_1));
     }
     @Test
-    @DisplayName("Add user to database")
+    @DisplayName("Add Admin user to database")
+    public void AddAdminUsertoDB() {
+        ServerConnection testConnection = new ServerConnection();
+        testConnection.AddOU(OU_test);
+        assertEquals(true,testConnection.AddAdminUser(test_Case_2));
+    }
+    @Test
+    @DisplayName("Get Users from database")
     public void GetUser() {
         ServerConnection testConnection = new ServerConnection();
         ArrayList<User> users = testConnection.GetUsers();
